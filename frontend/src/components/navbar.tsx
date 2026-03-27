@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Brain, FileText, History, Home, Menu } from "lucide-react";
+import { Brain, FileText, History, Home, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
@@ -58,45 +58,58 @@ export default function Navbar() {
         </div>
 
         {/* Mobile nav */}
-        <Sheet open={open} onOpenChange={setOpen}>
-          <SheetTrigger asChild>
-            <Button variant="ghost" size="icon" className="md:hidden">
-              <Menu className="h-5 w-5" />
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="right" className="w-64">
-            <nav className="flex flex-col gap-2 mt-8">
-              {navLinks.map((link) => {
-                const Icon = link.icon;
-                const isActive = pathname === link.href;
-                return (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    onClick={() => setOpen(false)}
-                  >
-                    <Button
-                      variant={isActive ? "secondary" : "ghost"}
-                      className={cn(
-                        "w-full justify-start gap-2",
-                        isActive && "font-semibold"
-                      )}
+        <div className="flex items-center gap-2 md:hidden">
+          <ThemeToggle />
+          <Sheet open={open} onOpenChange={setOpen}>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon">
+                <Menu className="h-5 w-5" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-[280px] sm:w-[320px]">
+              <SheetHeader className="mb-6">
+                <SheetTitle className="flex items-center gap-2">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                    <Brain className="h-4 w-4" />
+                  </div>
+                  <span className="text-lg font-bold">AI Paper Gen</span>
+                </SheetTitle>
+              </SheetHeader>
+              <nav className="flex flex-col gap-1">
+                {navLinks.map((link) => {
+                  const Icon = link.icon;
+                  const isActive = pathname === link.href;
+                  return (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      onClick={() => setOpen(false)}
                     >
-                      <Icon className="h-4 w-4" />
-                      {link.label}
-                    </Button>
-                  </Link>
-                );
-              })}
-              <div className="mt-4 pt-4 border-t">
-                <div className="flex items-center justify-between px-2">
-                  <span className="text-sm font-medium">Theme</span>
-                  <ThemeToggle />
+                      <Button
+                        variant={isActive ? "secondary" : "ghost"}
+                        size="lg"
+                        className={cn(
+                          "w-full justify-start gap-3 text-base",
+                          isActive && "font-semibold bg-primary/10"
+                        )}
+                      >
+                        <Icon className="h-5 w-5" />
+                        {link.label}
+                      </Button>
+                    </Link>
+                  );
+                })}
+              </nav>
+              <div className="absolute bottom-6 left-6 right-6">
+                <div className="rounded-lg border bg-muted/50 p-4">
+                  <p className="text-xs text-muted-foreground text-center">
+                    AI-Powered Question Paper Generator
+                  </p>
                 </div>
               </div>
-            </nav>
-          </SheetContent>
-        </Sheet>
+            </SheetContent>
+          </Sheet>
+        </div>
       </div>
     </header>
   );

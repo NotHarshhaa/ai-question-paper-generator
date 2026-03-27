@@ -18,6 +18,6 @@ T5_MODEL_NAME = os.getenv("T5_MODEL_NAME", "valhalla/t5-small-qg-hl")
 BERT_MODEL_NAME = os.getenv("BERT_MODEL_NAME", "sentence-transformers/all-MiniLM-L6-v2")
 
 # Flask
-FLASK_HOST = os.getenv("FLASK_HOST", "127.0.0.1")
+FLASK_HOST = os.getenv("FLASK_HOST", "0.0.0.0")
 FLASK_PORT = int(os.getenv("FLASK_PORT", "5000"))
 FLASK_DEBUG = os.getenv("FLASK_DEBUG", "true").lower() == "true"

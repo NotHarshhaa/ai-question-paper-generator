@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: ai-question-paper-generator
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: bash start.sh
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: FLASK_ENV
+        value: production
+      - key: T5_MODEL_NAME
+        value: valhalla/t5-small-qg-hl
+      - key: BERT_MODEL_NAME
+        value: sentence-transformers/all-MiniLM-L6-v2
+      - key: FLASK_HOST
+        value: 0.0.0.0
+      - key: FLASK_PORT
+        value: 10000
+      - key: FLASK_DEBUG
+        value: false

@@ -103,3 +103,123 @@ def delete_paper_by_id(paper_id: str):
     conn.commit()
     conn.close()
     return deleted > 0
+
+
+def delete_paper(paper_id: str) -> bool:
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM papers WHERE id = ?", (paper_id,))
+    deleted = cursor.rowcount
+    conn.commit()
+    conn.close()
+    return deleted > 0
+
+
+# PYQ Database Functions
+def get_pyq_questions_by_subject(subject: str, limit: int = 50) -> list[dict]:
+    """Get PYQ questions for a specific subject."""
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        """
+        SELECT text, marks, difficulty, question_type, topic, source_file
+        FROM pyq_questions
+        WHERE subject = ?
+        ORDER BY RANDOM()
+        LIMIT ?
+        """,
+        (subject, limit)
+    )
+    questions = []
+    for row in cursor.fetchall():
+        questions.append({
+            "text": row["text"],
+            "marks": row["marks"],
+            "difficulty": row["difficulty"],
+            "question_type": row["question_type"],
+            "topic": row["topic"],
+            "source": row["source_file"]
+        })
+    conn.close()
+    return questions
+
+
+def get_pyq_questions_by_difficulty(subject: str, difficulty: str, limit: int = 20) -> list[dict]:
+    """Get PYQ questions for a subject filtered by difficulty."""
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        """
+        SELECT text, marks, difficulty, question_type, topic, source_file
+        FROM pyq_questions
+        WHERE subject = ? AND difficulty = ?
+        ORDER BY RANDOM()
+        LIMIT ?
+        """,
+        (subject, difficulty, limit)
+    )
+    questions = []
+    for row in cursor.fetchall():
+        questions.append({
+            "text": row["text"],
+            "marks": row["marks"],
+            "difficulty": row["difficulty"],
+            "question_type": row["question_type"],
+            "topic": row["topic"],
+            "source": row["source_file"]
+        })
+    conn.close()
+    return questions
+
+
+def get_pyq_topics_by_subject(subject: str) -> list[str]:
+    """Get unique topics from PYQ questions for a subject."""
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        """
+        SELECT DISTINCT topic
+        FROM pyq_questions
+        WHERE subject = ? AND topic != ''
+        ORDER BY topic
+        """,
+        (subject,)
+    )
+    topics = [row["topic"] for row in cursor.fetchall()]
+    conn.close()
+    return topics
+
+
+def get_pyq_stats_by_subject(subject: str) -> dict:
+    """Get statistics about PYQ questions for a subject."""
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        """
+        SELECT 
+            COUNT(*) as total,
+            SUM(CASE WHEN difficulty = 'easy' THEN 1 ELSE 0 END) as easy,
+            SUM(CASE WHEN difficulty = 'medium' THEN 1 ELSE 0 END) as medium,
+            SUM(CASE WHEN difficulty = 'hard' THEN 1 ELSE 0 END) as hard,
+            AVG(marks) as avg_marks,
+            MAX(marks) as max_marks,
+            MIN(marks) as min_marks
+        FROM pyq_questions
+        WHERE subject = ?
+        """,
+        (subject,)
+    )
+    row = cursor.fetchone()
+    conn.close()
+    
+    if row:
+        return {
+            "total": row["total"],
+            "easy": row["easy"],
+            "medium": row["medium"],
+            "hard": row["hard"],
+            "avg_marks": round(row["avg_marks"], 1) if row["avg_marks"] else 0,
+            "max_marks": row["max_marks"] or 0,
+            "min_marks": row["min_marks"] or 0
+        }
+    return {"total": 0, "easy": 0, "medium": 0, "hard": 0, "avg_marks": 0, "max_marks": 0, "min_marks": 0}

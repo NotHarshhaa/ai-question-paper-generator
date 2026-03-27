@@ -6,7 +6,7 @@ from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 
 from config import FLASK_HOST, FLASK_PORT, FLASK_DEBUG, T5_MODEL_NAME, BERT_MODEL_NAME
-from database.db import init_db, save_paper, get_all_papers, get_paper_by_id, delete_paper_by_id
+from database.db import init_db, save_paper, get_all_papers, get_paper_by_id, delete_paper_by_id, get_pyq_stats_by_subject
 from utils.nlp_processor import NLPProcessor
 from utils.ai_engine import AIEngine
 from utils.smart_selector import SmartSelector
@@ -69,7 +69,7 @@ def generate_paper():
 
         logger.info("Extracted %d topics, %d units", len(topics), len(units))
 
-        # Step 2: AI — Generate questions for each topic
+        # Step 2: AI — Generate questions using PYQ patterns
         all_questions = []
         questions_per_topic = max(2, (num_questions * 3) // max(len(important_topics), 1))
 
@@ -81,19 +81,22 @@ def generate_paper():
                     topic_unit = unit_name
                     break
 
-            generated = ai_engine.generate_questions(topic, syllabus, questions_per_topic)
+            # Try PYQ pattern generation first, fallback to regular AI
+            pyq_generated = ai_engine.generate_questions_with_pyq_patterns(
+                subject, topic, questions_per_topic
+            )
 
-            for q_text in generated:
-                difficulty = ai_engine.classify_difficulty(q_text)
+            for q_data in pyq_generated:
                 all_questions.append(
                     {
                         "id": str(uuid.uuid4()),
-                        "text": q_text,
-                        "marks": 0,
-                        "difficulty": difficulty,
+                        "text": q_data["text"],
+                        "marks": q_data["marks"],
+                        "difficulty": q_data["difficulty"],
                         "unit": topic_unit,
                         "topic": topic,
-                        "question_type": _classify_question_type(q_text),
+                        "question_type": q_data["question_type"],
+                        "source": q_data["source"],
                     }
                 )
 
@@ -229,6 +232,17 @@ def analyze_syllabus():
         return jsonify({"topics": topics, "units": units})
     except Exception as e:
         logger.exception("Error analyzing syllabus")
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/pyq-stats/<subject>", methods=["GET"])
+def pyq_stats(subject):
+    """Get PYQ statistics for a subject."""
+    try:
+        stats = get_pyq_stats_by_subject(subject)
+        return jsonify(stats)
+    except Exception as e:
+        logger.exception("Error getting PYQ stats")
         return jsonify({"error": str(e)}), 500
 
 

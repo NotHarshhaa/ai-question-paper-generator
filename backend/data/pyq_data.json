@@ -1,0 +1,2612 @@
+{
+  "Artificial Intelligence": [
+    {
+      "text": "Discuss the Mini-max search procedure.",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "the Mini-max search procedure",
+      "source": "Artificial Intelligence - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Distinguish between procedural knowledge and declarative knowledge (3-26/10B-15504 PTO.",
+      "marks": 5,
+      "difficulty": "easy",
+      "question_type": "descriptive",
+      "topic": "Distinguish between procedural knowledge",
+      "source": "Artificial Intelligence - Previous Year QPs.pdf"
+    },
+    {
+      "text": "What is semantic analysis 2",
+      "marks": 2,
+      "difficulty": "easy",
+      "question_type": "definition",
+      "topic": "semantic analysis 2",
+      "source": "Artificial Intelligence - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Explain uninformed and informed search: 2x5-10 Unit I 2 _ Define Intelligence' What is Artificial Intelligence ? Discuss in detail the foundations and history of Al. 15",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "uninformed and informed search: 2x5-10 Unit I 2 _ Define Int",
+      "source": "Artificial Intelligence - Previous Year QPs.pdf"
+    },
+    {
+      "text": "' Explain the concept of inference rules and the concept of clausal form and its significance in representing logical statements 15 Unit II 4 What do you mean by Search 2 Discuss the various uninformed and informed search techniques: 15 B-15504 2",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "' Explain the concept of inference rules",
+      "source": "Artificial Intelligence - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Discuss the concepts of admissibility and monotonicity in reasoning and decision-making in artificial intelligence systems. 15 Unit III 6 . Discuss the concept and applications of expert systems in the field of artificial intelligence. 15 7_ Discuss the concept of Stanford Certainty Factor Algebra (SCFA) and its role in handling uncertainty and belief revision in artificial intelligence systems. 15 Unit IV",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "the concepts of admissibility",
+      "source": "Artificial Intelligence - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Explain the concept of encoding schemes and their role in representing and manipulating knowledge in AI: Discuss the significance of encoding schemes: in artificial intelligence systems. 15 (3-26/11)B-15504 3 PTO. 9 Discuss the conccpts of learning by automata and intelligent editors in the field of artificial intclligencc. Explain thc role and significance of thcse approaches in machine learning and knowledge acquisition. 15 B-15504 110 ~S) 15504 (For Batch 2021 & Onwards) (Second Semester) ARTIFICIAL INTELLIGENCE MCAGen/2ICC1l me Three Hours Maximum Marks 70 Define artificial intelligence. (ii) Describe the A* algorithm and its role in solving search problems (iii) What is fuzzy logic 2 Explain one practical application where fuzzy logic is commonly used. (8-13/17)B-15504 PTO.",
+      "marks": 2,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "encoding schemes",
+      "source": "Artificial Intelligence - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Differentiate between supervised unsupervised and reinforcement learning Explain the concept of transfer learning in machine learning: 2x5-10 Unit I",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "between supervised unsupervised",
+      "source": "Artificial Intelligence - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Discuss the syntax and semantics of FOPL with examples. Discuss the significance of FLOP in measuring computational performance in artificial intelligence systems. 15 3_ Explain the concept of knowledge representation and its significance in AI. 15 Unit II 4 Explain the State Space Search, Data-Driven Search; and Goal-Driven Search: Compare and contrast state space search, data-driven search, and goal-driven search algorithms in the context of problem-solving in artificial intelligence. 15 B-15504 2 5_ Explain uninformed, informed search and the properties of these search algorithms 15 Unit III 6_ Discuss the concepts of fuzzy logic and the Dempster-Shafer theory in the context of uncertainty and reasoning in artificial intelligence. 15 7 _ Discuss the production system ad its types 15 Unit IV 8 Discuss the process of knowledge acquisition in artificial intelligence systems Explain the importance and challenges associated with acquiring knowledge for Al applications 15",
+      "marks": 2,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "the syntax and semantics of FOPL with examples",
+      "source": "Artificial Intelligence - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Explain Genetic algorithms and theic role in optimization and problem-solving: 15 (8-13/18)B-15504 5 60 No 15604 Maximum Marks 70 Vote Q. No. 1 is compulsory Attempt four more questions, in addition to compulsory Q. No. 1, selecting one question from each Unit; All questions carry equal marks",
+      "marks": 5,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "Genetic algorithms",
+      "source": "Artificial Intelligence - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Define Inference Rules.  Explain optimality of an algorithm. (c) What do you mean by Data Driven Search ? PTO. (-10/5) B-15604",
+      "marks": 6,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "Inference Rules",
+      "source": "Artificial Intelligence - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Explain min-max strategy: (e) Define knowledge acquisition. Unit I 2 Discuss syntax and semantic for propositiore logic and FOPL",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "min-max strategy: (e) Define knowledge acquisition",
+      "source": "Artificial Intelligence - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Discuss the following in context wit knowledge representation (a) Associated network and conceptual graph  Frames and Scripts. Unit MI 4_ Discuss the requirement to do a search process Discuss important Brute Force Search techniques",
+      "marks": 6,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "the following in context wit knowledge representation (a) As",
+      "source": "Artificial Intelligence - Previous Year QPs.pdf"
+    },
+    {
+      "text": "(a) Discuss types of Hill Climbing] Techniques. Also discuss about time spac complexity of this algorithm: (b) Explain A* search algorithm: Discuss about the admissibility of A* algorithm: B-15604 2 Unit MII 6",
+      "marks": 5,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "(a) Discuss types of Hill Climbing] Techniques",
+      "source": "Artificial Intelligence - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Explain Decomposable and Non- decomposable production systems Discuss control of search in production system: Discuss the managing of uncertainty in Expert Systems.",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "Decomposable",
+      "source": "Artificial Intelligence - Previous Year QPs.pdf"
+    },
+    {
+      "text": "(a) Discuss Bayesian probability theory with the help of example.  What is Fuzzy Logic 2 Explain its usefulness. Also discuss Fuzzy Logic Architecture. Unit IV",
+      "marks": 6,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "(a) Discuss Bayesian probability theory",
+      "source": "Artificial Intelligence - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Discuss the folowing in context with knowledge acquisition (a) Intelligent Agents (b) Learning by Automata 9 What do yOU mean by Genetic Algorithm 2 Discuss genetic operators with the help of suitable example (1-10/6) B-15604 3 %0 2227 UCA, (Third Year) EXAMINATION (New Scheme) ARTFICIAL NTELLIGENCE MCA-DE-3S(iv) Tree Hours Maximum Marks 70 Yi: Atempt any Five questions: All questions carry equal marks. Vat do you understand by Artificial Intelligence 2 What . are different uses/ importance of AI: 14 Describe various AI techniques in detail by giving proper example. 14 What is an expert system ? What are various applications of expert system 2 Discuss: 14 ~n) B-2227 4 What do you mean by Search Strategy Explain Data Driven and Goal-Driven Search in detail. 14",
+      "marks": 2,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "the folowing in context",
+      "source": "Artificial Intelligence - Previous Year QPs.pdf"
+    },
+    {
+      "text": "(a) What is the difference between Depth: First-Search and Breadth-First-Search ? 7 Explain Best First Search algorithm; 7 6 (a) What is the difference betwecn declarative and procedural knowledge ? Explain with example. (b) What is conflict resolution ? Explain with suitable example.",
+      "marks": 2,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "(a) What is the difference between Depth: First-Search",
+      "source": "Artificial Intelligence - Previous Year QPs.pdf"
+    },
+    {
+      "text": "(a) What are various factors that determine the direction of search (forward or backward) during problem solving 10 (b) What is Inference Knowledge 2 8 Explain various object-oriented concepts used in AI. 14 B-2227 2 Write notes on any (wo of thc following 7/2-14 Unification (ii) Resolution (iii) Predicate Calculas (iv) Propositional Calculas. [O. (a) What do you mean by Heuristic Scarch ' How is it better than traditiona: scarch techniques ? (b) Explain the architecture of production system 2 Also discuss its imporlance. 7 20",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "(a) What are various factors that determine the direction of",
+      "source": "Artificial Intelligence - Previous Year QPs.pdf"
+    },
+    {
+      "text": "B-2227 3 No A+l) 10466 Three Hours Maximum Marks : 70 ~ae Q No. 1 is compulsory Attempt any four Vote questions selecting one question from each Unit;",
+      "marks": 5,
+      "difficulty": "easy",
+      "question_type": "descriptive",
+      "topic": "B-2227 3 No A+l) 10466 Three Hours Maximum Marks : 70 ~ae Q",
+      "source": "Artificial Intelligence - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Define the term Artificial Intelligence (AI): List and explain various AI task domains in brief: () Explain Non-monotonic Reasoning Systems with example. () Explain the concept of belief. d) Define Tautology ad truth table (e) What is learning by Induction 2 XVI9B-10466 PTO. Unit I",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "the term Artificial Intelligence (AI): List",
+      "source": "Artificial Intelligence - Previous Year QPs.pdf"
+    },
+    {
+      "text": "(a) Convert the following sentences into predicate logic All Pompeians were Romans",
+      "marks": 5,
+      "difficulty": "easy",
+      "question_type": "descriptive",
+      "topic": "(a) Convert the following sentences into predicate logic All",
+      "source": "Artificial Intelligence - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Every one is loyal to someone b) What is knowledge representation 1 Explain in detail about the various approaches of knowledge representation in AI. 3 Unification is an algorithm process of solving equations between symbolic expressions Justify the statement with an example Unit M 4 AO* algorithm are used for representing the solution; Write down the steps of Ao* algorithm as a heuristic search technique B-10466 radth First Search (BFS) visits the node Ievel by level whereas Depth First Search DFS) visit nodes of graph depth wise. This is Qne of the differences between the two. Mention other differences between Breadth Finst Search and Depth First Search: Unit MI a What is the significance of Interface Engine in Expert Systems 2 Discuss forward chaining and backward chaining strategies.  Explain the Export Systems Architecture: Explain Bayes? theorem for conditional probability Explain, why is Bayes' theorem intractable ? Unit IV 8 (a) Write a program in PROLOG to verify if a word is a palindrome: (-31/20B-10466  Why is PROLOG called a logic programming language What is 4 clausal form ? How is it related to Horn Clause and PROLOG 2 Why PROLOG is Declarative Language ? 9 Write brief notes 0n the following",
+      "marks": 6,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "Every one is loyal to someone b) What is knowledge represent",
+      "source": "Artificial Intelligence - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Genetic Algorithms  Intelligence Editors 10466 (For Batch 2016 & Onwards) (Fifth Semester) ARTIFICIAL NTELLIGENCE fe Three Hours Maximum Marks 70 INote Q. No. 1 is compulsory Attempt any four more questions selecting one question from each Unit,",
+      "marks": 6,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "Genetic Algorithms  Intelligence Editors 10466 (For Batch 20",
+      "source": "Artificial Intelligence - Previous Year QPs.pdf"
+    },
+    {
+      "text": "What are the scientific goals of Artificial Intelligence ? List the name of problems those falls into the formal, mundane ad expert tasks.  Explain Non-monotonic Reasoning Systems with example. 0-1S/7) ` B-10466 PTO. 2-I) () Explain the significance of uncertainty (d) Enlist the various applications of Artificial Neural Network (ANN) e) What is Heuristic Search ? Sx2-10 Unit I",
+      "marks": 6,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "the scientific goals of Artificial Intelligence ? List the n",
+      "source": "Artificial Intelligence - Previous Year QPs.pdf"
+    },
+    {
+      "text": "(a) Explain Knowledge Representation Issues. Explain limitations of Knowledge Representation. Explain Semantic Nets in terms of Knowledge Representation: What d you mean by Inheritance Reasoning and Inverse Link 2 State advantages and disadvantages of Semantic Nets 15 3 Unification is an algorithmic process of solving equations between symbolic expressions. Justify the statement with an example 15 Unit II",
+      "marks": 2,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "(a) Explain Knowledge Representation Issues",
+      "source": "Artificial Intelligence - Previous Year QPs.pdf"
+    },
+    {
+      "text": "AO* algorithm are used for representing the solution: Write down the steps of Ao* algorithm aS a heuristic search technique 15 B-10466 2 Mention differences between Breadth First Search and Depth First Search. Branch-and-Bound is a way to combine (b) the space saving of depth-first search with heuristic information Write a short note on Branch and Bound. 15 Unit III What is the significance of Interface Engine in Expert Systems 2 Discuss forward chaining and backward chaining strategies.  Explain the concept of uncertainty in Dampster Shafer theory: 15 1, Explain Bayes' theorem for conditional probability Explain, why is Bayes' theorem intractable 2 15 Unit IV 8 (a) Write a program in PROLOG to compute factorial of a number: 0IS8) B-10466 3  Why is PROLOG called a logic programming language What iS d clausal form 2 How is it related to Horn Clause and PROLOG ? Why is PROLOG a Declarative Language 2 15",
+      "marks": 6,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "AO* algorithm are used for representing the solution: Write",
+      "source": "Artificial Intelligence - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Write brief notes on the following 15",
+      "marks": 5,
+      "difficulty": "easy",
+      "question_type": "descriptive",
+      "topic": "brief notes on the following 15",
+      "source": "Artificial Intelligence - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Genetic Algorithm  Learning by Induction. B-10466 53 14514 For Batch 2020 Onwards) Second Semester) ARTFICIAL NTELLIGENCE Te Tnree Hours Maximm Marbs 3 70 1",
+      "marks": 6,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "Genetic Algorithm  Learning by Induction",
+      "source": "Artificial Intelligence - Previous Year QPs.pdf"
+    },
+    {
+      "text": "What can Al systems not do yet 2 List any three tasks. What is the search cost associated with the time and memory required to find a solution 2 (c) Define a production system: (5-37/18B-14514 PTO.",
+      "marks": 2,
+      "difficulty": "easy",
+      "question_type": "listing",
+      "topic": "What can Al systems not do yet 2 List any three tasks",
+      "source": "Artificial Intelligence - Previous Year QPs.pdf"
+    },
+    {
+      "text": "What is Learning by Induction 2 (e) Name the languages that are used for artificial intelligence. Unit I 2 Using propositional logic prove (D) from (A, B; C) : (a) P = (Q 9 R) () 7 (Q = R)",
+      "marks": 2,
+      "difficulty": "hard",
+      "question_type": "analytical",
+      "topic": "Learning by Induction 2 (e) Name the languages that are used",
+      "source": "Artificial Intelligence - Previous Year QPs.pdf"
+    },
+    {
+      "text": "7P ^(s =-Q). 3 What are frames and scripts 2 Discuss their use with examples: Unit II 4 (a) Explain the concept of lterative Deepening Depth-First Search:  Describe the properties of search algorithms. 14514 2 AO* algorithms are used for rerpresenting the solution. Write down the steps of Ao* algorithm as a heuristic search technique: Unit MII What is an expert system 2 Briefly describe fve major components of an expert system: Using a suitable query, explain the working of an inference engine in a rule based expert system;, What is fuzzy logic ? How is fuzzy logic different from Boolean logic 2 0) Explain Bayes' theorem: Write equations of Bayes' rule. Unit IV Enlist the various types of learning: Differentiate between Supervised and Unsupervised Learning: () What are genetic algorithms ? Where can these be used ? S9B-14514 3 PTO: 9 (a) Write a PROLOG Program to append two lists. Show dry-run of your program- using a suitable example. (b) What is meant by Understanding ?",
+      "marks": 6,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "7P ^(s =-Q)",
+      "source": "Artificial Intelligence - Previous Year QPs.pdf"
+    }
+  ],
+  "Computer Architecture and Parallel Processing": [
+    {
+      "text": "Write short notes on the following Concurrent execution (ii) Levels of parallelism (3-24/14)B-15451 PTO.",
+      "marks": 2,
+      "difficulty": "easy",
+      "question_type": "definition",
+      "topic": "short notes on the following Concurrent execution (ii) Level",
+      "source": "Computer Architecture - QPs.pdf"
+    },
+    {
+      "text": "Code scheduling (iv) Adaptive routing (v) Shared memory Unit I",
+      "marks": 5,
+      "difficulty": "hard",
+      "question_type": "programming",
+      "topic": "Code scheduling (iv) Adaptive routing (v) Shared memory Unit",
+      "source": "Computer Architecture - QPs.pdf"
+    },
+    {
+      "text": "Describe Von-Neumann model in detail,",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "Von-Neumann model in detail",
+      "source": "Computer Architecture - QPs.pdf"
+    },
+    {
+      "text": "Explain parallel processing in detail with its merits. Unit II What is pipelining 2 Explain its different advantages and disadvantages Also differentiate between pipelining and superscaling: 5_ Explain ILP processors with its different uses and merits. Unit III 6 Waht is cache problem 2 How can You remove these problems 2 B-15451 Explain circuit switching with its merits. Unit IV",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "parallel processing in detail with its merits",
+      "source": "Computer Architecture - QPs.pdf"
+    },
+    {
+      "text": "Explain MIM architecture with its merits and demerits. 9 Write short notes on the following (a) Hierarchical cache coherence protocol. (b) Software based protocol: ~24/15)B-15451 120 (01/21-I) 14501 COMPUTER ARCHITECTURE AND PARALLEL PROCESSING MCA-11 Maximum Marks 70 (Compulsory Question) 1",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "MIM architecture with its merits and demerits",
+      "source": "Computer Architecture - QPs.pdf"
+    },
+    {
+      "text": "What do mean by don t care you 2 condition  Write on eoncoder and a note 2 comparators. (5-61/1) B-14501 PTO: Wlwt is 4 uddressing modc ? Dietinguiak' bolwcon auto incrcment and aulq dccrement addressing modc. 2 Discuss pipelining and writc thc advantagcs of pipelining: 2 (c) List various arithmetic micro operations, 2 Unit I",
+      "marks": 6,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "What do mean by don t care you 2 condition  Write on eoncode",
+      "source": "Computer Architecture - QPs.pdf"
+    },
+    {
+      "text": "Simplify the following Boolean function in product of sums form by means of four-variable map. Draw the logic diagram with  OR: AND gates; (b) NOR gates F(w,x,y,z)= 2(2,3,4,5,6,7,11,14,15). 15 3 (a) What is meant by fixed and floating point representation 2 Obtain 9's complement of the following eight digit decimal numbers 8 (i) 12349876 (ii) 00980100 (iii) 90009951 B-14501 2 What is error detecting and correcting b) code 2 How is Hamming code used for error detection 2 Unit II",
+      "marks": 2,
+      "difficulty": "hard",
+      "question_type": "programming",
+      "topic": "Simplify the following Boolean function in product of sums f",
+      "source": "Computer Architecture - QPs.pdf"
+    },
+    {
+      "text": "Design a 4-bit adderlsubtractor circuit using full adders and explain its function. 7  What is multiplexer 2 Design an 8-1 multiplexer circuit; 8",
+      "marks": 6,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "Design a 4-bit adderlsubtractor circuit using full adders",
+      "source": "Computer Architecture - QPs.pdf"
+    },
+    {
+      "text": "What are synchronous and asynchronous sequential circuits 2 Discuss J-K flip- flop: 7  What do you mean by counters ? Briefly explain BCD ripple counter: 8 Unit III 0",
+      "marks": 6,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "synchronous",
+      "source": "Computer Architecture - QPs.pdf"
+    },
+    {
+      "text": "Draw a relationship between computer organisation and computer architecture 5-61/2) 7 B-14501 3 PTO: What are the different types of instruclit forat in computer architecture ? Disql instruction cycle. 7 What do you mean by interrupt 2 Expla interrupt cycle. Describe the mechanism handling multiple interrupt requests. Unit IV",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "a relationship between computer organisation",
+      "source": "Computer Architecture - QPs.pdf"
+    },
+    {
+      "text": "(a) What is meant by hazards in pipelining' Discuss data and control hazards.  Write a detailed note on Flymi Classification:",
+      "marks": 6,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "(a) What is meant by hazards in pipelining' Discuss data",
+      "source": "Computer Architecture - QPs.pdf"
+    },
+    {
+      "text": "(a) Explain the basic organization of & mic' programmed control unit and thk generation of control signals using micro program. b) What is Direct Memory Access (DMA)' How does DMA controller work Explain with suitable block diagram 100 B-14501 (12/23) 15451 (For Batch 2021 & Onwards) (First Semester) COMPUTER ARCHTECTURE AND PARALLEL PROCESSINNG MCAGENILICCI Maximum Marks 70 1S Write short notes: o the following 2x5-10 (a) Parallel execution  Dependencies between instructions (1-19/11) B-15451 PTO.",
+      "marks": 6,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "(a) Explain the basic organization of & mic' programmed cont",
+      "source": "Computer Architecture - QPs.pdf"
+    },
+    {
+      "text": "Distributed memory (d) Shared memory Hardware based cache coherence protocol (e) Unit I Explain parallel processing, its types and levels 2. 15 of parallelism:",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "Distributed memory (d) Shared memory Hardware based cache co",
+      "source": "Computer Architecture - QPs.pdf"
+    },
+    {
+      "text": "Discuss the following Types and levels of 'parailelism 74 (a) Differentiate between concurrent and  execution: T2 parallel Unit II",
+      "marks": 6,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "the following Types",
+      "source": "Computer Architecture - QPs.pdf"
+    },
+    {
+      "text": "Discuss the following (a) Non-overlapped execution and overlapped execution. 7 (b) Different levels of Code scheduling in computer architecture. 7 B-15451 2 Unit III",
+      "marks": 5,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "the following (a) Non-overlapped execution",
+      "source": "Computer Architecture - QPs.pdf"
+    },
+    {
+      "text": "Explain in detail the MM architecture and its advantages and applications. 15",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "the MM architecture and its advantages and applications. 15",
+      "source": "Computer Architecture - QPs.pdf"
+    },
+    {
+      "text": "Discuss detail:' interconnections topologies in 15 Unit IV",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "detail:' interconnections topologies in 15 Unit IV",
+      "source": "Computer Architecture - QPs.pdf"
+    },
+    {
+      "text": "Explain hardware and software level solutions for cache coherence problem in detail 15 9_ Write ' short notes on the following (a) Advantages and:disadvantages of Shared Memory MMD Architectures 7  Algorithm for implementing Distributed Shared Memory: 7% (1-19/12) B-15451 3 Ioo",
+      "marks": 6,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "hardware and software level solutions for cache coherence pr",
+      "source": "Computer Architecture - QPs.pdf"
+    }
+  ],
+  "Computer Networks": [
+    {
+      "text": "(a) What is RSVP 2 Explain. (b) What is DODB 2 Explain, (c) What is X.25 2 Explain. What is Frame Relay 2 Explain: (d) What is IP protocol 2 Explain Sx2-10 (e) PTO: (5-27/13)B-15452 Unit ]",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "(a) What is RSVP 2 Explain. (b) What is DODB 2 Explain",
+      "source": "Computer Network - QPs.pdf"
+    },
+    {
+      "text": "What are types of Networks 2 Explain goals and applications of Computer Networks with example. 15 3_ What do you mean by TCP/IP reference model works ? Explain each layer with an example 15 Unit II",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "types of Networks 2 Explain goals",
+      "source": "Computer Network - QPs.pdf"
+    },
+    {
+      "text": "What are Switching Techniques 2 How iS switching circuit different from packet switching ? Explain with example 15",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "Switching Techniques 2 How iS switching circuit different fr",
+      "source": "Computer Network - QPs.pdf"
+    },
+    {
+      "text": "What do you mean by Transmission Modes What are its types ? Explain with example. 16 Unit III 6_ How does the Framing Technique work 2 Explain error detection and correction with examples. 15 B-15452 What is Data Link Layer ? How does Sliding Window work ? Explain with example. 15 Unit IV What is Routing 2 What are the functions of\" Routing ? Explain shortest-path, flooding and distance vector with example. 15 What is Congestion Control 2 What is the principle of Congestion Control 2 Explain Chock packet with example. 15 5-27/14)B-15452 3 120 (01/21-II) 14502 (For Batch 2020 Onwards) (First Semester) COMPUTER NETWORKS Maximum Marks 70 Compulsory Question 1, (a) What arc point Lo point networks 2 Discuss, 2 (b) What does the term protocol mcan 2 2 (c) Discuss ATM networks, 2 (2-58/4) B-14502 PTO.",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "What do you mean by Transmission Modes What are its types ?",
+      "source": "Computer Network - QPs.pdf"
+    },
+    {
+      "text": "Does the use of a wire center influence on the have . performance 2 of a ring tok (e) Differentiate between deterministic adaptive routing: Unit I 2 What does the term Computer Network mean' Distinguish between various topologies thal? based a on broadcasting: Also give an exampk of each for a network standard that is basel on these topologies. 3_ Sketch the layers of OSI and TCPIIP referen models and make a distinction between t: two specifying distinctly the functions of ex' of the layers in both the models: Unit II 4",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "comparative",
+      "topic": "Does the use of a wire center influence on the have",
+      "source": "Computer Network - QPs.pdf"
+    },
+    {
+      "text": "How is digital data transmitted through modems ? How is modulation different from multiplexing 2 B-14502 2  Distinguish between twisted pair cable, co-axial cable and optical fiber cable. 9",
+      "marks": 6,
+      "difficulty": "easy",
+      "question_type": "descriptive",
+      "topic": "is digital data transmitted through modems ? How is modulati",
+      "source": "Computer Network - QPs.pdf"
+    },
+    {
+      "text": "(a) Discuss and compare time division multiplexing and frequency division multiplexing: 8 (b) What is the importance of switching in data communication Differentiate between circuit and packet switching: 7 Unit III",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "(a) Discuss",
+      "source": "Computer Network - QPs.pdf"
+    },
+    {
+      "text": "(a) Explain error-detection and correction. Give ore example method for error detection and explain the importance of acknowledgement and sequence number in error control. 8  Describe any one important sliding window protocol used in the data link layer for controlling flow:",
+      "marks": 6,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "(a) Explain error-detection and correction",
+      "source": "Computer Network - QPs.pdf"
+    },
+    {
+      "text": "What is the purpose of MAC protocols Describe any two MAC protocols in which collision can occur; 15 (2-58/5) B-14502 PTO. Unit IV 8 , (a) Explain llooding and shortest path routing and discuss how and when they are used in link state routing: (b) What is the count-to-infinity problem associaled with distance vector routing '",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "the purpose of MAC protocols Describe any two MAC protocols",
+      "source": "Computer Network - QPs.pdf"
+    },
+    {
+      "text": "(a) Discuss general principles of congestion control. Also any two algorithms fr traffic shaping: (b) How are packets routed to mobile hosts Discuss, B-14502 100 (12/23) 15452 For Batch 2021 & Onwards) (First Semester) COMPUTER NETWORKS MCAGEN/ICC2 Maximum Marks 70 1_",
+      "marks": 5,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "(a) Discuss general principles of congestion control",
+      "source": "Computer Network - QPs.pdf"
+    },
+    {
+      "text": "What is Point to Point Network ? Explain. (b) What is DODB ? Explain. (c) What is X.2S ? Explain: (d) What is Frame Relay ? Explain. (e) What is Choke Packet ? Explain. 2*5-10 (1-19/9) B-15452 PTO. Unit I",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "Point to Point Network ? Explain",
+      "source": "Computer Network - QPs.pdf"
+    },
+    {
+      "text": "(a) What do you mean by Computer Networks ? Explain Applications of Computer Networks with example. 10 6) What is Topology 2 Explain any four Topologies with example 5 3 . What are Reference Models 2 What are types of Reference Model 2 Explain each with example 15 Unit II 4 How do Switching Techniques work ? Describe the difference between Switching Circuit and Packet Switching ? Explain with example. 15",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "(a) What do you mean by Computer Networks ? Explain Applicat",
+      "source": "Computer Network - QPs.pdf"
+    },
+    {
+      "text": "Explain the following with example (a) Guided Transmission Media (b) Wireless Transmission Media 5 5",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "the following",
+      "source": "Computer Network - QPs.pdf"
+    },
+    {
+      "text": "ATM Networks: 5 B-15452 2 Unit III 6. Describe the role of Framing Techniques in Networks. Explain error detection and correction with examples 15",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "ATM Networks: 5 B-15452 2 Unit III 6",
+      "source": "Computer Network - QPs.pdf"
+    },
+    {
+      "text": "Explain the following with example (a) Sliding Window Work (b) Multiple Access Control Flow (c) Token Bus 5 5 5 Unit IV",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "the following",
+      "source": "Computer Network - QPs.pdf"
+    },
+    {
+      "text": "Explain the following with example (a) Deterministic and Adaptive Routing (b) Centralized and Distributed Routing (c) Shortest-path and Flooding: 5 5 5",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "the following with example (a) Deterministic",
+      "source": "Computer Network - QPs.pdf"
+    },
+    {
+      "text": "(a) How does Congestion Control work 2 What are basic principles of Congestion Control ? Explain with example. 10 'b) What are difference between Broadcast and Multicast Routing ? Explain. 5 (1-19/10) B-15452 3 Ioo",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "(a) How does Congestion Control work 2 What are basic princi",
+      "source": "Computer Network - QPs.pdf"
+    }
+  ],
+  "Data Structures": [
+    {
+      "text": "Describe the following topics/concepts 2 each Linear data structures and their examples",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "the following topics/concepts 2 each Linear data structures",
+      "source": "Data Structures - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Graph representation methods (iii) Rehashing PTO. (8-14/3) B-15501",
+      "marks": 5,
+      "difficulty": "easy",
+      "question_type": "descriptive",
+      "topic": "Graph representation methods (iii) Rehashing PTO",
+      "source": "Data Structures - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Asymptotic notations of algorithmic complexity (v) Name the applications of linked lists (vi) Compare trec and graph (vii) Chaining: Unit I 2 What do you understand by efficiency of a algorithm ? Discuss domain independent ad domain specific efficiency metrics with example 14",
+      "marks": 2,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "Asymptotic notations of algorithmic complexity (v) Name the",
+      "source": "Data Structures - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Attempt the following parts (a) Compare and contrast recursive and iterative approaches  Describe divide *n' conquer approach 7 Unit MI 4_ Discuss the concept and different flavors of queue data structure along with its operations and applications 14 B-15501 Discuss the concept of link-list; its operations, applications and implementation: 14 Unit III 6_ Discuss the concept of tree data structure, its traversal and its typeslflavors 14 Write the logiclsteps of Kruskal algorithm and Prim's algorithm and explain their working with example data: 14 Unit IV 8_ Write the logic of the following algorithms and their applications and temporal complexity = Binary and linear search 7 (ii) Quick sort: 7 Discuss the concept and types of hashing: Also describe the hashing function and different types of hashing functions 14 (8-14/4) B-15501 3 60 GolNo: = 78/22-II) 2212 M,Sc. Computer SciencelM C.A, (Second Year): EXAMINATION (For Batch 2009 to 2018 Only) DATA STRUCTURE MCAMMSc-DE-22 Maximum Marks 70 [ (a) What is Data Structure ? Discuss various Primitive and Composite Data Structures: 10  What is Sparse Matrix 2 Give suitable example. 2, (a) What is Array 2 How elements are inserted and deleted from an . array ? 7  ` B-2212 PTO.  What is a Matrix 2 How two matrices can be added ? Explain addition of two matrices with example. 7 3_ What is a Queue ? How is it different fom & Dequeue ? Write algorithms for insertion and deletion in a Queue. 14 4 (a) What is a Stack 2 Explain PUSH ad POP operations in a Stack Also write applications of a Stack 10 '6) Give definition of Queue and Dequeue 5. What is a Linked List 2 How elements are inserted and deleted from a Linked List ? 14",
+      "marks": 6,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "Attempt the following parts (a) Compare",
+      "source": "Data Structures - Previous Year QPs.pdf"
+    },
+    {
+      "text": "(a) What is Binary Search Tree ? Create a binary search tree from the following data 1 15, 20, 7, 12, 8, 3, 12, 15, &, 20  What is Hashing ? Discuss in detail, 7 B-2212 2 What is a Balanced Tree 2 What and how 7_ operations are applied to balance an unbalanced tree during the process of creating a balanced tree 2 14",
+      "marks": 6,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "(a) What is Binary Search Tree ? Create a binary search tree",
+      "source": "Data Structures - Previous Year QPs.pdf"
+    },
+    {
+      "text": "What is a Tree ? Explain various tree traversal methods using suitable example. 14 9 What is a Graph ? What are its applications ? How graph is represented in memory ? 14",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "a Tree ? Explain various tree traversal methods",
+      "source": "Data Structures - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Write short notes on the following (a) Sorting Techniques  Searching Techniques. 7 7 (3-43/2) B-2212 3 60 15602 Sc. (CS) (Al & DS) EXAMINATION (For Batch 2022 & Onwards) First Semester) JATA STRUCTURES AND ALGORITHMS MDS/I/CC2IT 1e Three Hours Maximum Marks 70 Jte Attempt Five questions in all, selecting one question from each Unit. Q No. 1 is compulsory. All questions carry equal marks. (Compulsory Question) (Short Answer Type Questions) 7x2-14 Explain the following (a) Recursion  Header linked list {20/13 7B-15602 PTO:",
+      "marks": 6,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "short notes on the following (a) Sorting Techniques  Searchi",
+      "source": "Data Structures - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Threuded binary tree",
+      "marks": 5,
+      "difficulty": "easy",
+      "question_type": "descriptive",
+      "topic": "Threuded binary tree",
+      "source": "Data Structures - Previous Year QPs.pdf"
+    },
+    {
+      "text": "De-queuc  Minimum spanning tree Rehashing Bipartite graph. Unit [ 2 (a) What do you understand by Data Structures 2 What are different types of data structures ? Explain: 7 What is divide and conquer strategy in algorithms ? Explain with example. 7 3 (a) Explain the asymptotic notations for complexity of algorithms using examples 7 What is algorithms ? Explain. 7 B-15602 2 Unit II",
+      "marks": 2,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "De-queuc  Minimum spanning tree Rehashing Bipartite graph",
+      "source": "Data Structures - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Write an algorithm to insert an element at end of a singly linked list: (b) Write an algorithm to insert an element in a circular queue. 5 What is stack data structure 2 Explain using pictorial representation. Write algorithms for PUSH and POP operations in Stack. Alsc explain; how stack is used for evaluation of postfix expression: 14 Unit MII",
+      "marks": 2,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "an algorithm to insert an element at end of a singly linked",
+      "source": "Data Structures - Previous Year QPs.pdf"
+    },
+    {
+      "text": "(a) Write an algorithm for pre-order traversal of binary tree. (b) Explain Breadth First Search traversal method for a graph with example: 7_",
+      "marks": 5,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "(a) Write an algorithm for pre-order traversal of binary tre",
+      "source": "Data Structures - Previous Year QPs.pdf"
+    },
+    {
+      "text": "How many bits are saved for encoding the message MISSISSIPPI' using Huffian coding if the normal coding takes 8 bits for each character 2 (5-20/18)B-15602 PTO.",
+      "marks": 5,
+      "difficulty": "easy",
+      "question_type": "descriptive",
+      "topic": "many bits are saved for encoding the message MISSISSIPPI'",
+      "source": "Data Structures - Previous Year QPs.pdf"
+    },
+    {
+      "text": "What is Heap 2 What are its types 2 Explain the process of building a Min- Heap taking example data input 7 Unit IV",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "Heap 2 What are its types 2 Explain the process of building",
+      "source": "Data Structures - Previous Year QPs.pdf"
+    },
+    {
+      "text": "(a) Write an algorithm for quick sort Also discuss its complexity: 7  Write an algorithm for linear search: Explain the scenario where linear search is most useful. 7 9 Explain the following with example (a) Radix sort (b) Chaining (c) Bubble sort: 4 5 5 B-15602 50 Roll = No: (07/21-IT) 14511 For Batch 2020 Onwards) (Second Semester) DATA STRUCTURES Maximum Marks 70 1, (a) What is Big of Notation  Explain the term sort efficiency: (c) What is the use of stack 2",
+      "marks": 6,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "(a) Write an algorithm for quick sort Also discuss its compl",
+      "source": "Data Structures - Previous Year QPs.pdf"
+    },
+    {
+      "text": "What is Shell Sort ? What do you mean by Balanced Trees 2 Unit [ 2 What is meant by time and space complexity of an algorithm 2 Illustrate with suitable example. 3 What is Data Structure 2 Explain the importance of data structure in the computer science. Unit II 4, What is doubly linked list ? Explain and write the algorithm for performing following operations in doubly linked list",
+      "marks": 2,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "Shell Sort ? What do you mean by Balanced Trees 2 Unit [ 2 W",
+      "source": "Data Structures - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Insert a node in beginning",
+      "marks": 5,
+      "difficulty": "easy",
+      "question_type": "descriptive",
+      "topic": "Insert a node in beginning",
+      "source": "Data Structures - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Insert a hode in end B-14511 2 Write an algorithm to insert a new element in the given unsorted array at kth position. Explain Header linked list for polynomial  manipulation. Unit III What is AVL Tree ? Construct AVL tree using following sequence of data 16,27, 9, 11, 56, 54, 81, 63, 72",
+      "marks": 6,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "Insert a hode in end B-14511 2 Write an algorithm to insert",
+      "source": "Data Structures - Previous Year QPs.pdf"
+    },
+    {
+      "text": "What are Graphs 2 Explain the terms depth, height; strongly connected graphs, degree of graph.  Explain various forms of representation of graphs. Unit IV 8, (a) What is Insertion Sort ? Explain in detail with its worst case, average case and best case complexity:",
+      "marks": 6,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "Graphs 2 Explain the terms depth",
+      "source": "Data Structures - Previous Year QPs.pdf"
+    },
+    {
+      "text": "B-14511 3 PTO. (09/20-1) 10432 (For Batch 2016 Onwards) (For Re-appear Candidates Only) (Second Semester) DATA STRUCTURAL USNNG CH Maximum Marks 70 1 (a) What is Sparse Matrices ? Explain: b) What is linear and non-linear data structure ? Also give their examples (c) Explain the concept of Dequeue. d) Briefly discuss Balanced Tree. (e) List the applications of Graph. 2x5=10 (1-18/3) B-10432 PTO. Unit_ 1 What is String ? Discuss the different types s string operations, Also discuss the concepls string representation and word processing: 15 % What d you understand by multidimensiona} arrays ? Also discuss the representation of Iwo dimensional arrays in memory: 15 Unit II Deline Linked List Explain the representation of linked lists in memory: Also discuss the concepts of garbage collection: 15",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "B-14511 3 PTO",
+      "source": "Data Structures - Previous Year QPs.pdf"
+    },
+    {
+      "text": "What is stack ? Write an algorithm to perform the PUSH and POP operations on the stack Also discuss the concepts of polish notation, 15 Unit III 6 Explain the following (a) Threaded binary trec . (b) Heap (c) Traversing Binary` Trces. 5x3-15 B-10432",
+      "marks": 2,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "stack ? Write an algorithm to perform the PUSH",
+      "source": "Data Structures - Previous Year QPs.pdf"
+    },
+    {
+      "text": "What is binary search tree ? Write an algorithm to insert and delete the ITEM in the binary search tree Also discuss its limitations 15 Unit IV",
+      "marks": 2,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "binary search tree ? Write an algorithm to insert",
+      "source": "Data Structures - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Explain the following (a) Merge Sort (b) Selection Sort: 8 7 9 Discuss the sequential representation of a graph. Also discuss in details the concepts of traversing a graph: 15 (1-18/4) B-10432 {(04/17-1) 10432 M_ C. A. EXAMINA TION (For Batch 2016 & Onwards) (Second Semester) DATA STRUCTURAL USNNG C++ Maximum Marks 70 GNote Attempt Five questions in all, selecting one question from each Unit. Q. No. 1 is compulsory 15",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "the following (a) Merge Sort (b) Selection Sort: 8 7 9 Discu",
+      "source": "Data Structures - Previous Year QPs.pdf"
+    },
+    {
+      "text": "What is Data Structure ? Explain. (b) List the applications of stack. (c) Explain the concept of balanced tree. (d) Briefly discuss the header linked list: (e) Explain the concept of hashing: (4-01/20)B-10432 PTO: Unit [ 2 Explain the different types of data structur Discuss the different types of data structur operations. Also discuss the concepts of spar matrices. 3_ Explain the concepts of linear arrays: All duscuss the representation of linear arrays memory and concepts of traversing line? arrays. Unit II 4 Discuss in detail the concepts traversing a searching a linked list. Also discuss the| insertion into and deletion from a link list, 1: 5_ Discuss the array and linked representation 0 stacks. Also explain the quick sort with the] help of an example. 15 Unit III 6_ Explain the following (a) Linked and Sequential representation of binary trees in memory  Heapsort 8 B-10432 2 Discuss in detail (hc dlillere tyivn 0' 7 Moe traversal algorithms: Uuit V",
+      "marks": 6,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "Data Structure ? Explain",
+      "source": "Data Structures - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Explain the following (a) Warshall 's algorithm  Insertion Sort '1 9_ What is Graph ? Discussthe linked representation of a graph. Also discuss the different lypes of operation on graphs. 15 00432 3 60 (05/24) 15501 (For Batch 2021 & Onwards) (Second Semester) DATA STRUCTURES Maximum Marks 70 1. Describe the following topics/concepts 7x2-14 Mathematical notations of algorithmic complexity (ii) Huffman coding (iii) Need of sorting (5-19/8) B-15501 PTO:",
+      "marks": 6,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "the following (a) Warshall 's algorithm  Insertion Sort '1 9",
+      "source": "Data Structures - Previous Year QPs.pdf"
+    },
+    {
+      "text": "First-In-Last-Out is (or is not) equivalent to Last-In-First-Out. Justify:",
+      "marks": 5,
+      "difficulty": "easy",
+      "question_type": "descriptive",
+      "topic": "First-In-Last-Out is (or is not) equivalent to Last-In-First",
+      "source": "Data Structures - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Name the applications of stack data structure.",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "listing",
+      "topic": "Name the applications of stack data structure",
+      "source": "Data Structures - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Differentiate heap and forest:",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "comparative",
+      "topic": "heap and forest",
+      "source": "Data Structures - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Situations in which linear and binary search are 'suitable. Unit I",
+      "marks": 5,
+      "difficulty": "easy",
+      "question_type": "descriptive",
+      "topic": "Situations in which linear and binary search are 'suitable",
+      "source": "Data Structures - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Discuss the following topics Algorithmic complexity, its significance, types and notations 7",
+      "marks": 5,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "the following topics Algorithmic complexity",
+      "source": "Data Structures - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Recursion, its cons and pros: 3 Discuss different approaches to analyse an algorithm. Elaborate steps in 'analysis and design of algorithms Illustrate with example 14 B-15501 2 Unit II",
+      "marks": 5,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "Recursion, its cons",
+      "source": "Data Structures - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Discuss the concept of linked list, its limitations and applications. Also discuss its implementation in CICt+. 14",
+      "marks": 2,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "linked list",
+      "source": "Data Structures - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Discuss the stack data structure, its operations, applications and implementation: 14 Unit III",
+      "marks": 5,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "the stack data structure",
+      "source": "Data Structures - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Discuss the operations and applications of graph structure. 14 7 _ Discuss the following topics in context of tree data structure 7x2-14 Binary tree (ii) BST (iii) Threaded binary tree (iv) AVL tree (v) B tree (vi) B+ tree (vii) Applications. (5-19/9) B-15501 3 PTO. Unit IV",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "the operations and applications of graph structure",
+      "source": "Data Structures - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Discuss the following parts (a) Sorting; its need, and various approaches to sorting 7  Hashing; its approaches and hashing functions: 9 Write the concept (logic), advantages, disadvantages (if any) and suitability of the following sorting techniques 14 Bubble sort",
+      "marks": 6,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "the following parts (a) Sorting; its need",
+      "source": "Data Structures - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Quick sort. B-15501 110",
+      "marks": 5,
+      "difficulty": "easy",
+      "question_type": "descriptive",
+      "topic": "Quick sort. B-15501 110",
+      "source": "Data Structures - Previous Year QPs.pdf"
+    }
+  ],
+  "Database Systems": [
+    {
+      "text": "(i) Define a weak entity type.",
+      "marks": 2,
+      "difficulty": "easy",
+      "question_type": "definition",
+      "topic": "(i) Define a weak entity type",
+      "source": "Database Systems - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Differentiate between simple and composite attributes PTO. (5-10/27)B-15503",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "comparative",
+      "topic": "between simple and composite attributes PTO",
+      "source": "Database Systems - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Write any two threats faced in the database systems.",
+      "marks": 5,
+      "difficulty": "easy",
+      "question_type": "descriptive",
+      "topic": "any two threats faced in the database systems",
+      "source": "Database Systems - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Define the term time stamp. How is it used in a DBMS 2 What is the function of GROUP BY clause in SQL 2 Sx2-10 Unit I 2 What do you mean by database system 2 Discuss the main characteristics of the database approach and how it differs from traditional file system 2 15",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "the term time stamp",
+      "source": "Database Systems - Previous Year QPs.pdf"
+    },
+    {
+      "text": "(a) Write and explain the architecture of a typical DBMS . 8",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "(a) Write and explain the architecture of a typical DBMS . 8",
+      "source": "Database Systems - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Briefly discuss the different categories of workers who work behind the scene for the success of a DBMS. 7 B-15503 2 Unit II Professors can teach the same course over several semesters and each offering must be recorded",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "discuss the different categories of workers who work behind",
+      "source": "Database Systems - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Each Professor teaches exactly one course",
+      "marks": 5,
+      "difficulty": "easy",
+      "question_type": "descriptive",
+      "topic": "Each Professor teaches exactly one course",
+      "source": "Database Systems - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Each professor teaches at least one course and same professors may teach multiple courses",
+      "marks": 5,
+      "difficulty": "easy",
+      "question_type": "descriptive",
+      "topic": "Each professor teaches at least one course",
+      "source": "Database Systems - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Each Professor teaches at least one courSe' and some Professors must teach all the courses_ (5-10/28)B-15503 5 PTO.",
+      "marks": 5,
+      "difficulty": "easy",
+      "question_type": "descriptive",
+      "topic": "Each Professor teaches at least one courSe'",
+      "source": "Database Systems - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Differentiate between relation schema <4 relational instance. Define the terms arity &4 degree of a relation. What are domaia constraints 2 Explain with suitable example:_. 15 Unit III 6_ What do you mean by functional dependencies ? Explain 2NFE; 3NF ad BCNF with suitable examples. 15",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "between relation schema <4 relational instance",
+      "source": "Database Systems - Previous Year QPs.pdf"
+    },
+    {
+      "text": "(a) What are various categories of functions supported by SQL ? Write two examples of each category (b) Consider the Table SPORTS given below 8 Student No Class Name 10 Ravi H1 Shiv 12 Karan 43 James 14 Love 15 10 Arun Game Grade Game2 Grde Cricket Swimming Tennis Skating C Swimming B Football B Tennis Tennis A Basketball B Cricket A Cricket Athletics C B-15503 Write SQL commands for the following on the basis of table SPORTS Display the names of students who have grade 'C' in either Game 1 Or Game 2 or both:",
+      "marks": 2,
+      "difficulty": "easy",
+      "question_type": "listing",
+      "topic": "(a) What are various categories of functions supported by SQ",
+      "source": "Database Systems - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Display the number of students getting grade 'A' in Cricket (iii) Display the names of the students who have same game for both Game 1 and Game 2.",
+      "marks": 2,
+      "difficulty": "easy",
+      "question_type": "listing",
+      "topic": "Display the number of students getting grade 'A' in Cricket",
+      "source": "Database Systems - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Display the games taken up by the students, whose name starts with 'A . Arrange the whole table in the alphabetical order of Name Unit IV",
+      "marks": 2,
+      "difficulty": "easy",
+      "question_type": "listing",
+      "topic": "Display the games taken up by the students",
+      "source": "Database Systems - Previous Year QPs.pdf"
+    },
+    {
+      "text": "(a) L ist and briefly explain any five problems faced during concurrency control in DBMS. 5 (5-10/29)B-15503 5 PTO.",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "(a) L ist and briefly explain any five problems faced during",
+      "source": "Database Systems - Previous Year QPs.pdf"
+    },
+    {
+      "text": "What do you mean by a transaction 1 Explain the desirable properties of transaction. 1o 0_ Write and explain any two recovery techniqucs used in the centralized database systems. 15 B-15503 50 AII No 3 3-II) 15601 M; Sc. (CS (Al & DS)) EXAMINATION (For Batch 2022 & Onwards) First Semester) DATABASE SYSTEMS MDSHICCI/T Maximum Marks 70 Vote Attempt Five questions in all:. Q: No 1 is compulsory: Attempt four more questions, selecting one question from each Unit. AlI questions carry equal marks",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "What do you mean by a transaction 1 Explain the desirable pr",
+      "source": "Database Systems - Previous Year QPs.pdf"
+    },
+    {
+      "text": "What do you mean by DBMS 2  Define entity type with example. (c) Explain transitive and non-transitive dependencies. What is network data model 2 034/)) B-15601 PTO.",
+      "marks": 6,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "What do you mean by DBMS 2  Define entity type with example",
+      "source": "Database Systems - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Define database security. 0) Discuss deferred update recovery technique. (g) What is decomposition 2 Unit [ 2 (a) Discuss different types of database users. (b) Explain the responsibilities of the DBA and database designers. 3_ Draw three schema architecture and how is it used to achieve data independence 2 Also explain different types of data independence Which data independence is more difficult to achieve and why 2 Unit II 4 Discuss the naming conventions used for ER schema diagrams. Draw an ER model of you choice by taking a suitable example B-15601 2",
+      "marks": 2,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "database security",
+      "source": "Database Systems - Previous Year QPs.pdf"
+    },
+    {
+      "text": "(a) What is relational model 2 Discuss the integrity constraints applied over relational model. (b) Discuss select; project and rename operators in context with relational algebra: Unit III 6. Discuss the following (a) Functional dependencies (b) 3NF and BCNF:",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "(a) What is relational model 2 Discuss the integrity constra",
+      "source": "Database Systems - Previous Year QPs.pdf"
+    },
+    {
+      "text": "(a) Discuss view in SQL by taking suitable example: Also explain specifying constraints in SQL. (b) Write and explain the basic structure of an oracle program: Discus; Ie applications of Oracle Unit IV",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "(a) Discuss view in SQL by taking suitable example: Also exp",
+      "source": "Database Systems - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Discuss the problems of deadlo k and starvation; and the different approxches to dealing with these problems (5-34/6) B-15601 PIO Write shorz nates on the fllowing Tina stamp ordering Inka diatc updata roe tcchnique B-15601 W. 15601 For Batch 2022 & Onwards) First Semester) DATABASE SYSTEMS MDSIIICCIT \"~me Three Hours Maximum Marks 70 Vote Attempt Five questions in all, selecting one question from each Unit, Q: No. 1 is compulsory. All questions carry equal marks",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "the problems of deadlo k",
+      "source": "Database Systems - Previous Year QPs.pdf"
+    },
+    {
+      "text": "What is Data abstraction",
+      "marks": 2,
+      "difficulty": "easy",
+      "question_type": "definition",
+      "topic": "Data abstraction",
+      "source": "Database Systems - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Explain primary key and superkey with example. (c) Define weak entity type by taking suitable example BTO. 1M1.)IX-[560I 23",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "primary key and superkey with example",
+      "source": "Database Systems - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Discuss view in SQL.",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "view in SQL",
+      "source": "Database Systems - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Explain rename operator with example. What is the role of log in recovery ?",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "rename operator with example",
+      "source": "Database Systems - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Define Shared lock Unit I 2_ What is meant by database system 2 Discuss the main characteristics of the database approach: Also explain the implications of database approach:",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "Shared lock Unit I 2_ What is meant by database system 2 Dis",
+      "source": "Database Systems - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Define DBMS. Explain the component modules of DBMS and their interaction, with the help of diagram. Unit II",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "DBMS. Explain the component modules of DBMS",
+      "source": "Database Systems - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Define the following",
+      "marks": 2,
+      "difficulty": "easy",
+      "question_type": "definition",
+      "topic": "the following",
+      "source": "Database Systems - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Schema and instances",
+      "marks": 5,
+      "difficulty": "easy",
+      "question_type": "descriptive",
+      "topic": "Schema and instances",
+      "source": "Database Systems - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Entity integrity constraint B-1S601 2",
+      "marks": 5,
+      "difficulty": "easy",
+      "question_type": "descriptive",
+      "topic": "Entity integrity constraint B-1S601 2",
+      "source": "Database Systems - Previous Year QPs.pdf"
+    },
+    {
+      "text": "What do you mean by data model 2 Discuss network and hierarchical data models.  Define relational data model. Explain constraints and anomalies in relational model: Unit 6",
+      "marks": 6,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "What do you mean by data model 2 Discuss network",
+      "source": "Database Systems - Previous Year QPs.pdf"
+    },
+    {
+      "text": "What is SQL ? Discuss any three DM statements of SQL.",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "SQL ? Discuss any three DM statements of SQL",
+      "source": "Database Systems - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Discuss the storage organization in Oracle programming: 1 What do you mean by normalization ? Discuss 1NF, 2NF, 3NF and BCNF with suitable example. (8-13/14)B-15601 3 PTO. Unit IV",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "the storage organization in Oracle programming: 1 What do yo",
+      "source": "Database Systems - Previous Year QPs.pdf"
+    },
+    {
+      "text": "What is 2PL 2 Explain the growing and shrinking phase of two-phase locking protocol 9 (a) What do you mean by database security ? Discuss database security issues.",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "2PL 2 Explain the growing",
+      "source": "Database Systems - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Explain the type of schedules used in transaction processing 40 B-15601 10+33 For Barch 2016 Onwards) Send Semester) DATASASE SYSTEMS Ia Hors Maximum Marks 3 70 E ATempt Five questions in all, selecting one question fom each Unit Q No 1 is compulsory: Wiite short notes on the following  Define partial functional dependency: () Define Naive user",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "the type of schedules used in transaction processing 40 B-15",
+      "source": "Database Systems - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Discuss the difference between a composite key and a composite attribute. PTO: B10433 Difierence between strong entity Set and weak entity Set (e) Define Multivalued functional dependency: Unit [ 2 Explain the advantages and disadvantages of Database approach over Traditional file based approach 3 Explain the various DBMS functions and component modules: Unit II 4 Explain the concept of generalization and Specialization giving suitable example. 5 What do you mean by key 2 Explain Super; Candidate, primary, unique and foreign key giving Suitable examples B-10433 2 Unit III What do you mean by Normalization ? Explain IF 2NF, 3NF taking suitable examples. Irile note on Database Design process: Unit IV What do you mean by data recovery ? Explain the various methods of data recovery Explain Transaction processing: Explain the properties of transaction. '133/1o) B-10433 3 14513 Maximum Marks 70 1_ (i) Write two disadvantages of database system: (ii) Write any two applications of Oracle. (iii) Differentiate derived and stored attributes. (iv) Write any two characteristics of a good database design: (2-39/7) B-14513 PTO. anj\" (1'0 database Name recovery techniques 5x2-10 Unit [ 2 (a) Describe the three-schema architecture. Why do Ie need mapping between schema levels 2 10 b) What is Data Redundancy 2 What are the disadvantages of having redundancy within a database 2 5 3_ Differentiate between Logical data independence and Physical data independence ? Which one is harder to achieve 2 Why 2 15 Unit II What are the main features of a network data model 2 Explain how it is different from hierarchical data model. 15 What do you mean by Integrity Constraints 2 Differentiate between Entity integrity, Domain integrity and Referential integrity: 15 3 Unit III Aj do mean by functional dependencies 2 wli 2NF, 3NF and BCNF with suitable Enuples; 15 Xhat , are stored procedures 2 Describe various Js of stored procedures in PLISQL. Write Jde in PLISQL to check whether a given Mmber\" 1S palindrome or not 2 The number should be supplied by the user: 15 Unit IV Ihat is the nced of database recovery 2 Explain the process of database recovery supported by oracle. 15 a1 List and describe in detail at least five issues related with security of a database and its users, 10  Briefly explain the time stamp based protocol used for concurrency control in a database. 5 8 B-14513 3 100 (05/24) 15503 For Batch 2021 & Onwards) (Second Semester) DATABASE' SYSTEMS MCA/Gen/2ICC1o Maximum Marks 70 What do you mean by a superkey (ii) , Are NULL' values in.a database same as that' 'of a blank 'space or zero 2 (iii)' What do you mean by a lock in' DBMS ? (iv) Write: full form of ACID (3-20/14B-15503 PTO:' Differentiate between DELETE and TRUNCATE command in\" a 'database:_ Sx2-10 Unit I 2 What are the different categories of database users 2 Discuss the responsibilities : of each class of users: 15 3 (a) List some of the advantages'of: database- management system over : traditional: file management system; (b) What is. the role,of system . analyst and application programmers in 'the. success of a DBMS 2 Unit II",
+      "marks": 6,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "the difference between a composite key",
+      "source": "Database Systems - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Describe the' three-schema architecture. Why do we need mapping between schema levels ? 15' B-15503 5 (a) Briefly discuss any three types of relationships which can' be used in ER diagrams 2 9 =  How E-R data models are superior than traditional data models 2 6 Unit III 6. What do you mean by functional dependencies ? Explain 2NF, 3NF, and BCNF with suitable examples 15 A university database contains inforation about Professors (Identified by a*social security number) . and courses (Identified by a course I). Each of the following situations concerns the relationship set between the teacher and the student; Draw an ER diagram for each Situation (Assuming that no further constraints hold) 15 Professors can teach the same course over several semesters and each offering must be recorded (3-20/15B-15503 3 PTO.",
+      "marks": 6,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "the' three-schema architecture",
+      "source": "Database Systems - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Each Professor teaches exactly one course (iii) Each professor teaches at least one course` and same professors may teach multiple courses",
+      "marks": 5,
+      "difficulty": "easy",
+      "question_type": "descriptive",
+      "topic": "Each Professor teaches exactly one course (iii) Each profess",
+      "source": "Database Systems - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Each Professor teaches at least one course and some Professors must teach all,the courses. Unit IV 8. What is the need of database recovery Explain the process of database . recovery supported by oracle. 15 9 (a) List and describe in. detail atleast` five issues related with security of a database and its users. (b) Write and explain any four properties of a transaction: 8 B-15503 110-",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "Each Professor teaches at least one course",
+      "source": "Database Systems - Previous Year QPs.pdf"
+    }
+  ],
+  "IoT and Cloud Computing": [
+    {
+      "text": "What is the role of IoT in home automation ?",
+      "marks": 2,
+      "difficulty": "easy",
+      "question_type": "definition",
+      "topic": "the role of IoT in home automation",
+      "source": "IoT and Cloud Computing - PYQPs.pdf"
+    },
+    {
+      "text": "Give examples of any three cloud service provider companies (e) What is a type-I Hypervisor 2 5x2-10 Unit I 2 Give an overview of Internet of Things along with its characteristics. Also describe any two domain Specific IoT: 15 3 Describe the physical and logical design of IoT focusing on its major protocols. 15 Unit I 4_ Give a description of the major enabling technologies behind the development of IoT: 15 B-14522 5 Describc thc support of IoT for thc following applications 523-15 (a) Environment and Agriculture  Energy Conservation (c) Health and Fitness. Unit III 6_ (a) What is Cloud Computing 2 What are the advantages of cloud computing ? 7z  Give a brief description of the evolution of cloud computing: 7 7 , Give a detailed description of the various services provided by cloud computing along with their characteristics and benefits. 15 Unit IV 8 What js the concept behind virtualization in cloud computing 2 Describe the following kinds of virtualization 5x3-15",
+      "marks": 6,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "Give examples of any three cloud service provider companies",
+      "source": "IoT and Cloud Computing - PYQPs.pdf"
+    },
+    {
+      "text": "Server virtualization (5-31/18B-14522 3 PTO: Storage virtualization (c) Network virtualization. 9 What is service oriented architecture and how is it related to cloud computing 2 Give a diagrammatic representation of cloud computing service oriented architecture. Also describe various applications of Service Oriented Architecture. 15 1-14522 (09/23-II) 15512 For Batch 2021 & Onwards) (Third Semester) IOT AND CLOUD COMPUTING Maximum Marks 70 compulsory: 1_ Attempt the following parts Sx2-10 (a) What is loT connectivity (b) Write down the application areas of IoT: (c) Explain FTP Protocol: PTO. (5-34/9) B-15512",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "Server virtualization (5-31/18B-14522 3 PTO: Storage virtual",
+      "source": "IoT and Cloud Computing - PYQPs.pdf"
+    },
+    {
+      "text": "Enlist any two characteristics of cloud computing: (e) What is Windows Azure 2 Unit I 2_ Describe the following (a) IoT protocols  Layered architecture of IoT 7. 7. 3",
+      "marks": 6,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "Enlist any two characteristics of cloud computing: (e) What",
+      "source": "IoT and Cloud Computing - PYQPs.pdf"
+    },
+    {
+      "text": "Explain the different characteristics of loT 7.",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "the different characteristics of loT 7",
+      "source": "IoT and Cloud Computing - PYQPs.pdf"
+    },
+    {
+      "text": "Explain about the advanced message queuing protocol. 7. Unit II 4 Explain reasons to converge the technologies and shift to IoT and write the various application areas of IoT. 15 5 What are the different challenges in IoT 2 Explain enabling technologies used for IoT 15 B-15512 Umit M Wllt is cloud compultinp \" Explnin Uhc cloud compuling relerencc modol wilh (hc hclp of a dingrun; 15",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "about the advanced message queuing protocol",
+      "source": "IoT and Cloud Computing - PYQPs.pdf"
+    },
+    {
+      "text": "Differentiate public and private cloud, 7,5 (b) Explain SaaS and its relation to cloud computing: 7,5 Unit IV",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "public and private cloud",
+      "source": "IoT and Cloud Computing - PYQPs.pdf"
+    },
+    {
+      "text": "Discuss various sccurity challenges in cloud computing: 7.5  Discuss the usc of hypervisor in cloud computing: 7. 9_ Discuss the concept, type and benefits of' virtualization; 15 6-3410B-15512 3 10U (12/24) 15512 For Batch 2021 & Onwards) (Third Semester) IoT AND CLOUD COMPUTNNG Maximum Marks 70 1 . Answer the following parts 2 each Define IoT and explain its conceptual framework; (ii) Discuss the major security concerns associated with IoT; (iii) Discuss major communication challenges in IoT. (1-28/6) B-15512 RTO. 0 (iv) Give examples of IoT applications in 5, agriculture and supply chain management: (v) What are the main characteristics of cloud computing ? (vi) Differentiate between public, private and hybrid clouds. (vii) What is virtualization and why is it important in cloud computing ? Unit I",
+      "marks": 6,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "various sccurity challenges in cloud computing: 7",
+      "source": "IoT and Cloud Computing - PYQPs.pdf"
+    },
+    {
+      "text": "Explain the layered architecture of IoT with a focus on 3-layer and 5-layer models. Also discuss the technologies that enable IoT and provide relevant examples. 3 Discuss the importance of IoT in home automation and smart cities. Also discuss the security issues of IoT and suggest possible mitigation strategies. Unit II 4_ Explain the role of IoT in health, fitness, energy conservation highlighting its benefits, challenges and examples B-15512 2 \"ts 5_ Discuss the design principles for web connectivity and the working of various communication protocols in IoT: Unit MII 6 Discuss the working of cloud computing with a focus on its architecture and infrastructure. 7 . Explain the advantages and challenges of different cloud service models. Unit IV 8 Discuss the challenges of cloud security and the strategies to address them: 9 Describe the role of SOA in cloud computing with practical applications. (1-28/7) B-15512 3 100 (08/24S) 15512 (For Batch 2021 & Onwards) (Third Semester) IoT AND CLOUD COMPUTING Maximum Marks 70",
+      "marks": 5,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "the layered architecture of IoT with a focus on 3-layer",
+      "source": "IoT and Cloud Computing - PYQPs.pdf"
+    },
+    {
+      "text": "Attempt the following parts 2 each",
+      "marks": 5,
+      "difficulty": "easy",
+      "question_type": "descriptive",
+      "topic": "Attempt the following parts 2 each",
+      "source": "IoT and Cloud Computing - PYQPs.pdf"
+    },
+    {
+      "text": "Define IoT functional view:",
+      "marks": 2,
+      "difficulty": "easy",
+      "question_type": "definition",
+      "topic": "IoT functional view",
+      "source": "IoT and Cloud Computing - PYQPs.pdf"
+    },
+    {
+      "text": "Describe federated cloud computing: RT.O (8-I3/1S)B-15512 (d) What are the different challenges in IoT ?",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "federated cloud computing: RT",
+      "source": "IoT and Cloud Computing - PYQPs.pdf"
+    },
+    {
+      "text": "Give some examples of public cloud, Unit I 2 Define IoT Explain characteristics and components of IoT with a neat diagram. Write down the advantages and disadvantages of IoT 15 3 What is Machine-to-Machine Communication (MZM) 2 How does MZM communication work ? Explain. 15 Unit M 4, Write short notes on the following",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "Give some examples of public cloud",
+      "source": "IoT and Cloud Computing - PYQPs.pdf"
+    },
+    {
+      "text": "Smart health using IoT (b) Challenges in IoT 5 5 Smart home IoT application: 5 B-15512",
+      "marks": 5,
+      "difficulty": "easy",
+      "question_type": "descriptive",
+      "topic": "Smart health",
+      "source": "IoT and Cloud Computing - PYQPs.pdf"
+    },
+    {
+      "text": "(a) Explain different application layer protocols for the IoT. T/",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "(a) Explain different application layer protocols for the Io",
+      "source": "IoT and Cloud Computing - PYQPs.pdf"
+    },
+    {
+      "text": "Which protocol is used to link all the devices in the IoT 2 Explain in detail. 72 Unit III 6_ What are the innovative characteristics of cloud computing 2 Which are the technologies on which cloud computing relies 2",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "protocol is used to link all the devices in the IoT 2 Explai",
+      "source": "IoT and Cloud Computing - PYQPs.pdf"
+    },
+    {
+      "text": "Discuss the following",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "the following",
+      "source": "IoT and Cloud Computing - PYQPs.pdf"
+    },
+    {
+      "text": "Storage virtualization 72",
+      "marks": 5,
+      "difficulty": "easy",
+      "question_type": "descriptive",
+      "topic": "Storage virtualization 72",
+      "source": "IoT and Cloud Computing - PYQPs.pdf"
+    },
+    {
+      "text": "Hypervisor and its types. 7V Unit IV 8, (a) Discuss various types of clouds. 7Y (8-13/16)B-15512 3 PTO:",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "Hypervisor and its types. 7V Unit IV 8",
+      "source": "IoT and Cloud Computing - PYQPs.pdf"
+    },
+    {
+      "text": "Describe basic component of an IaaS - based solution for cloud computing 2 72 9 What are basic requirements of a secure cloud software 2 Enlist any four: general issues in securities of cloud computing: 15 B-15512 50",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "basic component of an IaaS - based solution for cloud comput",
+      "source": "IoT and Cloud Computing - PYQPs.pdf"
+    }
+  ],
+  "Java and .NET and C#": [
+    {
+      "text": "What do you mean by unboxing 2 2",
+      "marks": 5,
+      "difficulty": "easy",
+      "question_type": "descriptive",
+      "topic": "What do you mean by unboxing 2 2",
+      "source": "Java & C# - QPs.pdf"
+    },
+    {
+      "text": "What is destructor 2 2 2",
+      "marks": 2,
+      "difficulty": "easy",
+      "question_type": "definition",
+      "topic": "destructor 2 2 2",
+      "source": "Java & C# - QPs.pdf"
+    },
+    {
+      "text": "What is package 2 PTO. 19/4) B-15455",
+      "marks": 2,
+      "difficulty": "easy",
+      "question_type": "definition",
+      "topic": "package 2 PTO. 19/4) B-15455",
+      "source": "Java & C# - QPs.pdf"
+    },
+    {
+      "text": "What is contexl switching ? (c) What do you mean by container class 2 Unit I 2_ What do you mean by [dotJNET environment Discuss various features of JAVA and Programming Languages in detail. 3 (a) What are various control statemente available in java 2 Explain them using suitable example: (b) Explain different types of operators ad their use in Java: Unit II 4, (a) What is inheritance 2 Discuss variou;] types of inheritance used in java] programming: 10  What is an Interface ? How is it used for implementing Multiple Inheritance in JAVA ? B-15455 2 5,  Whal dilferent types of exceptions can occur in java programs 2 Discuss how thesc exceplions can be handled in java. 10",
+      "marks": 6,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "contexl switching ? (c) What do you mean by container class",
+      "source": "Java & C# - QPs.pdf"
+    },
+    {
+      "text": "What is function overloading 2 5 Unit III 6. What is a thread 2 How is it created and extended ? Explain life-cycle of a thread with suitable block diagram. 15 7 _ Write short notes on the following",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "function overloading 2 5 Unit III 6",
+      "source": "Java & C# - QPs.pdf"
+    },
+    {
+      "text": "Multi-threading 5",
+      "marks": 5,
+      "difficulty": "easy",
+      "question_type": "descriptive",
+      "topic": "Multi-threading 5",
+      "source": "Java & C# - QPs.pdf"
+    },
+    {
+      "text": "Thread Synchronization 5",
+      "marks": 5,
+      "difficulty": "easy",
+      "question_type": "descriptive",
+      "topic": "Thread Synchronization 5",
+      "source": "Java & C# - QPs.pdf"
+    },
+    {
+      "text": "Inter-thread Communication, 5 Unit IV 8. Write a detailed nole on collection framework in JAVA and C# with proper examples 15 (6-19/5) B-15455 3 PT.O. 9_ Write short notes on the following 15",
+      "marks": 2,
+      "difficulty": "easy",
+      "question_type": "definition",
+      "topic": "Inter-thread Communication",
+      "source": "Java & C# - QPs.pdf"
+    },
+    {
+      "text": "Input and Output Streams (ii) File handling Operations in JAVA and C#, B-1545S 120 (12/23) 15455 (For Batch 2021 & Onwards) (First Semester) JAVA AND C Maximum Marks : 70 (Compulsory Question)",
+      "marks": 5,
+      "difficulty": "easy",
+      "question_type": "descriptive",
+      "topic": "Input and Output Streams (ii) File handling Operations in JA",
+      "source": "Java & C# - QPs.pdf"
+    },
+    {
+      "text": "~Short Answer Type Questions (a) What do you mean by scope of a variable ?  What is constructor ? (1-24/13) B-15455 PTO: 4) What is thiegdiag ? - Wnat is GTJ 2 Whai is the eurpose of 'final' in exceptioil handlitig ? 2x5-]0 Uwit ]",
+      "marks": 6,
+      "difficulty": "easy",
+      "question_type": "definition",
+      "topic": "~Short Answer Type Questions (a) What do you mean by scope o",
+      "source": "Java & C# - QPs.pdf"
+    },
+    {
+      "text": "Explain thc following (a} [dot]NET' environient  Reference ypes (c) Boxing ard uboxing: 5 5 Discws; verio:s contro} statements with prcper\" cxamples. 10 Write dowr various types of operators il Java Unit I 4. What is Polymorphism 2 Discuss various types 0f polymorphism in C#} with proper exanples 15 1-15455 2 5.",
+      "marks": 6,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "thc following (a} [dot]NET' environient  Reference ypes (c)",
+      "source": "Java & C# - QPs.pdf"
+    },
+    {
+      "text": "Whul is cncapsulaticn ' Fiow i is achizv e i) Java (b) Whal is cxccplion 2 How exceptioi:: \"T handledl inJJava ' (c) What is wn: Interface + How::is .it (scd for-implementing Multiple Inherilance in JAVA ? 5 Unit II",
+      "marks": 2,
+      "difficulty": "hard",
+      "question_type": "programming",
+      "topic": "Whul is cncapsulaticn ' Fiow i is achizv e i) Java (b) Whal",
+      "source": "Java & C# - QPs.pdf"
+    },
+    {
+      "text": "What: do yor mean by thrcad priorities and inter thread communication 71 (b) Discuss in detail the concepi of tiread syncironization: Tv: 7 Whal is 8 tlread 2 How is il, Greatec wixd extended 2 Fxplain life-cycle 0f # threzd witti suitable block diagram. i; Unit IV 8",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "What: do yor mean by thrcad priorities",
+      "source": "Java & C# - QPs.pdf"
+    },
+    {
+      "text": "Explain various Inpul\" 'Output Streani Classes in JAVA and Cli. (b) What various file handling operations are available iJ1 JAVA ad C# ? 7V;  B-15455 3 PTO. 9_ Wrilc shorl notes 0n2 the following (a) Collection Framework in JAVA/CH 74/2",
+      "marks": 134114,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "various Inpul\" 'Output Streani Classes in JAVA and Cli",
+      "source": "Java & C# - QPs.pdf"
+    },
+    {
+      "text": "Containers and Components. 742 B-15455 110 (01/23-ID) 15455 (For Batch 2021 & Onwards) (First Semester) JAVA AND C# Maximum Marks : 70 Compulsory Question 1; (a) What do you mean by boxing ? What is encapsulation ? @ What is Package ? What is Method ? (e) What is GUI ? 2 2 2 2 2 (6-18/4) B-15455 PTO. Unit I 2 Explain the various charactcristics of JAVA and C# Programming Languages in detail, 15 3 (a) What different data types are available in Java 2 Explain by giving suitable example. 8  What do you mean by scope of a variable ? Explain with example 7 Unit MI 4_ What is Polymorphism 2 Discuss ' function overloading and opertor overloading in C# with proper examples 15 5_ (a) What are constructors and destructors ? Explain each with the help of example programs, 8  What is Exception ? How exceptions are handled ? 7 B-154SS 2 Unit III  Explain thread model in JAVACH 10 6 (b) What do you mean by Multi-threading ? How is it implemented ? 5 Write short notes o the following : 5x3-15 7 () Context Switching (ii) Thread Synchronization (iii) Inter-thread Communication. Unit IV 8_ (a) Explain . various Input Output Stream Classes in Java and CH. 8  What are various file handling operations available in JAVA ad C# ? 7 9 Write short notes on the following 8 15 (i) Collection Framework in JAVAC# (ii) Containers and Components J Jyl 4 Jcp 6' (6-18/5) B-1545S 80",
+      "marks": 6,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "Containers and Components",
+      "source": "Java & C# - QPs.pdf"
+    }
+  ],
+  "Linux and Shell Scripts": [
+    {
+      "text": "What is the use of tee command in Linux ? Discuss using syntax and example. 2 (d) Discuss the sort filter using example. 2",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "the use of tee command in Linux ? Discuss using syntax",
+      "source": "Linux and Shell Script - PYQPs.pdf"
+    },
+    {
+      "text": "What is a pip ? How is it useful ? Explain using example. 2 Unit I 2",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "a pip ? How is it useful ? Explain using example. 2 Unit I 2",
+      "source": "Linux and Shell Script - PYQPs.pdf"
+    },
+    {
+      "text": "Explain the architecture and features of Linux Operating System:  Explain the following commands with their format and options in Linux with the help of examples 8 data",
+      "marks": 6,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "the architecture",
+      "source": "Linux and Shell Script - PYQPs.pdf"
+    },
+    {
+      "text": "who B-14523 2 Discuss various types of files in Linux Also 3 14 discuss the organization and structure of file 15 Unit II 4 Discuss various file handling commands (any eight) in Linux using syntax and examples 15 5 (a) Discuss about different modes of vi editor and the Ex mode commands. Also discuss various commands for text delection in vi editor: 7  How can the file permissions for an existing file be changed using chmod command 2 Discuss the USC of chmod command both in symbolic and octal notations using examples. 8 (-36/28)B-14523 3 PTO systems. Unit III 6 Differentiate between the following using suitable examples 15",
+      "marks": 6,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "who B-14523 2 Discuss various types of files in Linux Also 3",
+      "source": "Linux and Shell Script - PYQPs.pdf"
+    },
+    {
+      "text": "(a) Give a brief description of the regular expressions that can be formed using characters and strings.",
+      "marks": 5,
+      "difficulty": "easy",
+      "question_type": "descriptive",
+      "topic": "(a) Give a brief description of the regular expressions that",
+      "source": "Linux and Shell Script - PYQPs.pdf"
+    },
+    {
+      "text": "Explain the following with the help of examples wrt sed 8",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "the following with the help of examples wrt sed 8",
+      "source": "Linux and Shell Script - PYQPs.pdf"
+    },
+    {
+      "text": "deleting a line (ii) writing to files (iii) find and replace a pattern (iv) line addressing: B-14523 Unit IV",
+      "marks": 5,
+      "difficulty": "easy",
+      "question_type": "descriptive",
+      "topic": "deleting a line (ii) writing to files (iii) find",
+      "source": "Linux and Shell Script - PYQPs.pdf"
+    },
+    {
+      "text": "Discuss the user-defined variables 8, and built-in variables in AWK. 8 Discuss various string handling functions in Perl using examples. 9 (a) What are signals 2 What are various classes of signals 2 Give a brief description of some important signals. 10 (b) Discuss various process control commands using syntax and examples 5 120 (09/23-I) 15513 (For Batch 2021 & Onwards) (Third Semester) LNNUX AND SHELL SCRIPTS Maximum Marks 0 70 Attempt Five questions in all, selecting one question from each Unit. Q No. 1 is compulsory: (Compulsory Question) 1_",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "the user-defined variables 8",
+      "source": "Linux and Shell Script - PYQPs.pdf"
+    },
+    {
+      "text": "What do you mean by filters 2 (b) What do you understand by syntax ? Give example. What do you mean by scripts 2 (5-34/7) B-15513 PTO.",
+      "marks": 5,
+      "difficulty": "easy",
+      "question_type": "descriptive",
+      "topic": "What do you mean by filters 2 (b) What do you understand by",
+      "source": "Linux and Shell Script - PYQPs.pdf"
+    },
+    {
+      "text": "Write thc usc ol' cat and touch command, (e) What does the block size signify ? 5x2-10 Unit I",
+      "marks": 5,
+      "difficulty": "easy",
+      "question_type": "descriptive",
+      "topic": "thc usc ol' cat and touch command",
+      "source": "Linux and Shell Script - PYQPs.pdf"
+    },
+    {
+      "text": "(a) What do you understand by shell 2 Discuss various types of Shell.  What do you understand by UID, PID and PPID stands for 2 Explain with example. 15 3 Write short notes o the followings with their syntax cal, touch; cat; wC, sort; ls, bC, man. 15 Unit II 4 Explain the following nohup; kill, finger; who, pack, mv 15 5",
+      "marks": 6,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "(a) What do you understand by shell 2 Discuss various types",
+      "source": "Linux and Shell Script - PYQPs.pdf"
+    },
+    {
+      "text": "Explain Linux system architecture. What is the meaning of. and_. 2  Write short notes on the followings with syntax write, wall, motd, mail. 15 B-15513 5 2 Unit III 6 What do you mean by grep filter ? Discuss it with all its options by giving examples. 15",
+      "marks": 6,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "Linux system architecture",
+      "source": "Linux and Shell Script - PYQPs.pdf"
+    },
+    {
+      "text": "Explain at, batch and cron command with examples. 15 Unit IV",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "at, batch and cron command with examples. 15 Unit IV",
+      "source": "Linux and Shell Script - PYQPs.pdf"
+    },
+    {
+      "text": "What is awk ? Explain various basic regular expressions used in awk Also explain how will you splitting a line into fields using awk ? 15 9 Discuss the following 15",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "awk ? Explain various basic regular expressions used in awk",
+      "source": "Linux and Shell Script - PYQPs.pdf"
+    },
+    {
+      "text": "JOIN and SPLIT functions  Begin and end section (c) Awk filtering; (5-34/8) B-15513 3 100 (12/24) 15513 (For Batch 2021 Onwards) (Third Semester) LINUX AND SHELL SCRIPTS Maximum Marks 2 70 Attempt Five questions in all, selecting one question from each Unit. Q Noj 1 is compulsory: (Compulsory Question )",
+      "marks": 6,
+      "difficulty": "easy",
+      "question_type": "descriptive",
+      "topic": "JOIN and SPLIT functions  Begin and end section (c) Awk filt",
+      "source": "Linux and Shell Script - PYQPs.pdf"
+    },
+    {
+      "text": "(a) What is command line 2  What do you mean by scripts 2 How will you rename a file in linux 2 (8-58/1) B-15513 PTO:",
+      "marks": 6,
+      "difficulty": "easy",
+      "question_type": "listing",
+      "topic": "(a) What is command line 2  What do you mean by scripts 2 Ho",
+      "source": "Linux and Shell Script - PYQPs.pdf"
+    },
+    {
+      "text": "Define inode table with example. (e) What does the block size signify 2 Unit I 2 Write a short note on the followings with their syntax: cal, touch, cat; WC, sort; ls, bc, man 3_",
+      "marks": 2,
+      "difficulty": "easy",
+      "question_type": "definition",
+      "topic": "inode table with example",
+      "source": "Linux and Shell Script - PYQPs.pdf"
+    },
+    {
+      "text": "Write salient features of Linux operating system (b) Write the steps for logging in and logging out in Linux Unit II 4.",
+      "marks": 5,
+      "difficulty": "easy",
+      "question_type": "descriptive",
+      "topic": "salient features of Linux operating system (b) Write the ste",
+      "source": "Linux and Shell Script - PYQPs.pdf"
+    },
+    {
+      "text": "What are the differences between compress and pack ? What are the modes of operations in vi editor (b) What do you understand by piping ? How will you handle the mailing in Linux ? 5_ Explain the followings; nohup, kill, finger; who, pack; mv B-15513 Unit III 6",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "the differences between compress",
+      "source": "Linux and Shell Script - PYQPs.pdf"
+    },
+    {
+      "text": "Discuss the user-defined variables and built-in-variables in sed.  How is sed different from grep 2 Justify your answer with example.",
+      "marks": 6,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "the user-defined variables and built-in-variables in sed",
+      "source": "Linux and Shell Script - PYQPs.pdf"
+    },
+    {
+      "text": "(a) What is the difference between Line addressing and Context addressing Write their syntax also. (b) How will you perform Text Editing using sed 2 Discuss with suitable example. Unit IV 8_ What is perl 2 Explain the various types of function used with the perl. 9 Discuss the following (a) JOIN and SPLIT functions (b) begin and end section (c) awk filtering: (8-58/2) B-15513 3 100",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "(a) What is the difference between Line addressing",
+      "source": "Linux and Shell Script - PYQPs.pdf"
+    }
+  ],
+  "Network Security": [
+    {
+      "text": "What is Radix-64 text encoding 2 (e) How S/MIME can be useful to avoid phishing attack ? Explain in brief; 5x2-10 Unit I 2 (a) What is the relation between security mechanisms and attacks 2 Explain. What is logic bomb 2 How to prevent logic bomb attacks ? Write any two major logic bomb attacks in history 3_",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "Radix-64 text encoding 2 (e) How S/MIME can be useful to avo",
+      "source": "Network Security - PYQPs.pdf"
+    },
+    {
+      "text": "What is Malware 2 Explain its various types with example. Write briefly the categories of attacks What are the x.800 listed attacks 2 Unit II 4_",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "Malware 2 Explain its various types with example",
+      "source": "Network Security - PYQPs.pdf"
+    },
+    {
+      "text": "What is cryptography 2 Discuss the different cipher methods with suitable examples: 8 B-14524 How do you convert a block cipher into a stream cipher by using the Cipher Feedback (CFB) mode 2 Explain. 7",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "cryptography 2 Discuss the different cipher methods",
+      "source": "Network Security - PYQPs.pdf"
+    },
+    {
+      "text": "Elaborate various message authentication functions with neat diagrams 15 Unit MI 6 What do you mean by TP Spoofing ? Explain packet filtering process of stopping F address spoofing attack along with its limitations. 15",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "Elaborate various message authentication functions",
+      "source": "Network Security - PYQPs.pdf"
+    },
+    {
+      "text": "(a) What is web security consideration ? How is it beneficial 2",
+      "marks": 2,
+      "difficulty": "easy",
+      "question_type": "definition",
+      "topic": "(a) What is web security consideration ? How is it beneficia",
+      "source": "Network Security - PYQPs.pdf"
+    },
+    {
+      "text": "What is IKE ? Explain its functioning: 4",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "IKE ? Explain its functioning: 4",
+      "source": "Network Security - PYQPs.pdf"
+    },
+    {
+      "text": "Explain the web issues in security 4 Unit IV 8_ (a) Explain secure socket layers in detail: 7 (5-342S)B-14524 PTO, Write short notes on each (b) of Ite following e-Mail Security (ii) PEM:",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "the web issues in security 4 Unit IV 8_ (a) Explain secure s",
+      "source": "Network Security - PYQPs.pdf"
+    },
+    {
+      "text": "(a) What is Intrusion Detection System Explain various types of Intrusion Detection Systems in detail:",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "(a) What is Intrusion Detection System Explain various types",
+      "source": "Network Security - PYQPs.pdf"
+    },
+    {
+      "text": "Describe the components of fire detection and response. 120 (12/23) 15514 For Batch 2021 & Onwards) (Third Semester) NETWORK SECURITY Maximum Marks : 70 1_ AlL questions are compulsory (a) Differentiate active attack and passive attack, (1-12/11) B-15514 PTO.  What do you mean digital signature ? (c) What do you mean by computer security ? (d) Illustrate the services provided by IPSec. (e) What do you mean by brute force attack and intrusion ? Unit I 2 Discuss any four Substitution Technique: listing their merits and demerits. 3_ What do you mean by security 2 Discuss the need of security: Also explain various security standards and mechanism: Unit II 4_ What is RSA algorithm ? Explain the generation of public and private key and hence the generation of cipher text through RSA taking a suitable example. B-15514 2 5 () Wlal do youl; MicKM by ecryption {Mc decryption ' Dixeuss public key eneryption listing its advanlages md disudvantages, Unit III 6 (a) Discuss Transport laywer security in detail. (b) What do you mean by uset\" authentication protocols ? Explain briefly 7 Explain SSL protocol. List the services provided by SSL record protocol. Unit IV 8 Explain IEE 802.11 wireless LAN standard. Also discuss its operation and phases. 9",
+      "marks": 6,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "the components of fire detection and response",
+      "source": "Network Security - PYQPs.pdf"
+    },
+    {
+      "text": "Discuss different cryptographic algorithms used in S/MIME.",
+      "marks": 5,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "different cryptographic algorithms used in S/MIME",
+      "source": "Network Security - PYQPs.pdf"
+    },
+    {
+      "text": "Give the structure of PGP message generation. Explain with a diagram: (1-12/12) B-15514 3 (01/23-II) 15514 For Batch 2021 & Onwards) (Third Semester) NETWORK SECURITY MCAGEN/3/DSC2(a) Maximum Marks 70 1_ AlL questions are compulsory (i) What do you mean by cryptanalysis ? (ii) Define a block cipher: (iii) Discuss heartbeat protocol. (3-32/17B-15514 PTO:",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "Give the structure of PGP message generation",
+      "source": "Network Security - PYQPs.pdf"
+    },
+    {
+      "text": "State the working of PGP (v) List the advantages of encryption techniques. Unit I 2 Explain the following",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "PGP (v) List the advantages of encryption techniques",
+      "source": "Network Security - PYQPs.pdf"
+    },
+    {
+      "text": "Stenography  Transposition techniques 3_ Explain OSI layered architecture. Discuss the need of security at specified layer: Also explain various security attacks. Unit II",
+      "marks": 6,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "Stenography  Transposition techniques 3_ Explain OSI layered",
+      "source": "Network Security - PYQPs.pdf"
+    },
+    {
+      "text": "What do you mean by Advance Encryption Standard (AES) 2 Draw a neat and clean diagram to describe the structure of AES. Also explain its expansion function:",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "What do you mean by Advance Encryption Standard (AES) 2 Draw",
+      "source": "Network Security - PYQPs.pdf"
+    },
+    {
+      "text": "(a) How digital signature is useful for authentication 2 Explain it. B-15514 2",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "(a) How digital signature is useful for authentication 2 Exp",
+      "source": "Network Security - PYQPs.pdf"
+    },
+    {
+      "text": "Explain Diffie-Hellman key exchange mechanism in detail. Unit III 6",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "Diffie-Hellman key exchange mechanism in detail. Unit III 6",
+      "source": "Network Security - PYQPs.pdf"
+    },
+    {
+      "text": "Explain handshake protocols.  Discuss the specifications required for web security:",
+      "marks": 6,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "handshake protocols",
+      "source": "Network Security - PYQPs.pdf"
+    },
+    {
+      "text": "(a) How HTTPs is different from HTTP 2 Discuss the significance of HTTPs. (b) Write a note on connection protocols. Unit IV",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "(a) How HTTPs is different from HTTP 2 Discuss the significa",
+      "source": "Network Security - PYQPs.pdf"
+    },
+    {
+      "text": "How security is provided to wireless devices 2 Discuss the measures required for providing security: Also explain strategies required for mobile device security: 9_ Explain the following terms (a) IPSec",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "security is provided to wireless devices 2 Discuss the measu",
+      "source": "Network Security - PYQPs.pdf"
+    },
+    {
+      "text": "SMMME. (3-32/18)B-15514 3 80 (12/24) 15514 (For Batch 2021 Onwards) (Third Semester) NETWORK SECURITY MCAGEN/3/DSC2(a) Maximum Marks 70",
+      "marks": 5,
+      "difficulty": "easy",
+      "question_type": "descriptive",
+      "topic": "SMMME. (3-32/18)B-15514 3 80 (12/24) 15514 (For Batch 2021 O",
+      "source": "Network Security - PYQPs.pdf"
+    },
+    {
+      "text": "Describe the following (i) Network Security 2x5-10",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "the following (i) Network Security 2x5-10",
+      "source": "Network Security - PYQPs.pdf"
+    },
+    {
+      "text": "Cryptanalysis (iii) Digital Signature",
+      "marks": 5,
+      "difficulty": "easy",
+      "question_type": "descriptive",
+      "topic": "Cryptanalysis (iii) Digital Signature",
+      "source": "Network Security - PYQPs.pdf"
+    },
+    {
+      "text": "SMME (1-07/1) B-15514 RTO. Unit [ 2 Writc short noles on the following with example 15 (a) Plyfair Cipher (b) Vigenere Cipher (c) Book Cipher 3 Explain different security attacks and trends in the sccurity: Also discuss OSI security architecture. 15 Unit II 4 Explain AES in detail. 15",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "SMME (1-07/1) B-15514 RTO",
+      "source": "Network Security - PYQPs.pdf"
+    },
+    {
+      "text": "Describe RSA and its usage 15 Unit III 6_ Explain transport Layer Securily: 15 7 , Discuss USCr' authentication protocol and connection protocol, 15 1-15514 2 Unit IV 8_ Explain threats and strategy for mobile device security in detail. 15 9_ Write short notes on the following ; 15",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "RSA and its usage 15 Unit III 6_ Explain transport Layer Sec",
+      "source": "Network Security - PYQPs.pdf"
+    },
+    {
+      "text": "IP Security  PGP (1-07/2) B-15514 3 100",
+      "marks": 6,
+      "difficulty": "easy",
+      "question_type": "descriptive",
+      "topic": "IP Security  PGP (1-07/2) B-15514 3 100",
+      "source": "Network Security - PYQPs.pdf"
+    }
+  ],
+  "Operating Systems": [
+    {
+      "text": "(a) Explain in detail the concept of Multiprocessor Operating Systems. (b) Explain the different views of an operating system in brief: Unit II",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "(a) Explain in detail the concept of Multiprocessor Operatin",
+      "source": "Operating System - QPs.pdf"
+    },
+    {
+      "text": "(a) Explain continuous memory allocation techniques: B-15454  Consider a string 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 4, 5, 7. Calculate the page faults using FIFO and LRU page replacement policies with frame size of 3.",
+      "marks": 6,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "(a) Explain continuous memory allocation techniques: B-15454",
+      "source": "Operating System - QPs.pdf"
+    },
+    {
+      "text": "Write a neat sketch and explain the concepts involved in demand loading of a page.  Explain with an example the concept of shared segments in details: Unit III",
+      "marks": 6,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "a neat sketch",
+      "source": "Operating System - QPs.pdf"
+    },
+    {
+      "text": "What are the fundamental process states, with a state transition diagram, explain the state transitions for a process.",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "the fundamental process states",
+      "source": "Operating System - QPs.pdf"
+    },
+    {
+      "text": "What are semaphores 2 Explain how mutual exclusion is implemented with sempahores. 14/22)B-15454 3 PTO. 7 Consider the five process at arrive 0, in U order given with the length of the CPU but given in milliseconds. Process Burst Time Pl 10 P2 29 P3 3 P4 P5 12 Consider the FCFS, SJF and RR (quantum 10 ms) scheduling, draw the Gantt Chart for each of the scheduling : Determine averag: waiting time and turaround time for all te 3-scheduling algorithm: Which algorithm would give the minimum average waiting time 2 Unit IV",
+      "marks": 5,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "semaphores 2 Explain how mutual exclusion is implemented",
+      "source": "Operating System - QPs.pdf"
+    },
+    {
+      "text": "(a) Define a file system; What are various components of a file system 2 State and explain various file allocation methods: B-15454  Using deadlock detection algorithm for the following example of system check, whether the deadlock exists in the system or not: RI R2 R3 Rl R2 R3 RI R2 R3 PI 2 1 0 1 3 1 1 3 Free Resources 1 1 0 1 2 2 2 Allocated Resources Requested Resources 9. Write short notes on the following (a) Directory Structures (b) Disk Scheduling; (2-34/23)B-15454 5 120 (01/21-I) 14504 Maximum Marks 70 Attempt Five questions in all. Question No 1 is compulsory: Attempt four more questions; selecting one question ftom each Unit; All questions carry equal marks. 1_ Answer the following questions in brief: 5x2-10 (a) Compare user-level threads with kernel- level threads: (b) Define Belady $ anomaly with respect to page replacement algorithms (5-61/3) B-14504 PTO:",
+      "marks": 6,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "(a) Define a file system; What are various components of a f",
+      "source": "Operating System - QPs.pdf"
+    },
+    {
+      "text": "Differentiate between Multiprogramming and Multitasking, along with their importance. (d) What is/are the difference(s) between paging and segmentation 2",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "comparative",
+      "topic": "between Multiprogramming and Multitasking",
+      "source": "Operating System - QPs.pdf"
+    },
+    {
+      "text": "Explain various attributes of the Process Control Block (PCB) Unit I",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "various attributes of the Process Control Block (PCB) Unit I",
+      "source": "Operating System - QPs.pdf"
+    },
+    {
+      "text": "Define the operating system and discuss an operating system $ layered architecture with & neat and clean diagram. 15 3_ What are the operating system goals ? Explain the various operating systems such as the multitasking operating system, time-sharing and distributed operating system: Also, discuss the need for an operating system; 15 B-14504 2 Unit II Define page fault; What is the need of page replacement algorithms in an operating system ? Consider a page reference string 8, 5, 1, 2, 5, 2, 3, 5, 3, 2, 1, 2, 5, 1, 8, 5, 1. 3, 5, 4, Calculate the page faults using 15 (i) FIFO page replacement algorithm (ii) LRU page replacement algorithm (iii) Optimal page replacement algorithm: Initially, four frames are available and also return the minimum number of Page faults. What are the causes of thrashing 2 Explain static and dynamic memory allocation techniques along with their advantages and disadvantages. 15 Unit III",
+      "marks": 2,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "the operating system",
+      "source": "Operating System - QPs.pdf"
+    },
+    {
+      "text": "Why do we need scheduling 2 Discuss the parameters considered at the time of CPU scheduling: Explain the importance of turnaround time (TAT) 8 '1l4) B-14504 3 PTO.  Consider four processes P1, P2, P3 & P4 shown in the table Process Average Number PI 10 6 8 2 3 Draw their Gantt Chart using non pre emptive SJF and using FCFS . After that calculate the value of TAT; waiting tim: and Response time 7 Why are semaphores needed in process synchronization ? Explain binary and counting semaphores with the help of an example: What are the problems associated with semaphores Describe them, [5 B-14504 Burst Time Unit IV Define deadlock: What are the (a) requirements of deadlock ? Describe the conditions or characteristics of deadlock and their prevention method. 10 b) What is the difference between safe and unsafe state 2 Discuss it: 5",
+      "marks": 6,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "do we need scheduling 2 Discuss the parameters considered at",
+      "source": "Operating System - QPs.pdf"
+    },
+    {
+      "text": "Describe in detail contiguous and linked file allocation methods with their mertis and demerits. 10 b) What is the difference between Spooling and Buffering ? Discuss it 5 B-14504 5 100 (12/23) 15454 (For Batch 2021 & Onwards) (First Semester) OPERATNNG SYSTEM Maximum Marks 70 1.",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "contiguous and linked file allocation methods",
+      "source": "Operating System - QPs.pdf"
+    },
+    {
+      "text": "Under what circumstances would a user be better off using a timesharing system rather than a PC or single-user workstation ? (1-25/1) B-15454 PTO.",
+      "marks": 5,
+      "difficulty": "easy",
+      "question_type": "descriptive",
+      "topic": "Under what circumstances would a user be better off",
+      "source": "Operating System - QPs.pdf"
+    },
+    {
+      "text": "Differentiate single thread and multi-thread processes. Write a short note on Virtual Memory: Discuss the concept of semaphores. (e) List the major attributes and operations of a file system. Unit I 2 (a) Give the architecture of an Operating System and explain the role of Kernel What . is system call 2 Briefly describe different ' types of system calls in an Operating System.",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "single thread and multi-thread processes",
+      "source": "Operating System - QPs.pdf"
+    },
+    {
+      "text": "Discuss the essential properties of the following types of systems (a) Time Sharing Systems  Multi-processor Systems (c) Distributed Systems. B-15454 2 Unit II 4_ What are different techniques for memory management ? Discuss paging and segmentation techniques in detail,",
+      "marks": 6,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "the essential properties of the following types of systems (",
+      "source": "Operating System - QPs.pdf"
+    },
+    {
+      "text": "Discuss situation under which the most frequently used page replacement algorithm generates fewer page faults than the least recently used page replacement algorithm. Also discuss under which circumstances the opposite hold ? Unit MII",
+      "marks": 5,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "situation under which the most frequently used page replacem",
+      "source": "Operating System - QPs.pdf"
+    },
+    {
+      "text": "(a) Explain the different fields of Process Control Block (PCB)  Define Process: Discuss component of process and various states of a process with the help of a process state transition diagram. (1-25/2) B-15454 3 PTO. 7 What is Scheduling 2 Describe the different types of scheduling with suitable examples. Which Scheduling technique is better than other and why ? Unit IV 8. What is meant by Deadlock ? Explain essentials conditions ' for occurrence of Deadlock: Also, discuss Deadlock Recovery and Detection Methods; 9",
+      "marks": 6,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "(a) Explain the different fields of Process Control Block (P",
+      "source": "Operating System - QPs.pdf"
+    },
+    {
+      "text": "Discuss various allocation methods for the file management system. (b) What do you mean by disk scheduling ? List the algorithms for disk scheduling: B-15454 Io",
+      "marks": 2,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "various allocation methods for the file management system",
+      "source": "Operating System - QPs.pdf"
+    }
+  ],
+  "Software Engineering": [
+    {
+      "text": "Dillerent types o' soflwarc maintenano Usc of testing: Section A",
+      "marks": 5,
+      "difficulty": "easy",
+      "question_type": "descriptive",
+      "topic": "Dillerent types o' soflwarc maintenano Usc of testing: Secti",
+      "source": "Software Engineering - QPs.pdf"
+    },
+    {
+      "text": "Explain different goals of soflwarc enginecrilg Also focus on differcnt software procej modcls in detail, 3 Discuss software project planning and its uses Also discuss COCOMO model. Section B",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "different goals of soflwarc enginecrilg Also focus on differ",
+      "source": "Software Engineering - QPs.pdf"
+    },
+    {
+      "text": "Explain software requirement specifications and its different characteristics. 5 Explain software configuration management in detail. Section C",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "software requirement specifications",
+      "source": "Software Engineering - QPs.pdf"
+    },
+    {
+      "text": "Discuss software architectural desigu in detail 7 Focus On) object-oriented design methodology with its merits with suitable examples. B-15453 Section D Explain black box and white box testing 8. techniques with their merits and demerits. 9 Write short notes on the following (a) Validation testing  Maintenance characteristics (3-3512) B-15453 3 120 Rolfo. (O12i-I) 14503 Moximum Marks 70 Tne : Tnee Hoyrs fote Attempt Five questions in all selecting one question fom each Unit Q No. 1 is compulsory All questions carry equal marks: (Compulsory Question) does software differ ffom the Hov arlifzcts produced by other engineering disciplines ? do you ensure software quality 2 How Diccuss. PTO. @SSA1OB-14503",
+      "marks": 6,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "software architectural desigu in detail 7 Focus On) object-o",
+      "source": "Software Engineering - QPs.pdf"
+    },
+    {
+      "text": "List out the elements of design model, (d) Briefly explain two types of reliability models.",
+      "marks": 2,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "out the elements of design model",
+      "source": "Software Engineering - QPs.pdf"
+    },
+    {
+      "text": "Write any two requirements validation testing techniques. 5x2-10 Unit I 2 Define Software Engineering: What are the challenges of software engineering ? How d yOu estimate the cost of software 2 15 3_ What is meant by software crisis 2 Give a generic view of software engineering paradigms. How do you ensure appropriate personnel planning in a project ? 15 Unit II 4, (a) Elaborate 0n the series in tasks in a Sofiware Configuration Management (SCM) process. List the key participants in SCM process, B-14503 2 Distinguish between ssknown risk\" and (b) \"predictable risk\". How do you manage software risks 2 Explain: 7+8-15 What are the important attributes of (a) structured analysis ? Write the guidelines for selecting appropriate tools. (b) How is software validation different from software verification 2 Discuss. 7+8-15 Unit III",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "any two requirements validation testing techniques",
+      "source": "Software Engineering - QPs.pdf"
+    },
+    {
+      "text": "List out all the activities in an object oriented design process:  What is coding used for 2 Explain different types of coding with example. 7+8-15 What are the fundamental characteristics of a good software design 2 Elaborate any two structured design methodologies in detail 15",
+      "marks": 6,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "out all the activities in an object oriented design process:",
+      "source": "Software Engineering - QPs.pdf"
+    },
+    {
+      "text": "B-14503 5 PTO: Unit IV 8_ What are the principles of testing 2 State explain development testing and its U levels--unit testing; components testing system testing; 9. What are the different types of maintenam Elaborate the activities involved maintenance. Discuss real world factors software-end factors affecting maintenance ( B-14503 (12/23) 15453 For Batch 2021 Onwards) (First Semester) SOFTWARE ENGINEERING MCAGENIIICC3 Maximum Marks 70 1_",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "B-14503 5 PTO: Unit IV 8_ What are the principles of testing",
+      "source": "Software Engineering - QPs.pdf"
+    },
+    {
+      "text": "Write a short note on project scheduling; (b) What do you understand by requirement elicitation 2 Illustrate. (c) Describe software engineering paradigm with example. (1-2413) B-15453 PTO_",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "a short note on project scheduling; (b) What do you understa",
+      "source": "Software Engineering - QPs.pdf"
+    },
+    {
+      "text": "What do you: understand by . software reliability ? State its relevance.",
+      "marks": 2,
+      "difficulty": "easy",
+      "question_type": "listing",
+      "topic": "What do you: understand by",
+      "source": "Software Engineering - QPs.pdf"
+    },
+    {
+      "text": "Discuss various types of data flow testing: Unit I",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "various types of data flow testing: Unit I",
+      "source": "Software Engineering - QPs.pdf"
+    },
+    {
+      "text": "(a) What do you understand by software crisis ? Explain the circumstances that leads towards software crises:  What is meant by software project planning ? Outline' the goals of software 'project planning as well as the activities involved in software project planning: 3: (a) What are the various parameters that affect the cost of software project ? Explain.  End user demands are source of most software project Justify: this statement Also give steps of software project life cycle model. B-15453 Unit II 4",
+      "marks": 6,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "(a) What do you understand by software crisis ? Explain the",
+      "source": "Software Engineering - QPs.pdf"
+    },
+    {
+      "text": "What is Risk Management ? Explain the various activities involved with Risk Management:  What is Software Quality Assurance (SQA) ? What are the activities involved in the SQA process ? Explain. 5.",
+      "marks": 6,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "Risk Management ? Explain the various activities involved",
+      "source": "Software Engineering - QPs.pdf"
+    },
+    {
+      "text": "Elaborate on the series in tasks in a software configuration management process. (b) What are goals of the requirements analysis and specification phase 2 How are the requirements analysis and specification carried out and by whom 2 Discuss. Unit III",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "Elaborate on the series in tasks in a software configuration",
+      "source": "Software Engineering - QPs.pdf"
+    },
+    {
+      "text": "(a) Discuss the objectives of modular software design: What are the effects of module coupling and cohesion 2 (1-24/4) B-15453 3 PTO.  What is Object-oriented concept 2 With suilable example explain when it is appropriate to use OOA VS,' Structured analysis. 7",
+      "marks": 6,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "(a) Discuss the objectives of modular software design: What",
+      "source": "Software Engineering - QPs.pdf"
+    },
+    {
+      "text": "Describe the Mill's bug seeding model. Discuss few advantages of this model over other rehability models. 6) Discuss in detail about the design process in software development process Unit IV",
+      "marks": 5,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "the Mill's bug seeding model",
+      "source": "Software Engineering - QPs.pdf"
+    },
+    {
+      "text": "(a) What is software maintenance ? Describe various categories of maintenance. Which category consumes maximum effort and why ? (b) What are various debugging approaches ? Discuss them with the help of a example. 9. Write short notes on the following (a) White box testing and black box testing (b) Building Blocks of CASE Tools B-15453 (0",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "(a) What is software maintenance ? Describe various categori",
+      "source": "Software Engineering - QPs.pdf"
+    }
+  ],
+  "Web Development": [
+    {
+      "text": "Short answer type questions 5x2-10 (a) Write an if-else statement in JavaScript: PTO. (3-07/24B-15505",
+      "marks": 2,
+      "difficulty": "easy",
+      "question_type": "listing",
+      "topic": "Short answer type questions 5x2-10 (a) Write an if-else stat",
+      "source": "Web Development - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Write the purpose of the webxml file in a servlet- based web application:",
+      "marks": 5,
+      "difficulty": "easy",
+      "question_type": "descriptive",
+      "topic": "the purpose of the webxml file in a servlet- based web appli",
+      "source": "Web Development - Previous Year QPs.pdf"
+    },
+    {
+      "text": "What are the purposes of JSP directives ?",
+      "marks": 5,
+      "difficulty": "easy",
+      "question_type": "descriptive",
+      "topic": "the purposes of JSP directives",
+      "source": "Web Development - Previous Year QPs.pdf"
+    },
+    {
+      "text": "How are buttons used in ASPNET web forms",
+      "marks": 5,
+      "difficulty": "easy",
+      "question_type": "descriptive",
+      "topic": "are buttons used in ASPNET web forms",
+      "source": "Web Development - Previous Year QPs.pdf"
+    },
+    {
+      "text": "What is the difference between doGeto) and doPost() methods in a servlet 2 Unit I 2_ (a) Explain the different data types of JavaScript with example. 8",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "the difference between doGeto)",
+      "source": "Web Development - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Implement a JavaScript for loop that prints the numbers from 1 to 10. 7 3_",
+      "marks": 10,
+      "difficulty": "hard",
+      "question_type": "programming",
+      "topic": "Implement a JavaScript for loop that prints the numbers from",
+      "source": "Web Development - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Create an HTML document structure and explain its different parts. 8 B-15505 2",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "Create an HTML document structure",
+      "source": "Web Development - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Write a java script to show the usage of if-else statement: 7 Unit II",
+      "marks": 2,
+      "difficulty": "easy",
+      "question_type": "listing",
+      "topic": "a java script to show the usage of if-else statement: 7 Unit",
+      "source": "Web Development - Previous Year QPs.pdf"
+    },
+    {
+      "text": "What do you mean by servlet ? Explain 4 the life cycle phases of servlet",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "What do you mean by servlet ? Explain 4 the life cycle phase",
+      "source": "Web Development - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Describe HTTP Servlet Request and HTTP Servlet Response objects in a servlet with example. 5_",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "HTTP Servlet Request",
+      "source": "Web Development - Previous Year QPs.pdf"
+    },
+    {
+      "text": "What is session management in Servlet ? Describe two methods/ techniques for managing user sessions",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "session management in Servlet ? Describe two methods/ techni",
+      "source": "Web Development - Previous Year QPs.pdf"
+    },
+    {
+      "text": "What is the importance of data validation in servlets and describe two methods/ techniques that can be used for data validation; (3-07/25)B-15505 3 PTO: Unit III 6 (a) Explain, what are JavaServer Pages (TSP) and how are they differ from servlets i web application development 2",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "the importance of data validation in servlets",
+      "source": "Web Development - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Describe, how are cookies used for session tracking in JSP ?",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "Describe, how are cookies used for session tracking in JSP",
+      "source": "Web Development - Previous Year QPs.pdf"
+    },
+    {
+      "text": "(a) What is SSL protocol and explain it role in securing communication between _ a web server and a client,",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "(a) What is SSL protocol",
+      "source": "Web Development - Previous Year QPs.pdf"
+    },
+    {
+      "text": "How JSP Expression Language (EL) cal| be used in JSP ? Explain with example Unit IV",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "JSP Expression Language (EL) cal| be used in JSP ? Explain",
+      "source": "Web Development - Previous Year QPs.pdf"
+    },
+    {
+      "text": "(a) Discuss the structure of an ASPNET] web form with HTML and server controls. B-15505",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "(a) Discuss the structure of an ASPNET] web form with HTML",
+      "source": "Web Development - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Explain the purpose and usage of the text box; list box, and combo box controls in ASPNET 8 9 Explain the ASPNET security model and its key components in web application development. Discuss, how does it ensure application security 1 15 B-15505 5 50 (05/24) 15505 (For Batch 2021 & Onwards) (Second Semester) WEB DEVELOPMENT USING SERVLET, JSP AND ASPNET Maximum Marks 70 (Compulsory Question 1_ Short answer type questions 5x2-10 (a) How do you create a hyperlink in HTML 2 (3-29/16B-15505 PTO.  Explain the concept of data validation in servlets. (c) What is the role of JavaBeans in JSP development 2",
+      "marks": 6,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "the purpose and usage of the text box; list box",
+      "source": "Web Development - Previous Year QPs.pdf"
+    },
+    {
+      "text": "What is the purpose of a text box control in ASPNET 2",
+      "marks": 2,
+      "difficulty": "easy",
+      "question_type": "definition",
+      "topic": "the purpose of a text box control in ASPNET 2",
+      "source": "Web Development - Previous Year QPs.pdf"
+    },
+    {
+      "text": "What is the use of doPost() method in a servlet Unit I",
+      "marks": 2,
+      "difficulty": "easy",
+      "question_type": "definition",
+      "topic": "the use of doPost() method in a servlet Unit I",
+      "source": "Web Development - Previous Year QPs.pdf"
+    },
+    {
+      "text": "(a) Write a JavaScript function that takes two numbers as parameters and returns their sum: 7",
+      "marks": 5,
+      "difficulty": "easy",
+      "question_type": "descriptive",
+      "topic": "(a) Write a JavaScript function that takes two numbers as pa",
+      "source": "Web Development - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Describe -the difference between a web server and an application server with suitable example. 8 B-15505",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "-the difference between a web server",
+      "source": "Web Development - Previous Year QPs.pdf"
+    },
+    {
+      "text": "'(a) Explain usage of the looping statemenl in JavaScript with an example.  What is CSS and its types 2 Create a CSS rule that sets the background color of all <p> elements to blue and the font color to white. 8 Unit II",
+      "marks": 6,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "'(a) Explain usage of the looping statemenl in JavaScript",
+      "source": "Web Development - Previous Year QPs.pdf"
+    },
+    {
+      "text": "(a) What do you mean by supporting classes ? , Write down the importance of supporting classes in servlet deveiopment: 8",
+      "marks": 5,
+      "difficulty": "easy",
+      "question_type": "descriptive",
+      "topic": "(a) What do you mean by supporting classes ?",
+      "source": "Web Development - Previous Year QPs.pdf"
+    },
+    {
+      "text": "'Compare the HTTP GET and POST methods. Why 'these are used 2 7",
+      "marks": 5,
+      "difficulty": "easy",
+      "question_type": "comparative",
+      "topic": "'Compare the HTTP GET and POST methods",
+      "source": "Web Development - Previous Year QPs.pdf"
+    },
+    {
+      "text": "(a) Explain the purpose of the <servlet> and <servlet- mapping elements in the web;xml file 7",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "(a) Explain the purpose of the <servlet>",
+      "source": "Web Development - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Define servlet filters and explain how these are used process requests in 4 servlet-based web to application: 8 (3-29117B-15505 3 PTO_ Unit III",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "servlet filters",
+      "source": "Web Development - Previous Year QPs.pdf"
+    },
+    {
+      "text": "(a) Describe the difference between standard JSP tags and custom JSP tags with example.  Describe the different methods of session tracking in JSP with example. 8",
+      "marks": 6,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "(a) Describe the difference between standard JSP tags",
+      "source": "Web Development - Previous Year QPs.pdf"
+    },
+    {
+      "text": "(a) How JavaMail API can be used in JSP to send e-Mail messages.",
+      "marks": 5,
+      "difficulty": "easy",
+      "question_type": "descriptive",
+      "topic": "(a) How JavaMail API can be used in JSP to send e-Mail messa",
+      "source": "Web Development - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Explain the process of establishing an SSL connection between a web server and a client Unit IV",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "the process of establishing an SSL connection between a web",
+      "source": "Web Development - Previous Year QPs.pdf"
+    },
+    {
+      "text": "(a) Write down the features and, tools of Visual Studio development environment for ASPNET 8 B-15505",
+      "marks": 5,
+      "difficulty": "easy",
+      "question_type": "descriptive",
+      "topic": "(a) Write down the features and",
+      "source": "Web Development - Previous Year QPs.pdf"
+    },
+    {
+      "text": "Differentiate between a container control and a component control in ASPNET with example. What is the forin authentication in ASPNET ? Write down its workflow of user authenticating with steps and explain, how the user's identity is maintained 2 15 615505 5 110",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "between a container control",
+      "source": "Web Development - Previous Year QPs.pdf"
+    },
+    {
+      "text": "What is the difference between padding and margin in CSS 2  http is a statement protocol. Comment: (c) What do you understand by meta tags in html 2 (2-20/8) B-14521 BTO.",
+      "marks": 6,
+      "difficulty": "easy",
+      "question_type": "listing",
+      "topic": "the difference between padding",
+      "source": "Web Development - PYQPs.pdf"
+    },
+    {
+      "text": "What is the difference between indexed array and associative array in PHP ? (e) What is DTD ? What is the purpose of it ? Unit I 2 (a) What is a Computer Network ? What is Internet ? Write a note 0n the evolution of Internet and WWW: 'b) Write a note on SMTP 3_ (a) What is POP3 protocol ? How is it used ? Discuss.  What is a home page ? Discuss the set of guidelines for designing the home page of a website. Unit II 4",
+      "marks": 6,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "the difference between indexed array",
+      "source": "Web Development - PYQPs.pdf"
+    },
+    {
+      "text": "What is the basic structure of an html document 2 Explain:  What is CSS ? What is the need of it ? Write a note on CSS box model. B-14521 2",
+      "marks": 6,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "the basic structure of an html document 2 Explain:  What is",
+      "source": "Web Development - PYQPs.pdf"
+    },
+    {
+      "text": "What are the different link states in CSS ? 5, Illustrate. How do you create a hyperlink in html ? Discuss in detail. Unit MII 6_ What do you understand by XML elements and attributes 2 When is it advisable to use attributes ? Discuss 1 (a) For what purposes XML documents are used 2 Discuss the structure of XML document.  Write a detailed note on DTD elements. Unit IV 8 (a) What are the different types of loops available in PHP 2 Discuss  How is an argument passed to a function by reference in PHP ? Explain using an example  B-14521 PTO. 3 9 (a) Discuss the PHP features to handle htmy Ad forms: Use suitable examples  What is AJAX 2 When one should uSe it ? Illustrate. B - 120 (09/23-II) 15511 (For Batch 2021 & Onwards) (Third Semester) WEB DEVELOPMENT Maximum Marks 70 Attempt Five questions in all, selecting one question from each Unit. Q_ No_ 1 is compulsory 1_ (a) What is GPS 2",
+      "marks": 6,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "the different link states in CSS ? 5",
+      "source": "Web Development - PYQPs.pdf"
+    },
+    {
+      "text": "What is the purpose of <title> tag in HTML 2",
+      "marks": 2,
+      "difficulty": "easy",
+      "question_type": "definition",
+      "topic": "the purpose of <title> tag in HTML 2",
+      "source": "Web Development - PYQPs.pdf"
+    },
+    {
+      "text": "How to use markup in XML 2 (5-31/12)B-15511 PTO.",
+      "marks": 5,
+      "difficulty": "easy",
+      "question_type": "descriptive",
+      "topic": "to use markup in XML 2 (5-31/12)B-15511 PTO",
+      "source": "Web Development - PYQPs.pdf"
+    },
+    {
+      "text": "Explain any (wo rool elemnents in HTMLS",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "any (wo rool elemnents in HTMLS",
+      "source": "Web Development - PYQPs.pdf"
+    },
+    {
+      "text": "Explain the purpose <optgroup> tag in HTML with syntax 5x2-10 Unit [ 2 What is website navigation 2 Explain importance of navigation and type of navigation in detail;, 15 3",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "the purpose <optgroup> tag in HTML",
+      "source": "Web Development - PYQPs.pdf"
+    },
+    {
+      "text": "What do YOu mean by cohesive organization systems 2 How to create cohesive organization systems 2  What are the search engines and how do they work 2 Explain in detail with examples. 8 Unit IL 4 Write a code in HTML to create a home page t0 get information of any school/college. 15 I5-15511 2",
+      "marks": 6,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "What do YOu mean by cohesive organization systems 2 How to c",
+      "source": "Web Development - PYQPs.pdf"
+    },
+    {
+      "text": "Write a code in HTML 5 to create CSS file for any web page design. 7  Explain use of media in HTML and other media types in detail with examples \"8 Unit III 6_ (a) What is DOM 2 Write code to create HTM file that extracts the data of XM document using DOM 10 b) What do mean of SGM? Explain with example. 5",
+      "marks": 6,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "a code in HTML 5 to create CSS file for any web page design",
+      "source": "Web Development - PYQPs.pdf"
+    },
+    {
+      "text": "(a) Explain the relationship between HTML, SGML and XML with help of example. 8",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "(a) Explain the relationship between HTML",
+      "source": "Web Development - PYQPs.pdf"
+    },
+    {
+      "text": "What is the structure of XML documents ? How you define tree structure in XM 2 7 Unit IV 8, Explain difference features Web 1.0, Web 2.0 and Web 3.0. (5-31/13)B-15511 3 PTO. 9",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "the structure of XML documents ? How you define tree structu",
+      "source": "Web Development - PYQPs.pdf"
+    },
+    {
+      "text": "Write notes on the following with help of example 3*3-9 Flow elements (ii) Embedded elements (iii) W3C specification: (b) Describe RFC and IANA Documentation 6 B-15511 100 (12/24) 15511 For Batch 2021 & Onwards) (Third Semester) WEB DEVELPOMENT Maximum Marks 70 Attempt Five questions in all, selecting one question from each Unit. Q. No_ 1 is compulsory",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "notes on the following",
+      "source": "Web Development - PYQPs.pdf"
+    },
+    {
+      "text": "(a) What is Intranet",
+      "marks": 2,
+      "difficulty": "easy",
+      "question_type": "definition",
+      "topic": "(a) What is Intranet",
+      "source": "Web Development - PYQPs.pdf"
+    },
+    {
+      "text": "What do mean of <section> tag in web development 2",
+      "marks": 5,
+      "difficulty": "easy",
+      "question_type": "descriptive",
+      "topic": "What do mean of <section> tag in web development 2",
+      "source": "Web Development - PYQPs.pdf"
+    },
+    {
+      "text": "What is an XML declaration example 2 (5-43/23)B-15511 PTO_ What is HTMLS explain 2 (d) Explain the purpose <blink> tag in HTML with syntax Sx2-10 Unit I",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "an XML declaration example 2 (5-43/23)B-15511 PTO_ What is H",
+      "source": "Web Development - PYQPs.pdf"
+    },
+    {
+      "text": "(a) What is the role of information architect ? Explain different organization challenges in information architecture with example. 742  What do mean of design sketches 2 Explain different type design sketches in detail: 74 3",
+      "marks": 6,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "(a) What is the role of information architect ? Explain diff",
+      "source": "Web Development - PYQPs.pdf"
+    },
+    {
+      "text": "Write notes on the following 4+4=8 (i) Grouping content",
+      "marks": 5,
+      "difficulty": "easy",
+      "question_type": "descriptive",
+      "topic": "notes on the following 4+4=8 (i) Grouping content",
+      "source": "Web Development - PYQPs.pdf"
+    },
+    {
+      "text": "Collaboration and Communication.",
+      "marks": 5,
+      "difficulty": "easy",
+      "question_type": "descriptive",
+      "topic": "Collaboration and Communication",
+      "source": "Web Development - PYQPs.pdf"
+    },
+    {
+      "text": "Explain high level architecture Blue print in detail with help of example. 7 B-15511 2 Unit II 4",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "high level architecture Blue print in detail",
+      "source": "Web Development - PYQPs.pdf"
+    },
+    {
+      "text": "Explain preliminaries of image with help of example. Also explain different issues in downloading image What is CSS ? Explain different type of CSS with help\" of example. 8",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "preliminaries of image with help of example",
+      "source": "Web Development - PYQPs.pdf"
+    },
+    {
+      "text": "What is use and purpose of form tag 2 Explain different form control with help of example 15 Unit III",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "use and purpose of form tag 2 Explain different form control",
+      "source": "Web Development - PYQPs.pdf"
+    },
+    {
+      "text": "(a) What is XM ? Explain; how to write an XM document ? What are the goals of XM ? Clearly explain the XML Schema and XM parsing in detail 10 What do you mean of DTD 2 Explain with example. 5",
+      "marks": 2,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "(a) What is XM ? Explain; how to write an XM document ? What",
+      "source": "Web Development - PYQPs.pdf"
+    },
+    {
+      "text": "(a) Explain the markup elements and its attributes with help of example. 7 (5-43/24)B-15511 3 PTO.  Explain XML text and text formatting element with help of code_ 8 Unit IV",
+      "marks": 6,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "(a) Explain the markup elements",
+      "source": "Web Development - PYQPs.pdf"
+    },
+    {
+      "text": "(a) Explain any ten new feature of HTMLS with its purpose and example. 10 (b) Write a note on the internet web technology: 5 9",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "(a) Explain any ten new feature of HTMLS with its purpose",
+      "source": "Web Development - PYQPs.pdf"
+    },
+    {
+      "text": "Explain HTMLS and other technology in detail with help of example. 10 (b) Explain the metadata elements in HTMLS with help of example. 5 B-ISSI] 120",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "HTMLS and other technology in detail with help of example",
+      "source": "Web Development - PYQPs.pdf"
+    }
+  ],
+  "Wireless Networks": [
+    {
+      "text": "What is an SMS in GSM 2 (e) What do you mean by Firewall 2 Unit I 2 What do you mean by multiple radio access networks ? How fixed assignment is performed over voice oriented networks 2 15",
+      "marks": 2,
+      "difficulty": "easy",
+      "question_type": "definition",
+      "topic": "an SMS in GSM 2 (e) What do you mean by Firewall 2 Unit I 2",
+      "source": "Wireless Network - PYQPs.pdf"
+    },
+    {
+      "text": "How security is implemented in multiple radio access networks 2 Explain 15 Unit II 4. Discuss third generation systems WCDMA and CDMA 2000 of wireless WANs. 15 5 . Write short notes on the following 8+7-15 (a) GPRS  LTE: Unit III 6_ Explain the architecture of IEEE 802.11 WAN for medium access in wireless LAN,' Also list the services provided by WLAN. 15 B-14525 2 Explain the following 7+8-15 (a) Wi-Max Standard  MAC Management Sublayer: Unit IV 6_ What do you mean by a routing protocol 2 Discuss and differentiate between Table-driven and 0n-demand Routing protocols. 15 0_ Discuss the following 8+7=15",
+      "marks": 6,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "security is implemented in multiple radio access networks 2",
+      "source": "Wireless Network - PYQPs.pdf"
+    },
+    {
+      "text": "Classification of Wireless sensor networks",
+      "marks": 5,
+      "difficulty": "easy",
+      "question_type": "descriptive",
+      "topic": "Classification of Wireless sensor networks",
+      "source": "Wireless Network - PYQPs.pdf"
+    },
+    {
+      "text": "?1/8) B-14525 3 120 (12/23) 15515 (For Batch 2021 & Onwards) (Third Semester) WRELESS NETWORK MCAIGENI3IDSC2(b) Maximum Marks 0 70",
+      "marks": 5,
+      "difficulty": "easy",
+      "question_type": "descriptive",
+      "topic": "1/8) B-14525 3 120 (12/23) 15515 (For Batch 2021 & Onwards)",
+      "source": "Wireless Network - PYQPs.pdf"
+    },
+    {
+      "text": "No. 1 is compulsory. In addition attempt one question from each Unit: 1_ Attempt the following parts 2*5-10 (a) Discuss the purpose of Firewall in UMTS network (b) Describe Timeout freezing: (c) Discuss care of address in mobile IP 1-12/13) B-15515 PTO_",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "No. 1 is compulsory. In addition attempt one question from e",
+      "source": "Wireless Network - PYQPs.pdf"
+    },
+    {
+      "text": "Digcuys (hc dligadvantafyes of indirect 'TCV, (c) Discuss thc challengges of 4G Unid [ 2 Describe Che uscr sccnario architecture 'arid protocol stack of Bluetooth technology: 15",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "Digcuys (hc dligadvantafyes of indirect 'TCV",
+      "source": "Wireless Network - PYQPs.pdf"
+    },
+    {
+      "text": "Describe briefly the following protocols (a) IEEE 802.11  TEEE 802.11b and IEEE 802.1la (c) IEEE 802.16. 3*5-15 Unit II 4 Explain (and compare) the working mechanism of destination sequence distance vector and dynamic source routing protocol when applied 01l a mobile adhoc network scenario. 15 5_ Discuss the following concepts (a) Tunnelling and encapsulation (b) IPV6 8 7 B-15515 Unit III 6 Describe the working mechanism of Traditional TCP 15 7 Discuss the following topics with respect of TCP 3x5-15",
+      "marks": 6,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "the following protocols (a) IEEE 802",
+      "source": "Wireless Network - PYQPs.pdf"
+    },
+    {
+      "text": "Congestion control  Transaction-oriented TCP (c) Time out Freezing: Unit IV 8 Explain UMTS core network architecture. 15",
+      "marks": 6,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "Congestion control  Transaction-oriented TCP (c) Time out Fr",
+      "source": "Wireless Network - PYQPs.pdf"
+    },
+    {
+      "text": "(a) Discuss the features and challenges of 5G technology 10 (b) Write a note On LTE network. 5 (1-12/14) B-15515 3 8k (12/24) 15515 (For Batch 2021 & Onwards) (Third Semester) WIRELESS NETWORK Maximum Marks 0 70",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "(a) Discuss the features",
+      "source": "Wireless Network - PYQPs.pdf"
+    },
+    {
+      "text": "(i) What is care of address in mobile IP ? (ii) What are Piconet and Scatternet ? (iii) Define the term Care-of address in mobile P (iv) List the characteristics of 4G Network, (v) Give names of any four schemes to improve the TCPs performance in wireless networks: 5x2-10 (1-03/12) B-15515 PTO. Unit I 2 Explain in detail about the IEE 802.11 protocol architecture and bridging with other networks 3 Define HiperLan-2. Discuss about the various operation modes and protocol stack in HiperLan-2. 15 Unit II 4_ Explain the Mobile IP session initiation protocol for IP pocket delivery in Mobile IP Networks. 15 5_ Explain with neat diagram and example the destination sequence distance vector routing algorithm of Adhoc Networks: 15 Unit MII 6_ Explain the Congestion control, Slow start and Fast retransmit/fast recovery in traditional TCP 15 1-15515 2 7_ Describe the Snooping TCP and points out the advantages and disadvantages 15 Unit IV",
+      "marks": 2,
+      "difficulty": "hard",
+      "question_type": "descriptive",
+      "topic": "(i) What is care of address in mobile IP ? (ii) What are Pic",
+      "source": "Wireless Network - PYQPs.pdf"
+    },
+    {
+      "text": "With neat diagram; explain the Reference Architecture of UMTS. 15 9 Describe Channel Structure in UMTS Terrestrial Radio. 15 (1-03/13) B-15515 3 100",
+      "marks": 5,
+      "difficulty": "medium",
+      "question_type": "descriptive",
+      "topic": "With neat diagram; explain the Reference Architecture of UMT",
+      "source": "Wireless Network - PYQPs.pdf"
+    }
+  ]
+}

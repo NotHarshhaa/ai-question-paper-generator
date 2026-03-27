@@ -1,0 +1,259 @@
+import uuid
+import logging
+from datetime import datetime, timezone
+
+from flask import Flask, request, jsonify, send_file
+from flask_cors import CORS
+
+from config import FLASK_HOST, FLASK_PORT, FLASK_DEBUG, T5_MODEL_NAME, BERT_MODEL_NAME
+from database.db import init_db, save_paper, get_all_papers, get_paper_by_id, delete_paper_by_id
+from utils.nlp_processor import NLPProcessor
+from utils.ai_engine import AIEngine
+from utils.smart_selector import SmartSelector
+from utils.paper_structurer import PaperStructurer
+from utils.pdf_generator import PDFGenerator
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+)
+logger = logging.getLogger(__name__)
+
+# Initialize Flask app
+app = Flask(__name__)
+CORS(app, origins=["http://localhost:3000", "http://127.0.0.1:3000"])
+
+# Initialize components
+nlp = NLPProcessor()
+ai_engine = AIEngine(T5_MODEL_NAME, BERT_MODEL_NAME)
+selector = SmartSelector(ai_engine)
+structurer = PaperStructurer()
+pdf_gen = PDFGenerator()
+
+# Initialize database
+init_db()
+
+
+@app.route("/api/generate", methods=["POST"])
+def generate_paper():
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({"error": "No JSON data provided"}), 400
+
+        subject = data.get("subject", "").strip()
+        syllabus = data.get("syllabus", "").strip()
+        exam_pattern = data.get("exam_pattern", "standard")
+        total_marks = int(data.get("total_marks", 80))
+        duration_minutes = int(data.get("duration_minutes", 180))
+        num_questions = int(data.get("num_questions", 9))
+        difficulty_distribution = data.get(
+            "difficulty_distribution", {"easy": 30, "medium": 40, "hard": 30}
+        )
+        university_name = data.get("university_name", "")
+        semester = data.get("semester", "")
+
+        if not subject:
+            return jsonify({"error": "Subject is required"}), 400
+        if not syllabus or len(syllabus) < 10:
+            return jsonify({"error": "Syllabus must be at least 10 characters"}), 400
+
+        logger.info("Generating paper for subject: %s", subject)
+
+        # Step 1: NLP — Extract topics and units
+        topics = nlp.extract_topics(syllabus)
+        units = nlp.extract_units(syllabus)
+        unit_topic_map = nlp.map_topics_to_units(syllabus)
+        important_topics = nlp.get_important_topics(syllabus, top_n=20)
+
+        logger.info("Extracted %d topics, %d units", len(topics), len(units))
+
+        # Step 2: AI — Generate questions for each topic
+        all_questions = []
+        questions_per_topic = max(2, (num_questions * 3) // max(len(important_topics), 1))
+
+        for topic in important_topics:
+            # Find which unit this topic belongs to
+            topic_unit = "Unit 1"
+            for unit_name, unit_topics in unit_topic_map.items():
+                if any(topic.lower() in t.lower() or t.lower() in topic.lower() for t in unit_topics):
+                    topic_unit = unit_name
+                    break
+
+            generated = ai_engine.generate_questions(topic, syllabus, questions_per_topic)
+
+            for q_text in generated:
+                difficulty = ai_engine.classify_difficulty(q_text)
+                all_questions.append(
+                    {
+                        "id": str(uuid.uuid4()),
+                        "text": q_text,
+                        "marks": 0,
+                        "difficulty": difficulty,
+                        "unit": topic_unit,
+                        "topic": topic,
+                        "question_type": _classify_question_type(q_text),
+                    }
+                )
+
+        logger.info("Generated %d raw questions", len(all_questions))
+
+        # Step 3: Smart Selection
+        selected = selector.select_questions(
+            all_questions, difficulty_distribution, num_questions
+        )
+
+        # Step 4: Structure paper
+        sections = structurer.structure_paper(selected, exam_pattern, total_marks)
+
+        # Build final paper object
+        paper_id = str(uuid.uuid4())
+        paper = {
+            "id": paper_id,
+            "subject": subject,
+            "university_name": university_name,
+            "semester": semester,
+            "syllabus": syllabus,
+            "exam_pattern": exam_pattern,
+            "total_marks": total_marks,
+            "duration_minutes": duration_minutes,
+            "num_questions": len(selected),
+            "difficulty_distribution": difficulty_distribution,
+            "questions": selected,
+            "sections": sections,
+            "syllabus_topics": important_topics,
+            "created_at": datetime.now(timezone.utc).isoformat(),
+        }
+
+        # Save to database
+        save_paper(paper)
+        logger.info("Paper saved with id: %s", paper_id)
+
+        return jsonify(paper), 201
+
+    except Exception as e:
+        logger.exception("Error generating paper")
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/papers", methods=["GET"])
+def list_papers():
+    try:
+        papers = get_all_papers()
+        return jsonify(papers)
+    except Exception as e:
+        logger.exception("Error listing papers")
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/papers/<paper_id>", methods=["GET"])
+def get_paper(paper_id):
+    try:
+        paper = get_paper_by_id(paper_id)
+        if paper is None:
+            return jsonify({"error": "Paper not found"}), 404
+        return jsonify(paper)
+    except Exception as e:
+        logger.exception("Error getting paper")
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/papers/<paper_id>", methods=["DELETE"])
+def delete_paper(paper_id):
+    try:
+        deleted = delete_paper_by_id(paper_id)
+        if not deleted:
+            return jsonify({"error": "Paper not found"}), 404
+        return jsonify({"message": "Paper deleted successfully"})
+    except Exception as e:
+        logger.exception("Error deleting paper")
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/papers/<paper_id>/pdf", methods=["GET"])
+def export_pdf(paper_id):
+    try:
+        paper = get_paper_by_id(paper_id)
+        if paper is None:
+            return jsonify({"error": "Paper not found"}), 404
+
+        filepath = pdf_gen.generate_pdf(paper)
+        return send_file(
+            filepath,
+            as_attachment=True,
+            download_name=f"{paper['subject'].replace(' ', '_')}_Question_Paper.pdf",
+            mimetype="application/pdf",
+        )
+    except Exception as e:
+        logger.exception("Error exporting PDF")
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/subjects", methods=["GET"])
+def list_subjects():
+    subjects = [
+        "Computer Science",
+        "Mathematics",
+        "Physics",
+        "Chemistry",
+        "Biology",
+        "Electronics",
+        "Mechanical Engineering",
+        "Civil Engineering",
+        "Data Structures",
+        "Operating Systems",
+        "Database Management",
+        "Artificial Intelligence",
+        "Machine Learning",
+        "Computer Networks",
+    ]
+    return jsonify(subjects)
+
+
+@app.route("/api/analyze-syllabus", methods=["POST"])
+def analyze_syllabus():
+    try:
+        data = request.get_json()
+        syllabus = data.get("syllabus", "").strip()
+        if not syllabus:
+            return jsonify({"error": "Syllabus is required"}), 400
+
+        topics = nlp.extract_topics(syllabus)
+        units = nlp.extract_units(syllabus)
+
+        return jsonify({"topics": topics, "units": units})
+    except Exception as e:
+        logger.exception("Error analyzing syllabus")
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/health", methods=["GET"])
+def health():
+    return jsonify({"status": "ok", "message": "AI Question Paper Generator API is running"})
+
+
+def _classify_question_type(question: str) -> str:
+    q_lower = question.lower()
+    if any(kw in q_lower for kw in ["explain", "describe", "discuss", "elaborate"]):
+        return "descriptive"
+    elif any(kw in q_lower for kw in ["compare", "differentiate", "contrast"]):
+        return "comparative"
+    elif any(kw in q_lower for kw in ["derive", "prove", "calculate"]):
+        return "analytical"
+    elif any(kw in q_lower for kw in ["write a program", "implement", "code"]):
+        return "programming"
+    elif any(kw in q_lower for kw in ["diagram", "draw", "illustrate"]):
+        return "diagrammatic"
+    elif any(kw in q_lower for kw in ["list", "enumerate", "name"]):
+        return "listing"
+    elif any(kw in q_lower for kw in ["what is", "define", "short note"]):
+        return "definition"
+    else:
+        return "descriptive"
+
+
+if __name__ == "__main__":
+    logger.info("Starting AI Question Paper Generator API...")
+    logger.info("Server running at http://%s:%d", FLASK_HOST, FLASK_PORT)
+    app.run(host=FLASK_HOST, port=FLASK_PORT, debug=FLASK_DEBUG)

@@ -1,0 +1,9 @@
+flask==3.1.0
+flask-cors==5.0.1
+nltk==3.9.1
+scikit-learn==1.6.1
+transformers==4.47.1
+torch==2.5.1
+sentence-transformers==3.3.1
+reportlab==4.2.5
+python-dotenv==1.0.1

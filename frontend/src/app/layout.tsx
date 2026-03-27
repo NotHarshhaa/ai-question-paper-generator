@@ -3,7 +3,6 @@ import { Inter } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/theme-provider";
 import Navbar from "@/components/navbar";
-import CreatorFooter from "@/components/creator-footer";
 import "./globals.css";
 
 const inter = Inter({
@@ -33,7 +32,6 @@ export default function RootLayout({
         >
           <Navbar />
           <main className="flex-1">{children}</main>
-          <CreatorFooter />
           <Toaster richColors position="top-right" />
         </ThemeProvider>
       </body>

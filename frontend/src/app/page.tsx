@@ -8,6 +8,10 @@ import {
   Zap,
   BookOpen,
   ArrowRight,
+  Mail,
+  User,
+  Code,
+  Heart,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -160,6 +164,96 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Creator Section */}
+      <section className="container mx-auto px-4 py-16 md:py-24">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 rounded-full border bg-muted px-4 py-1.5 text-sm text-muted-foreground mb-4">
+              <Heart className="h-4 w-4 text-red-500" />
+              Made with passion
+            </div>
+            <h2 className="text-3xl font-bold tracking-tight mb-3">
+              Meet the Creator
+            </h2>
+            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+              Developed as an academic project to revolutionize question paper generation.
+            </p>
+          </div>
+
+          <Card className="overflow-hidden border-2 hover:shadow-2xl transition-all duration-300">
+            <CardContent className="p-0">
+              <div className="grid md:grid-cols-5 gap-0">
+                <div className="md:col-span-2 from-primary/10 via-primary/5 to-background p-8 flex items-center justify-center">
+                  <div className="relative">
+                    <div className="absolute inset-0 from-primary to-primary/60 rounded-full blur-2xl opacity-20 animate-pulse" />
+                    <img
+                      src="https://github.com/NotHarshhaa.png"
+                      alt="H A R S H H A A"
+                      className="relative h-40 w-40 rounded-full border-4 border-primary/20 object-cover"
+                    />
+                  </div>
+                </div>
+
+                <div className="md:col-span-3 p-8 flex flex-col justify-center">
+                  <div className="mb-6">
+                    <h3 className="text-2xl font-bold mb-2">H A R S H H A A</h3>
+                    <p className="text-muted-foreground mb-1">DevOps Engineer & MLOps Specialist</p>
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <Code className="h-4 w-4" />
+                      <span>Platform Engineering Expert</span>
+                    </div>
+                  </div>
+
+                  <p className="text-muted-foreground leading-relaxed mb-6">
+                    A passionate DevOps Engineer, MLOps specialist, and Platform Engineering expert on a mission to automate everything, scale cloud infrastructures efficiently, and build internal development platforms that empower engineering teams.
+                  </p>
+
+                  <div className="flex flex-wrap gap-3">
+                    <Button variant="outline" size="sm" className="gap-2" asChild>
+                      <a href="https://github.com/NotHarshhaa" target="_blank" rel="noopener noreferrer">
+                        <Code className="h-4 w-4" />
+                        GitHub
+                      </a>
+                    </Button>
+                    <Button variant="outline" size="sm" className="gap-2" asChild>
+                      <a href="https://linkedin.com/in/notharshhaa" target="_blank" rel="noopener noreferrer">
+                        <User className="h-4 w-4" />
+                        LinkedIn
+                      </a>
+                    </Button>
+                    <Button variant="outline" size="sm" className="gap-2" asChild>
+                      <a href="mailto:contact@harshhaa.dev">
+                        <Mail className="h-4 w-4" />
+                        Email
+                      </a>
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+            <div className="p-4 rounded-lg bg-muted/50">
+              <div className="text-2xl font-bold text-primary mb-1">T5 + BERT</div>
+              <div className="text-sm text-muted-foreground">AI Models</div>
+            </div>
+            <div className="p-4 rounded-lg bg-muted/50">
+              <div className="text-2xl font-bold text-primary mb-1">Next.js</div>
+              <div className="text-sm text-muted-foreground">Frontend</div>
+            </div>
+            <div className="p-4 rounded-lg bg-muted/50">
+              <div className="text-2xl font-bold text-primary mb-1">Flask</div>
+              <div className="text-sm text-muted-foreground">Backend</div>
+            </div>
+            <div className="p-4 rounded-lg bg-muted/50">
+              <div className="text-2xl font-bold text-primary mb-1">NLP</div>
+              <div className="text-sm text-muted-foreground">Technology</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="container mx-auto px-4 py-16 md:py-24">
         <div className="bg-primary rounded-2xl p-8 md:p-12 text-center text-primary-foreground max-w-3xl mx-auto">
@@ -186,7 +280,6 @@ export default function Home() {
         <div className="container mx-auto px-4">
           <p>
             AI Question Paper Generator — Built with Next.js, Flask, T5 &amp; BERT.
-            Developed as an academic semester project.
           </p>
         </div>
       </footer>

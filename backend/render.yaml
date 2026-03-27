@@ -1,7 +1,7 @@
 services:
   - type: web
     name: ai-question-paper-generator
-    env: python
+    runtime: python
     plan: free
     buildCommand: pip install -r requirements.txt
     startCommand: bash start.sh
@@ -19,4 +19,4 @@ services:
       - key: FLASK_PORT
         value: 10000
       - key: FLASK_DEBUG
-        value: false
+        value: 0

@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
+import { ThemeProvider } from "@/components/theme-provider";
 import Navbar from "@/components/navbar";
+import CreatorFooter from "@/components/creator-footer";
 import "./globals.css";
 
 const inter = Inter({
@@ -21,11 +23,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} h-full antialiased`}>
+    <html lang="en" className={`${inter.variable} h-full antialiased`} suppressHydrationWarning>
       <body className="min-h-full flex flex-col bg-background font-sans">
-        <Navbar />
-        <main className="flex-1">{children}</main>
-        <Toaster richColors position="top-right" />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <Navbar />
+          <main className="flex-1">{children}</main>
+          <CreatorFooter />
+          <Toaster richColors position="top-right" />
+        </ThemeProvider>
       </body>
     </html>
   );

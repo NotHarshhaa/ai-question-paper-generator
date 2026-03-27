@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { Brain, FileText, History, Home, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 
@@ -31,27 +32,30 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop nav */}
-        <nav className="hidden md:flex items-center gap-1">
-          {navLinks.map((link) => {
-            const Icon = link.icon;
-            const isActive = pathname === link.href;
-            return (
-              <Link key={link.href} href={link.href}>
-                <Button
-                  variant={isActive ? "secondary" : "ghost"}
-                  size="sm"
-                  className={cn(
-                    "gap-2",
-                    isActive && "font-semibold"
-                  )}
-                >
-                  <Icon className="h-4 w-4" />
-                  {link.label}
-                </Button>
-              </Link>
-            );
-          })}
-        </nav>
+        <div className="hidden md:flex items-center gap-1">
+          <nav className="flex items-center gap-1">
+            {navLinks.map((link) => {
+              const Icon = link.icon;
+              const isActive = pathname === link.href;
+              return (
+                <Link key={link.href} href={link.href}>
+                  <Button
+                    variant={isActive ? "secondary" : "ghost"}
+                    size="sm"
+                    className={cn(
+                      "gap-2",
+                      isActive && "font-semibold"
+                    )}
+                  >
+                    <Icon className="h-4 w-4" />
+                    {link.label}
+                  </Button>
+                </Link>
+              );
+            })}
+          </nav>
+          <ThemeToggle />
+        </div>
 
         {/* Mobile nav */}
         <Sheet open={open} onOpenChange={setOpen}>
@@ -84,6 +88,12 @@ export default function Navbar() {
                   </Link>
                 );
               })}
+              <div className="mt-4 pt-4 border-t">
+                <div className="flex items-center justify-between px-2">
+                  <span className="text-sm font-medium">Theme</span>
+                  <ThemeToggle />
+                </div>
+              </div>
             </nav>
           </SheetContent>
         </Sheet>

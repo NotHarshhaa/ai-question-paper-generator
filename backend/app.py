@@ -193,20 +193,24 @@ def export_pdf(paper_id):
 @app.route("/api/subjects", methods=["GET"])
 def list_subjects():
     subjects = [
-        "Computer Science",
-        "Mathematics",
-        "Physics",
-        "Chemistry",
-        "Biology",
-        "Electronics",
-        "Mechanical Engineering",
-        "Civil Engineering",
-        "Data Structures",
-        "Operating Systems",
-        "Database Management",
-        "Artificial Intelligence",
-        "Machine Learning",
+        "Computer Architecture and Parallel Processing",
         "Computer Networks",
+        "Software Engineering",
+        "Operating Systems",
+        "Java and .NET and C#",
+        "Data Structures",
+        "Database Systems",
+        "Artificial Intelligence",
+        "Web Development",
+        "IoT and Cloud Computing",
+        "Linux and Shell Scripts",
+        "Network Security",
+        "Wireless Networks",
+        "Python Programming",
+        "R Programming",
+        "Machine Learning",
+        "Big Data Analytics",
+        "Data Mining and Date Warehousing",
     ]
     return jsonify(subjects)
 

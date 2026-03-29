@@ -12,9 +12,9 @@ public_key_path = "~/.ssh/id_rsa.pub"
 # Other options: us-east-1, eu-west-1, ap-southeast-1
 # aws_region = "ap-south-1"
 
-# Instance type — t2.micro is free-tier eligible
-# Upgrade to t3.small (2 GB) if you want to enable T5 model
-# instance_type = "t2.micro"
+# Instance type — t3.micro is free-tier eligible in ap-south-1 (Mumbai)
+# Upgrade to t3.small (2 GB) if you want to enable the T5 model
+# instance_type = "t3.micro"
 
 # EBS volume size in GB (free tier gives 30 GB total)
 # volume_size_gb = 20

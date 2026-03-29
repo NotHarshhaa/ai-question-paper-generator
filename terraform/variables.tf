@@ -15,13 +15,13 @@ variable "app_name" {
 # ─── Compute ──────────────────────────────────────────────────────────────────
 
 variable "instance_type" {
-  description = "EC2 instance type. t2.micro is free-tier eligible."
+  description = "EC2 instance type. t3.micro is free-tier eligible in ap-south-1."
   type        = string
-  default     = "t2.micro"
+  default     = "t3.micro"
 
   validation {
-    condition     = can(regex("^t[23]\\.(micro|small|medium)", var.instance_type))
-    error_message = "Use a t2/t3 family instance for cost-efficiency."
+    condition     = can(regex("^t[234]g?\\.(micro|small|medium)", var.instance_type))
+    error_message = "Use a t2/t3/t4g family instance for cost-efficiency."
   }
 }
 

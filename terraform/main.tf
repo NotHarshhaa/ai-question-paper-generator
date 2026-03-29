@@ -32,7 +32,7 @@ resource "aws_key_pair" "app" {
 # ── Security Group ────────────────────────────────────────────────────────────
 resource "aws_security_group" "app" {
   name        = "${var.app_name}-sg"
-  description = "AI Question Paper Generator — allow HTTP and SSH"
+  description = "AI Question Paper Generator - allow HTTP and SSH"
 
   # SSH
   ingress {

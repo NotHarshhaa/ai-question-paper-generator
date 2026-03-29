@@ -1,0 +1,37 @@
+[Unit]
+Description=AI Question Paper Generator — Gunicorn Backend
+After=network.target
+Wants=network.target
+
+[Service]
+Type=simple
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/opt/ai-question-paper-generator/backend
+EnvironmentFile=/opt/ai-question-paper-generator/backend/.env
+
+ExecStart=/opt/ai-question-paper-generator/backend/venv/bin/gunicorn app:app \
+    --bind 127.0.0.1:5000 \
+    --workers 1 \
+    --threads 4 \
+    --timeout 300 \
+    --log-level info \
+    --access-logfile - \
+    --error-logfile -
+
+# Restart on crash — gives the app time to reload models
+Restart=on-failure
+RestartSec=5
+StartLimitIntervalSec=60
+StartLimitBurst=3
+
+# Allow model loading time before systemd marks it "failed"
+TimeoutStartSec=120
+
+# Graceful stop
+KillMode=mixed
+KillSignal=SIGTERM
+TimeoutStopSec=30
+
+[Install]
+WantedBy=multi-user.target

@@ -7,7 +7,7 @@ nltk==3.9.1
 scikit-learn==1.4.2
 numpy==1.26.4
 
-# Hugging Face (CPU-only torch to avoid OOM on Render free tier)
+# Hugging Face — CPU-only torch (no GPU on t2.micro free tier)
 --extra-index-url https://download.pytorch.org/whl/cpu
 torch==2.1.0+cpu
 transformers==4.40.0

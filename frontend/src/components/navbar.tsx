@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Brain, FileText, History, Home, Menu, X } from "lucide-react";
+import { Brain, FileText, History, Home, Menu, X, BarChart3, Database } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -12,6 +12,8 @@ import { useState } from "react";
 const navLinks = [
   { href: "/", label: "Home", icon: Home },
   { href: "/generate", label: "Generate", icon: Brain },
+  { href: "/question-bank", label: "Question Bank", icon: Database },
+  { href: "/analytics", label: "Analytics", icon: BarChart3 },
   { href: "/history", label: "History", icon: History },
 ];
 

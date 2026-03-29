@@ -257,6 +257,15 @@ interface FormState {
       });
     }
 
+    // If no units detected, create a default unit
+    if (units.length === 0 && syllabusText.trim().length > 10) {
+      units.push({
+        number: 1,
+        title: "Unit 1",
+        topics: []
+      });
+    }
+
     // Step 2: Topic Extraction
     const lines = syllabusText.split('\n');
     let currentUnit = 0;
@@ -277,6 +286,11 @@ interface FormState {
         const topic = trimmedLine.replace(/^[-•]\s*/, '').trim();
         if (topic && currentUnit >= 0 && currentUnit < units.length) {
           units[currentUnit].topics.push(topic);
+        }
+      } else if (trimmedLine.length > 5 && !trimmedLine.toLowerCase().includes('unit') && units.length > 0) {
+        // Add non-unit lines as topics if they're substantial enough
+        if (currentUnit >= 0 && currentUnit < units.length) {
+          units[currentUnit].topics.push(trimmedLine);
         }
       }
     });
@@ -623,7 +637,10 @@ interface FormState {
                 placeholder={`Unit 1: Introduction to Data Structures\n- Arrays, Linked Lists, Stacks, Queues\n\nUnit 2: Trees\n- Binary Trees, BST, AVL Trees\n\nUnit 3: Graphs\n- BFS, DFS, Shortest Path Algorithms`}
                 rows={12}
                 value={form.syllabus}
-                onChange={(e) => updateForm({ syllabus: e.target.value })}
+                onChange={(e) => {
+                  updateForm({ syllabus: e.target.value });
+                  processSyllabus(e.target.value);
+                }}
                 className="font-mono text-sm"
               />
               <div className="flex items-center justify-between text-xs text-muted-foreground">
@@ -632,7 +649,15 @@ interface FormState {
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => updateForm({ syllabus: "" })}
+                    onClick={() => {
+                  setForm((prev) => ({ 
+                    ...prev, 
+                    syllabus: "", 
+                    units: [], 
+                    topics: [], 
+                    keywords: [] 
+                  }));
+                }}
                     className="gap-1"
                   >
                     <FileSymlink className="h-3 w-3" />

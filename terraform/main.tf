@@ -26,7 +26,7 @@ data "aws_ami" "ubuntu" {
 # ── SSH Key Pair ──────────────────────────────────────────────────────────────
 resource "aws_key_pair" "app" {
   key_name   = "${var.app_name}-key"
-  public_key = file(var.public_key_path)
+  public_key = file(pathexpand(var.public_key_path))
 }
 
 # ── Security Group ────────────────────────────────────────────────────────────

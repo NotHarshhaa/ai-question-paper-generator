@@ -1,10 +1,14 @@
+import os
 import logging
-from transformers import T5ForConditionalGeneration, T5Tokenizer, pipeline
+from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
 from sentence_transformers import SentenceTransformer, util
 import torch
 from database.db import get_pyq_questions_by_subject, get_pyq_questions_by_difficulty
 
 logger = logging.getLogger(__name__)
+
+# Set to "1" or "true" to skip T5 loading entirely (uses template fallback)
+_DISABLE_T5 = os.getenv("DISABLE_T5_MODEL", "false").lower() in ("1", "true", "yes")
 
 
 class AIEngine:
@@ -19,25 +23,31 @@ class AIEngine:
     def load_models(self):
         if self._loaded:
             return
-        logger.info("Loading T5 model: %s", self.t5_model_name)
-        try:
-            self._t5_tokenizer = T5Tokenizer.from_pretrained(self.t5_model_name)
-            self._t5_model = T5ForConditionalGeneration.from_pretrained(
-                self.t5_model_name
-            )
-            self._t5_model.eval()
-            logger.info("T5 model loaded successfully")
-        except Exception as e:
-            logger.warning("Failed to load T5 model: %s. Using fallback.", e)
-            self._t5_model = None
-            self._t5_tokenizer = None
 
-        logger.info("Loading BERT model: %s", self.bert_model_name)
+        if _DISABLE_T5:
+            logger.info("T5 model loading skipped (DISABLE_T5_MODEL=true). Template fallback will be used.")
+        else:
+            logger.info("Loading T5 model: %s", self.t5_model_name)
+            try:
+                self._t5_tokenizer = AutoTokenizer.from_pretrained(
+                    self.t5_model_name, legacy=False
+                )
+                self._t5_model = AutoModelForSeq2SeqLM.from_pretrained(self.t5_model_name)
+                self._t5_model.eval()
+                logger.info("T5 model loaded successfully")
+            except BaseException as e:  # noqa: BLE001 — catches native crashes too
+                logger.warning("Failed to load T5 model (%s: %s). Using template fallback.",
+                               type(e).__name__, e)
+                self._t5_model = None
+                self._t5_tokenizer = None
+
+        logger.info("Loading BERT/SentenceTransformer model: %s", self.bert_model_name)
         try:
             self._bert_model = SentenceTransformer(self.bert_model_name)
             logger.info("BERT model loaded successfully")
-        except Exception as e:
-            logger.warning("Failed to load BERT model: %s. Using fallback.", e)
+        except BaseException as e:  # noqa: BLE001
+            logger.warning("Failed to load BERT model (%s: %s). Word-overlap fallback will be used.",
+                           type(e).__name__, e)
             self._bert_model = None
 
         self._loaded = True
@@ -48,11 +58,11 @@ class AIEngine:
         self.load_models()
         questions = []
 
-        if self._t5_model and self._t5_tokenizer:
+        if not _DISABLE_T5 and self._t5_model and self._t5_tokenizer:
             try:
                 questions = self._generate_with_t5(topic, context, num_questions)
-            except Exception as e:
-                logger.warning("T5 generation failed: %s. Using fallback.", e)
+            except BaseException as e:
+                logger.warning("T5 generation failed (%s): %s. Using fallback.", type(e).__name__, e)
 
         # Fallback: generate template-based questions
         if len(questions) < num_questions:
@@ -215,7 +225,7 @@ class AIEngine:
                         "text": new_question,
                         "marks": pyq["marks"],
                         "difficulty": pyq["difficulty"],
-                        "question_type": pyq["question_type"],
+                        "question_type": pyq.get("question_type") or "descriptive",
                         "topic": topic,
                         "source": "PYQ Pattern"
                     })

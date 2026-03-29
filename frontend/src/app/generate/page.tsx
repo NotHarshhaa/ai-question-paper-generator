@@ -104,8 +104,8 @@ export default function GeneratePage() {
     setProgressValue(0);
 
     const interval = setInterval(() => {
-      setProgressValue((prev) => Math.min(prev + Math.random() * 15, 90));
-    }, 500);
+      setProgressValue((prev) => Math.min(prev + Math.random() * 10, 85));
+    }, 800);
 
     try {
       const paper = await api.generatePaper(form);
@@ -117,7 +117,7 @@ export default function GeneratePage() {
       clearInterval(interval);
       setProgressValue(0);
       const message = err instanceof Error ? err.message : "Failed to generate paper";
-      toast.error(message);
+      toast.error(message, { duration: 8000 });
     } finally {
       setLoading(false);
     }
@@ -395,13 +395,24 @@ export default function GeneratePage() {
               <div className="space-y-2">
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-muted-foreground">
-                    Generating paper...
+                    {progressValue < 20
+                      ? "Connecting to AI backend..."
+                      : progressValue < 50
+                      ? "Loading AI models (may take a minute on first run)..."
+                      : progressValue < 80
+                      ? "Generating questions from syllabus..."
+                      : "Structuring paper..."}
                   </span>
                   <span className="font-medium">
                     {Math.round(progressValue)}%
                   </span>
                 </div>
                 <Progress value={progressValue} />
+                {progressValue > 5 && progressValue < 90 && (
+                  <p className="text-xs text-muted-foreground">
+                    This may take 1–3 minutes while AI models load. Please keep this tab open.
+                  </p>
+                )}
               </div>
             )}
 

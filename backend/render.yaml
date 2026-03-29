@@ -3,20 +3,41 @@ services:
     name: ai-question-paper-generator
     runtime: python
     plan: free
+    region: singapore   # change to your nearest region
     buildCommand: pip install -r requirements.txt
     startCommand: bash start.sh
     healthCheckPath: /api/health
     autoDeploy: true
+
     envVars:
+      # Flask / server
       - key: FLASK_ENV
         value: production
+      - key: FLASK_DEBUG
+        value: "0"
+      - key: FLASK_HOST
+        value: "0.0.0.0"
+
+      # Python output — makes logs visible in Render dashboard immediately
+      - key: PYTHONUNBUFFERED
+        value: "1"
+
+      # HuggingFace model names
       - key: T5_MODEL_NAME
         value: valhalla/t5-small-qg-hl
       - key: BERT_MODEL_NAME
         value: sentence-transformers/all-MiniLM-L6-v2
-      - key: FLASK_HOST
-        value: 0.0.0.0
-      - key: FLASK_PORT
-        value: 10000
-      - key: FLASK_DEBUG
-        value: 0
+
+      # IMPORTANT: Render free tier has 512 MB RAM.
+      # T5 + BERT + torch together exceed that and will OOM.
+      # Set to false only if you upgrade to a paid plan (≥1 GB RAM).
+      - key: DISABLE_T5_MODEL
+        value: "true"
+
+      # Cache HuggingFace models inside the repo so Render can reuse them
+      - key: HF_HOME
+        value: /opt/render/project/src/.cache/huggingface
+
+      # Prevents a known HuggingFace tokenizer deadlock warning in gunicorn
+      - key: TOKENIZERS_PARALLELISM
+        value: "false"

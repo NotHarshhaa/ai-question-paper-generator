@@ -2,17 +2,34 @@ const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:5000/api";
 
 async function request<T>(
   endpoint: string,
-  options?: RequestInit
+  options?: RequestInit,
+  timeoutMs = 300_000 // 5 minutes — ML model loading can be slow
 ): Promise<T> {
-  const res = await fetch(`${API_BASE}${endpoint}`, {
-    headers: { "Content-Type": "application/json" },
-    ...options,
-  });
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({ error: "Unknown error" }));
-    throw new Error(err.error || `Request failed: ${res.status}`);
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    const res = await fetch(`${API_BASE}${endpoint}`, {
+      headers: { "Content-Type": "application/json" },
+      signal: controller.signal,
+      ...options,
+    });
+    clearTimeout(timeoutId);
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ error: "Unknown error" }));
+      throw new Error(err.error || `Request failed: ${res.status}`);
+    }
+    return res.json();
+  } catch (err) {
+    clearTimeout(timeoutId);
+    if (err instanceof Error && err.name === "AbortError") {
+      throw new Error("Request timed out. The backend may be loading AI models for the first time — please try again in a moment.");
+    }
+    if (err instanceof TypeError && err.message === "Failed to fetch") {
+      throw new Error("Cannot connect to backend. Make sure the Flask server is running on http://127.0.0.1:5000");
+    }
+    throw err;
   }
-  return res.json();
 }
 
 export interface GenerateRequest {

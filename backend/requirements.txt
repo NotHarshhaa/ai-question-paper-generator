@@ -1,14 +1,23 @@
 flask==3.1.0
 flask-cors==5.0.1
+gunicorn==21.2.0
+
+# NLP / ML
 nltk==3.9.1
-transformers==4.36.0
-torch==2.1.0
-sentence-transformers==2.2.2
-huggingface-hub==0.24.0
+scikit-learn==1.4.2
+numpy==1.26.4
+
+# Hugging Face (CPU-only torch to avoid OOM on Render free tier)
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.1.0+cpu
+transformers==4.40.0
+huggingface-hub==0.23.4
+sentence-transformers==3.0.1
+tokenizers>=0.19,<0.22
+
+# PDF generation
 reportlab==4.2.5
-python-dotenv==1.0.1
 pdfplumber==0.11.4
-easyocr==1.7.2
-pdf2image==1.17.0
-numpy==1.24.3
-scikit-learn==1.2.2
+
+# Utilities
+python-dotenv==1.0.1

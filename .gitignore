@@ -61,3 +61,4 @@ htmlcov/
 # Models cache (optional - comment out if you want to cache models)
 backend/models/
 .cache/
+backend/.cache/

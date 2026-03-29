@@ -34,6 +34,15 @@ pdf_gen = PDFGenerator()
 # Initialize database
 init_db()
 
+# Eagerly load AI models at startup so the first HTTP request doesn't
+# trigger a multi-minute model download / load that times out the client.
+logger.info("Pre-loading AI models at startup (this may take a few minutes on first run)...")
+try:
+    ai_engine.load_models()
+    logger.info("AI models loaded successfully.")
+except Exception as _exc:
+    logger.warning("Model pre-load encountered an error (fallback will be used): %s", _exc)
+
 
 @app.route("/api/generate", methods=["POST"])
 def generate_paper():
@@ -48,15 +57,13 @@ def generate_paper():
         total_marks = int(data.get("total_marks", 80))
         duration_minutes = int(data.get("duration_minutes", 180))
         num_questions = int(data.get("num_questions", 9))
-        difficulty_distribution = data.get(
-            "difficulty_distribution", {"easy": 30, "medium": 40, "hard": 30}
-        )
-        university_name = data.get("university_name", "")
-        semester = data.get("semester", "")
+        difficulty_distribution = data.get("difficulty_distribution", {"easy": 30, "medium": 50, "hard": 20})
+        university_name = data.get("university_name", "").strip()
+        semester = data.get("semester", "").strip()
 
-        if not subject:
-            return jsonify({"error": "Subject is required"}), 400
-        if not syllabus or len(syllabus) < 10:
+        if not subject or not syllabus:
+            return jsonify({"error": "Subject and syllabus are required"}), 400
+        if len(syllabus) < 10:
             return jsonify({"error": "Syllabus must be at least 10 characters"}), 400
 
         logger.info("Generating paper for subject: %s", subject)
@@ -69,7 +76,7 @@ def generate_paper():
 
         logger.info("Extracted %d topics, %d units", len(topics), len(units))
 
-        # Step 2: AI — Generate questions using PYQ patterns
+        # Step 2: AI — Generate questions using PYQ patterns with fallbacks
         all_questions = []
         questions_per_topic = max(2, (num_questions * 3) // max(len(important_topics), 1))
 
@@ -77,14 +84,22 @@ def generate_paper():
             # Find which unit this topic belongs to
             topic_unit = "Unit 1"
             for unit_name, unit_topics in unit_topic_map.items():
-                if any(topic.lower() in t.lower() or t.lower() in topic.lower() for t in unit_topics):
-                    topic_unit = unit_name
+                unit_topics_list: list[str] = [str(t) for t in unit_topics]
+                if any(topic.lower() in t.lower() or t.lower() in topic.lower() for t in unit_topics_list):
+                    topic_unit = str(unit_name)
                     break
 
-            # Try PYQ pattern generation first, fallback to regular AI
-            pyq_generated = ai_engine.generate_questions_with_pyq_patterns(
-                subject, topic, questions_per_topic
-            )
+            # Try PYQ pattern generation with timeout protection
+            pyq_generated = []
+            try:
+                pyq_generated = ai_engine.generate_questions_with_pyq_patterns(
+                    subject, topic, questions_per_topic
+                )
+                logger.info("PYQ generation successful for topic: %s", topic)
+            except Exception as e:
+                logger.warning("PYQ generation failed for %s: %s", topic, e)
+                # Fallback to simple template questions
+                pyq_generated = ai_engine._generate_fallback_questions_dict(topic, questions_per_topic)
 
             for q_data in pyq_generated:
                 all_questions.append(
@@ -95,20 +110,38 @@ def generate_paper():
                         "difficulty": q_data["difficulty"],
                         "unit": topic_unit,
                         "topic": topic,
-                        "question_type": q_data["question_type"],
+                        "question_type": q_data.get("question_type") or "descriptive",
                         "source": q_data["source"],
                     }
                 )
 
         logger.info("Generated %d raw questions", len(all_questions))
 
-        # Step 3: Smart Selection
-        selected = selector.select_questions(
-            all_questions, difficulty_distribution, num_questions
-        )
+        # Step 3: Smart Selection with fallback
+        try:
+            selected = selector.select_questions(
+                all_questions, difficulty_distribution, num_questions
+            )
+            logger.info("Smart selection successful")
+        except Exception as e:
+            logger.warning("Smart selection failed: %s", e)
+            # Simple fallback: take first N questions (use islice to satisfy type checker)
+            import itertools
+            selected = list(itertools.islice(all_questions, num_questions))
 
-        # Step 4: Structure paper
-        sections = structurer.structure_paper(selected, exam_pattern, total_marks)
+        # Step 4: Structure paper with fallback
+        try:
+            sections = structurer.structure_paper(selected, exam_pattern, total_marks)
+            logger.info("Paper structuring successful")
+        except Exception as e:
+            logger.warning("Paper structuring failed: %s", e)
+            # Simple fallback: one section with all questions
+            sections = [{
+                "name": "Section A",
+                "instructions": "Answer all questions",
+                "questions": selected,
+                "total_marks": sum(q["marks"] for q in selected)
+            }]
 
         # Build final paper object
         paper_id = str(uuid.uuid4())
@@ -131,9 +164,9 @@ def generate_paper():
 
         # Save to database
         save_paper(paper)
-        logger.info("Paper saved with id: %s", paper_id)
 
-        return jsonify(paper), 201
+        logger.info("Paper generated successfully: %s", paper_id)
+        return jsonify(paper)
 
     except Exception as e:
         logger.exception("Error generating paper")
@@ -274,4 +307,10 @@ def _classify_question_type(question: str) -> str:
 if __name__ == "__main__":
     logger.info("Starting AI Question Paper Generator API...")
     logger.info("Server running at http://%s:%d", FLASK_HOST, FLASK_PORT)
-    app.run(host=FLASK_HOST, port=FLASK_PORT, debug=FLASK_DEBUG)
+    app.run(
+        host=FLASK_HOST,
+        port=FLASK_PORT,
+        debug=FLASK_DEBUG,
+        threaded=True,        # Handle multiple requests concurrently
+        use_reloader=False,   # Prevent double model-loading in debug mode
+    )

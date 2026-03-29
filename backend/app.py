@@ -62,12 +62,28 @@ def generate_paper():
         university_name = data.get("university_name", "").strip()
         semester = data.get("semester", "").strip()
 
+        # Extract exam pattern details for university pattern
+        exam_structure = data.get("exam_structure", {})
+        short_questions_count = int(data.get("short_questions_count", 5))
+        short_questions_marks = int(data.get("short_questions_marks", 2))
+        short_questions_total = int(data.get("short_questions_total", 10))
+        short_questions_choice_generate = int(data.get("short_questions_choice_generate", 7))
+        short_questions_choice_attempt = int(data.get("short_questions_choice_attempt", 5))
+        long_questions_count = int(data.get("long_questions_count", 8))
+        long_questions_marks = int(data.get("long_questions_marks", 15))
+        long_questions_total = int(data.get("long_questions_total", 60))
+        long_questions_units = int(data.get("long_questions_units", 4))
+        long_questions_per_unit = int(data.get("long_questions_per_unit", 2))
+
         if not subject or not syllabus:
             return jsonify({"error": "Subject and syllabus are required"}), 400
         if len(syllabus) < 10:
             return jsonify({"error": "Syllabus must be at least 10 characters"}), 400
 
-        logger.info("Generating paper for subject: %s", subject)
+        logger.info("Generating paper for subject: %s, pattern: %s", subject, exam_pattern)
+        logger.info("Exam pattern details: short=%d@%d, long=%d@%d", 
+                    short_questions_count, short_questions_marks, 
+                    long_questions_count, long_questions_marks)
 
         # Step 1: NLP — Extract topics and units
         topics = nlp.extract_topics(syllabus)
@@ -79,60 +95,144 @@ def generate_paper():
 
         # Step 2: AI — Generate questions using PYQ patterns with fallbacks
         all_questions = []
-        questions_per_topic = max(2, (num_questions * 3) // max(len(important_topics), 1))
+        
+        # For university pattern, generate specific numbers of short and long questions
+        if exam_pattern == "university":
+            # Generate short questions (2 marks each)
+            short_questions_per_topic = max(1, (short_questions_count * 2) // max(len(important_topics), 1))
+            long_questions_per_topic = max(1, (long_questions_count * 2) // max(len(important_topics), 1))
+            
+            for topic in important_topics:
+                # Find which unit this topic belongs to
+                topic_unit = "Unit 1"
+                for unit_name, unit_topics in unit_topic_map.items():
+                    unit_topics_list: list[str] = [str(t) for t in unit_topics]
+                    if any(topic.lower() in t.lower() or t.lower() in topic.lower() for t in unit_topics_list):
+                        topic_unit = str(unit_name)
+                        break
 
-        for topic in important_topics:
-            # Find which unit this topic belongs to
-            topic_unit = "Unit 1"
-            for unit_name, unit_topics in unit_topic_map.items():
-                unit_topics_list: list[str] = [str(t) for t in unit_topics]
-                if any(topic.lower() in t.lower() or t.lower() in topic.lower() for t in unit_topics_list):
-                    topic_unit = str(unit_name)
-                    break
+                # Generate short questions
+                try:
+                    pyq_generated = ai_engine.generate_questions_with_pyq_patterns(
+                        subject, f"{topic} (short answer)", short_questions_per_topic
+                    )
+                    logger.info("PYQ generation successful for short questions on topic: %s", topic)
+                except Exception as e:
+                    logger.warning("PYQ generation failed for %s: %s", topic, e)
+                    pyq_generated = ai_engine._generate_fallback_questions_dict(topic, short_questions_per_topic)
 
-            # Try PYQ pattern generation with timeout protection
-            pyq_generated = []
-            try:
-                pyq_generated = ai_engine.generate_questions_with_pyq_patterns(
-                    subject, topic, questions_per_topic
-                )
-                logger.info("PYQ generation successful for topic: %s", topic)
-            except Exception as e:
-                logger.warning("PYQ generation failed for %s: %s", topic, e)
-                # Fallback to simple template questions
-                pyq_generated = ai_engine._generate_fallback_questions_dict(topic, questions_per_topic)
-
-            for q_data in pyq_generated:
-                all_questions.append(
-                    {
+                for q_data in pyq_generated[:short_questions_per_topic]:
+                    all_questions.append({
                         "id": str(uuid.uuid4()),
                         "text": q_data["text"],
-                        "marks": q_data["marks"],
+                        "marks": short_questions_marks,
                         "difficulty": q_data["difficulty"],
                         "unit": topic_unit,
                         "topic": topic,
-                        "question_type": q_data.get("question_type") or "descriptive",
+                        "question_type": "short",
                         "source": q_data["source"],
-                    }
-                )
+                    })
+
+                # Generate long questions
+                try:
+                    pyq_generated = ai_engine.generate_questions_with_pyq_patterns(
+                        subject, f"{topic} (long answer)", long_questions_per_topic
+                    )
+                    logger.info("PYQ generation successful for long questions on topic: %s", topic)
+                except Exception as e:
+                    logger.warning("PYQ generation failed for %s: %s", topic, e)
+                    pyq_generated = ai_engine._generate_fallback_questions_dict(topic, long_questions_per_topic)
+
+                for q_data in pyq_generated[:long_questions_per_topic]:
+                    all_questions.append({
+                        "id": str(uuid.uuid4()),
+                        "text": q_data["text"],
+                        "marks": long_questions_marks,
+                        "difficulty": q_data["difficulty"],
+                        "unit": topic_unit,
+                        "topic": topic,
+                        "question_type": "long",
+                        "source": q_data["source"],
+                    })
+        else:
+            # Original logic for other patterns
+            questions_per_topic = max(2, (num_questions * 3) // max(len(important_topics), 1))
+
+            for topic in important_topics:
+                # Find which unit this topic belongs to
+                topic_unit = "Unit 1"
+                for unit_name, unit_topics in unit_topic_map.items():
+                    unit_topics_list: list[str] = [str(t) for t in unit_topics]
+                    if any(topic.lower() in t.lower() or t.lower() in topic.lower() for t in unit_topics_list):
+                        topic_unit = str(unit_name)
+                        break
+
+                # Try PYQ pattern generation with timeout protection
+                pyq_generated = []
+                try:
+                    pyq_generated = ai_engine.generate_questions_with_pyq_patterns(
+                        subject, topic, questions_per_topic
+                    )
+                    logger.info("PYQ generation successful for topic: %s", topic)
+                except Exception as e:
+                    logger.warning("PYQ generation failed for %s: %s", topic, e)
+                    # Fallback to simple template questions
+                    pyq_generated = ai_engine._generate_fallback_questions_dict(topic, questions_per_topic)
+
+                for q_data in pyq_generated:
+                    all_questions.append(
+                        {
+                            "id": str(uuid.uuid4()),
+                            "text": q_data["text"],
+                            "marks": q_data["marks"],
+                            "difficulty": q_data["difficulty"],
+                            "unit": topic_unit,
+                            "topic": topic,
+                            "question_type": q_data.get("question_type") or "descriptive",
+                            "source": q_data["source"],
+                        }
+                    )
 
         logger.info("Generated %d raw questions", len(all_questions))
 
         # Step 3: Smart Selection with fallback
-        try:
-            selected = selector.select_questions(
-                all_questions, difficulty_distribution, num_questions
-            )
-            logger.info("Smart selection successful")
-        except Exception as e:
-            logger.warning("Smart selection failed: %s", e)
-            # Simple fallback: take first N questions (use islice to satisfy type checker)
-            import itertools
-            selected = list(itertools.islice(all_questions, num_questions))
+        if exam_pattern == "university":
+            # For university pattern, select specific numbers of short and long questions
+            short_questions = [q for q in all_questions if q.get("question_type") == "short"]
+            long_questions = [q for q in all_questions if q.get("question_type") == "long"]
+            
+            # Select the required number of questions
+            selected_short = short_questions[:short_questions_choice_generate]  # Generate more than needed
+            selected_long = long_questions[:long_questions_count]
+            selected = selected_short + selected_long
+            
+            logger.info("University pattern: selected %d short, %d long questions", 
+                       len(selected_short), len(selected_long))
+        else:
+            # Original logic for other patterns
+            try:
+                selected = selector.select_questions(
+                    all_questions, difficulty_distribution, num_questions
+                )
+                logger.info("Smart selection successful")
+            except Exception as e:
+                logger.warning("Smart selection failed: %s", e)
+                # Simple fallback: take first N questions (use islice to satisfy type checker)
+                import itertools
+                selected = list(itertools.islice(all_questions, num_questions))
 
         # Step 4: Structure paper with fallback
         try:
-            sections = structurer.structure_paper(selected, exam_pattern, total_marks)
+            # Pass exam pattern details to structurer for university pattern
+            if exam_pattern == "university":
+                sections = structurer.structure_university_paper(
+                    selected, 
+                    short_questions_count, short_questions_marks, short_questions_total,
+                    short_questions_choice_generate, short_questions_choice_attempt,
+                    long_questions_count, long_questions_marks, long_questions_total
+                )
+            else:
+                sections = structurer.structure_paper(selected, exam_pattern, total_marks)
             logger.info("Paper structuring successful")
         except Exception as e:
             logger.warning("Paper structuring failed: %s", e)

@@ -255,16 +255,18 @@ interface FormState {
     
     const units: ProcessedSyllabus[] = [];
     const unitMap: { [key: string]: number } = {};
+    const unitMatches: Array<{match: string, index: number, number: number}> = [];
     
     console.log("Processing syllabus:", syllabusText.substring(0, 200) + "...");
     
-    // Try each pattern
+    // First pass: Find all unit matches with their positions
     unitPatterns.forEach((pattern, patternIndex) => {
       let match;
-      // Reset regex lastIndex to ensure we catch all matches
+      // Reset regex lastIndex to ensure we catch all matches from the beginning of the string
       pattern.lastIndex = 0;
       while ((match = pattern.exec(syllabusText)) !== null) {
-        console.log(`Pattern ${patternIndex} matched:`, match[0], "Unit ID:", match[1]);
+        const fullMatch = match[0];
+        const matchIndex = match.index;
         
         let unitIdentifier = match[1].toLowerCase(); // Convert to lowercase for easier handling
         
@@ -286,18 +288,32 @@ interface FormState {
           unitNumber = parseInt(unitIdentifier) || 1;
         }
         
-        const unitTitle = match[0].trim();
+        unitMatches.push({
+          match: fullMatch.trim(),
+          index: matchIndex,
+          number: unitNumber
+        });
         
-        if (!unitMap[unitTitle]) {
-          units.push({
-            number: unitNumber,
-            title: unitTitle,
-            topics: []
-          });
-          unitMap[unitTitle] = units.length - 1;
-          console.log(`Added unit:`, unitTitle, `as unit number ${unitNumber}`);
-        }
+        console.log(`Pattern ${patternIndex} matched: "${fullMatch}" at index ${matchIndex}, Unit ${unitNumber}`);
       }
+    });
+    
+    // Sort matches by position and remove duplicates
+    unitMatches.sort((a, b) => a.index - b.index);
+    const uniqueMatches = unitMatches.filter((match, index, self) => 
+      index === self.findIndex(m => m.number === match.number)
+    );
+    
+    console.log("Unique unit matches:", uniqueMatches);
+    
+    // Create units from unique matches
+    uniqueMatches.forEach((unitMatch) => {
+      units.push({
+        number: unitMatch.number,
+        title: unitMatch.match,
+        topics: []
+      });
+      console.log(`Added unit:`, unitMatch.match, `as unit number ${unitMatch.number}`);
     });
 
     console.log("Total units detected:", units.length);
@@ -314,43 +330,45 @@ interface FormState {
       });
     }
 
-    // Step 2: Topic Extraction
-    const lines = syllabusText.split('\n');
-    let currentUnitIndex = 0;
-    
-    lines.forEach((line: string) => {
-      const trimmedLine = line.trim();
+    // Step 2: Topic Extraction using proper unit boundaries
+    uniqueMatches.forEach((unitMatch, unitIndex) => {
+      const nextUnit = uniqueMatches[unitIndex + 1];
+      const unitStartIndex = unitMatch.index + unitMatch.match.length;
+      const unitEndIndex = nextUnit ? nextUnit.index : syllabusText.length;
       
-      // Check if this is a unit line using any pattern
-      let isUnitLine = false;
-      unitPatterns.forEach((pattern) => {
-        const unitMatch = trimmedLine.match(pattern);
-        if (unitMatch) {
-          isUnitLine = true;
-          // Find the corresponding unit index
-          for (let i = 0; i < units.length; i++) {
-            if (units[i].title === unitMatch[0]) {
-              currentUnitIndex = i;
-              break;
+      console.log(`Processing ${unitMatch.match}: range ${unitStartIndex} to ${unitEndIndex}`);
+      
+      if (unitStartIndex !== -1 && unitEndIndex > unitStartIndex) {
+        const unitContent = syllabusText.substring(unitStartIndex, unitEndIndex);
+        console.log(`Unit ${unitMatch.match} content:`, unitContent.substring(0, 100) + "...");
+        
+        // Extract topics from this unit's content
+        // Look for lines starting with bullet points or hyphens
+        const lines = unitContent.split('\n');
+        const topics: string[] = [];
+        
+        lines.forEach(line => {
+          const trimmedLine = line.trim();
+          // Match bullet points or hyphens at the start of a line
+          if (trimmedLine.match(/^[-•–—*]\s*.+/) || trimmedLine.match(/^•\s*.+/)) {
+            const topic = trimmedLine.replace(/^[-•–—*]\s*/, '').trim();
+            if (topic.length > 0) {
+              topics.push(topic);
             }
           }
+        });
+        
+        // Find the corresponding unit in the units array and update its topics
+        const unitToUpdate = units.find(u => u.number === unitMatch.number);
+        if (unitToUpdate) {
+          unitToUpdate.topics = topics;
+          console.log(`Unit ${unitMatch.match}: Found ${topics.length} topics`);
+          topics.forEach((topic, i) => {
+            if (i < 3) console.log(`  Topic ${i+1}:`, topic);
+          });
         }
-      });
-      
-      if (isUnitLine) return;
-      
-      // Extract topics (lines starting with • or -, or containing important keywords)
-      if (trimmedLine.startsWith('•') || trimmedLine.startsWith('-') || 
-          trimmedLine.match(/^(definition|explain|describe|compare|analyze|evaluate)/i)) {
-        const topic = trimmedLine.replace(/^[•\-]\s*/, '').trim();
-        if (topic && currentUnitIndex >= 0 && currentUnitIndex < units.length) {
-          units[currentUnitIndex].topics.push(topic);
-        }
-      } else if (trimmedLine.length > 5 && !trimmedLine.toLowerCase().includes('unit') && units.length > 0) {
-        // Add non-unit lines as topics if they're substantial enough
-        if (currentUnitIndex >= 0 && currentUnitIndex < units.length) {
-          units[currentUnitIndex].topics.push(trimmedLine);
-        }
+      } else {
+        console.log(`Unit ${unitMatch.match}: No valid content range (${unitStartIndex} to ${unitEndIndex})`);
       }
     });
 
@@ -411,13 +429,25 @@ interface FormState {
       // Find the selected exam pattern structure
       const selectedPattern = examPatterns.find(pattern => pattern.value === form.exam_pattern);
       
-      // Prepare the request with exam structure
+      // Prepare the request with exam structure flattened into main fields
       const requestData = {
         ...form,
+        // Add exam pattern details as separate fields for better backend compatibility
+        short_questions_count: selectedPattern?.structure?.shortQuestions?.count || 5,
+        short_questions_marks: selectedPattern?.structure?.shortQuestions?.marks || 2,
+        short_questions_total: selectedPattern?.structure?.shortQuestions?.total || 10,
+        short_questions_choice_generate: selectedPattern?.structure?.shortQuestions?.choice?.generate || 7,
+        short_questions_choice_attempt: selectedPattern?.structure?.shortQuestions?.choice?.attempt || 5,
+        long_questions_count: selectedPattern?.structure?.longQuestions?.count || 8,
+        long_questions_marks: selectedPattern?.structure?.longQuestions?.marks || 15,
+        long_questions_total: selectedPattern?.structure?.longQuestions?.total || 60,
+        long_questions_units: selectedPattern?.structure?.longQuestions?.units || 4,
+        long_questions_per_unit: selectedPattern?.structure?.longQuestions?.questionsPerUnit || 2,
+        // Also include the structure for backward compatibility
         exam_structure: selectedPattern?.structure
       };
       
-      console.log("Sending request with exam structure:", requestData);
+      console.log("Sending request with exam pattern details:", requestData);
       
       const paper = await api.generatePaper(requestData);
       setProgressValue(100);

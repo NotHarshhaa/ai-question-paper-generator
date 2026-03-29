@@ -72,6 +72,17 @@ export interface GenerateRequest {
   num_questions: number;
   university_name?: string;
   semester?: string;
+  // Flattened exam pattern fields for backend compatibility
+  short_questions_count?: number;
+  short_questions_marks?: number;
+  short_questions_total?: number;
+  short_questions_choice_generate?: number;
+  short_questions_choice_attempt?: number;
+  long_questions_count?: number;
+  long_questions_marks?: number;
+  long_questions_total?: number;
+  long_questions_units?: number;
+  long_questions_per_unit?: number;
 }
 
 export interface Question {

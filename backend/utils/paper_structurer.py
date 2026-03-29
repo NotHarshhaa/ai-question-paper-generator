@@ -112,6 +112,62 @@ class PaperStructurer:
             }
         ]
 
+    def structure_university_paper(
+        self, 
+        questions: list[dict], 
+        short_count: int, short_marks: int, short_total: int,
+        short_choice_generate: int, short_choice_attempt: int,
+        long_count: int, long_marks: int, long_total: int
+    ) -> list[dict]:
+        """Structure paper in university format with short and long questions"""
+        sections = []
+        
+        # Separate short and long questions
+        short_questions = [q for q in questions if q.get("question_type") == "short"]
+        long_questions = [q for q in questions if q.get("question_type") == "long"]
+        
+        # Section A: Short Questions (with choice)
+        if short_questions:
+            # Take the required number of short questions for choice
+            short_for_choice = short_questions[:short_choice_generate]
+            sections.append({
+                "name": "Section A",
+                "instructions": f"Answer any {short_choice_attempt} out of {short_choice_generate} questions. Each question carries {short_marks} marks.",
+                "questions": short_for_choice,
+                "total_marks": short_total,
+                "choice": {
+                    "generate": short_choice_generate,
+                    "attempt": short_choice_attempt
+                }
+            })
+        
+        # Section B: Long Questions (no choice, unit-based)
+        if long_questions:
+            # Group long questions by unit
+            unit_questions = {}
+            for q in long_questions:
+                unit = q.get("unit", "Unknown Unit")
+                if unit not in unit_questions:
+                    unit_questions[unit] = []
+                unit_questions[unit].append(q)
+            
+            # Take required number from each unit
+            unit_long_questions = []
+            for unit, qs in unit_questions.items():
+                unit_long_questions.extend(qs[:long_count // len(unit_questions) if len(unit_questions) > 0 else long_count])
+            
+            # Ensure we have exactly the required number
+            unit_long_questions = unit_long_questions[:long_count]
+            
+            sections.append({
+                "name": "Section B",
+                "instructions": f"Answer all questions. Each question carries {long_marks} marks.",
+                "questions": unit_long_questions,
+                "total_marks": long_total
+            })
+        
+        return sections
+
     def structure_paper(
         self, questions: list[dict], exam_pattern: str, total_marks: int
     ) -> list[dict]:

@@ -32,10 +32,36 @@ async function request<T>(
   }
 }
 
+export interface ExamPatternStructure {
+  shortQuestions?: {
+    count: number;
+    marks: number;
+    total: number;
+    choice?: {
+      generate: number;
+      attempt: number;
+    };
+  };
+  longQuestions?: {
+    count: number;
+    marks: number;
+    total: number;
+    units?: number;
+    questionsPerUnit?: number;
+  };
+  sections?: Array<{
+    name: string;
+    marks: number;
+    questions: number;
+  }>;
+  totalMarks: number;
+}
+
 export interface GenerateRequest {
   subject: string;
   syllabus: string;
   exam_pattern: string;
+  exam_structure?: ExamPatternStructure;
   total_marks: number;
   duration_minutes: number;
   difficulty_distribution: {

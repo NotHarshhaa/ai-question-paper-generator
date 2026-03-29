@@ -246,41 +246,63 @@ interface FormState {
   };
 
   const processSyllabus = (syllabusText: string) => {
-    // Step 1: Unit Detection - Support multiple formats
+    // Step 1: Unit Detection - Support multiple formats including typos
     const unitPatterns = [
-      /Unit\s+([IVX]+)[\:\-]/gi,  // Unit-I, Unit-II, etc.
-      /Unit\s+(\d+)[\:\-]/gi,     // Unit-1, Unit-2, etc.
-      /Unit\s+([IVX]+)/gi,        // Unit I, Unit II, etc.
-      /Unit\s+(\d+)/gi            // Unit 1, Unit 2, etc.
+      /Unit\s*[-\s]*([IVXL]+|[ivxl]+|[IVXLivxl]+)/gi,  // Unit-I, Unit II, unit-iii, etc.
+      /Unit\s*[-\s]*(\d+)/gi,                         // Unit-1, Unit 2, etc.
+      /\bUnit[-\s]*([IVXL]+|[ivxl]+|\d+)\b/gi         // More flexible unit detection
     ];
     
     const units: ProcessedSyllabus[] = [];
     const unitMap: { [key: string]: number } = {};
     
+    console.log("Processing syllabus:", syllabusText.substring(0, 200) + "...");
+    
     // Try each pattern
-    unitPatterns.forEach((pattern) => {
+    unitPatterns.forEach((pattern, patternIndex) => {
       let match;
+      // Reset regex lastIndex to ensure we catch all matches
+      pattern.lastIndex = 0;
       while ((match = pattern.exec(syllabusText)) !== null) {
-        const unitIdentifier = match[1];
+        console.log(`Pattern ${patternIndex} matched:`, match[0], "Unit ID:", match[1]);
+        
+        let unitIdentifier = match[1].toLowerCase(); // Convert to lowercase for easier handling
+        
+        // Fix common typos: ll -> ii, etc.
+        if (unitIdentifier === 'll') unitIdentifier = 'ii';
+        if (unitIdentifier === 'l') unitIdentifier = 'i';
+        if (unitIdentifier === 'v') unitIdentifier = 'v';
+        
         let unitNumber: number;
         
         // Convert Roman numerals to numbers
-        if (/^[IVX]+$/.test(unitIdentifier)) {
-          const romanMap: { [key: string]: number } = { I: 1, II: 2, III: 3, IV: 4, V: 5, VI: 6, VII: 7, VIII: 8, IX: 9, X: 10 };
+        if (/^[ivxl]+$/.test(unitIdentifier)) {
+          const romanMap: { [key: string]: number } = { 
+            i: 1, ii: 2, iii: 3, iv: 4, v: 5, vi: 6, vii: 7, viii: 8, ix: 9, x: 10,
+            I: 1, II: 2, III: 3, IV: 4, V: 5, VI: 6, VII: 7, VIII: 8, IX: 9, X: 10
+          };
           unitNumber = romanMap[unitIdentifier] || 1;
         } else {
-          unitNumber = parseInt(unitIdentifier);
+          unitNumber = parseInt(unitIdentifier) || 1;
         }
         
-        if (!unitMap[match[0]]) {
+        const unitTitle = match[0].trim();
+        
+        if (!unitMap[unitTitle]) {
           units.push({
             number: unitNumber,
-            title: match[0],
+            title: unitTitle,
             topics: []
           });
-          unitMap[match[0]] = units.length - 1;
+          unitMap[unitTitle] = units.length - 1;
+          console.log(`Added unit:`, unitTitle, `as unit number ${unitNumber}`);
         }
       }
+    });
+
+    console.log("Total units detected:", units.length);
+    units.forEach((unit, index) => {
+      console.log(`Unit ${index}:`, unit.title, "Number:", unit.number);
     });
 
     // If no units detected, create a default unit
@@ -386,7 +408,18 @@ interface FormState {
     }, 800);
 
     try {
-      const paper = await api.generatePaper(form);
+      // Find the selected exam pattern structure
+      const selectedPattern = examPatterns.find(pattern => pattern.value === form.exam_pattern);
+      
+      // Prepare the request with exam structure
+      const requestData = {
+        ...form,
+        exam_structure: selectedPattern?.structure
+      };
+      
+      console.log("Sending request with exam structure:", requestData);
+      
+      const paper = await api.generatePaper(requestData);
       setProgressValue(100);
       clearInterval(interval);
       toast.success("Question paper generated successfully!");
@@ -715,27 +748,27 @@ interface FormState {
 
             {/* Syllabus Analysis */}
             {form.units.length > 0 && (
-              <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+              <div className="p-4 bg-muted border border-border rounded-lg">
                 <div className="flex items-center gap-2 mb-3">
-                  <BarChart3 className="h-4 w-4 text-blue-600" />
-                  <h4 className="font-semibold text-sm text-blue-800">Syllabus Analysis</h4>
+                  <BarChart3 className="h-4 w-4 text-primary" />
+                  <h4 className="font-semibold text-sm text-foreground">Syllabus Analysis</h4>
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
                   <div>
-                    <span className="text-blue-600 font-medium">Units:</span>
-                    <span className="ml-1">{form.units.length}</span>
+                    <span className="text-primary font-medium">Units:</span>
+                    <span className="ml-1 text-foreground">{form.units.length}</span>
                   </div>
                   <div>
-                    <span className="text-blue-600 font-medium">Topics:</span>
-                    <span className="ml-1">{form.topics.length}</span>
+                    <span className="text-primary font-medium">Topics:</span>
+                    <span className="ml-1 text-foreground">{form.topics.length}</span>
                   </div>
                   <div>
-                    <span className="text-blue-600 font-medium">Keywords:</span>
-                    <span className="ml-1">{form.keywords.length}</span>
+                    <span className="text-primary font-medium">Keywords:</span>
+                    <span className="ml-1 text-foreground">{form.keywords.length}</span>
                   </div>
                   <div>
-                    <span className="text-blue-600 font-medium">Complexity:</span>
-                    <span className="ml-1">
+                    <span className="text-primary font-medium">Complexity:</span>
+                    <span className="ml-1 text-foreground">
                       {form.syllabus.length > 500 ? "High" : form.syllabus.length > 200 ? "Medium" : "Low"}
                     </span>
                   </div>
@@ -743,11 +776,11 @@ interface FormState {
                 
                 {/* Units Breakdown */}
                 <div className="mt-3 space-y-2">
-                  <h5 className="font-medium text-xs text-blue-800">Detected Units:</h5>
+                  <h5 className="font-medium text-xs text-foreground">Detected Units:</h5>
                   <div className="space-y-1">
                     {form.units.map((unit: any, index: number) => (
-                      <div key={index} className="flex items-center justify-between text-xs bg-white p-2 rounded">
-                        <span className="font-medium">{unit.title}</span>
+                      <div key={index} className="flex items-center justify-between text-xs bg-card p-2 rounded border">
+                        <span className="font-medium text-foreground">{unit.title}</span>
                         <Badge variant="outline" className="text-xs">
                           {unit.topics?.length || 0} topics
                         </Badge>

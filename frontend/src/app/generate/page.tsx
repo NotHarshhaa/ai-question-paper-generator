@@ -6,7 +6,6 @@ import { toast } from "sonner";
 import {
   Brain,
   BookOpen,
-  Loader2,
   Sparkles,
   ChevronRight,
   ChevronLeft,
@@ -16,18 +15,11 @@ import {
   Clock,
   Star,
   TrendingUp,
-  Download,
   Upload,
   Settings,
   BarChart3,
-  Users,
-  Calendar,
-  Tag,
   FolderOpen,
   FileSymlink,
-  History,
-  Grid3X3,
-  List,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -42,80 +34,47 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { api, type GenerateRequest } from "@/lib/api";
+// import { Switch } from "@/components/ui/switch";
+// import { Slider } from "@/components/ui/slider";
+import { api } from "@/lib/api";
 
 const subjects = [
-  { id: "cs_arch", name: "Computer Architecture and Parallel Processing", category: "Core CS", difficulty: "Medium", credits: 4, popularity: 85 },
-  { id: "cn", name: "Computer Networks", category: "Core CS", difficulty: "Medium", credits: 4, popularity: 92 },
-  { id: "se", name: "Software Engineering", category: "Software", difficulty: "Easy", credits: 3, popularity: 88 },
-  { id: "os", name: "Operating Systems", category: "Core CS", difficulty: "Hard", credits: 4, popularity: 95 },
-  { id: "languages", name: "Java and .NET and C#", category: "Programming", difficulty: "Medium", credits: 3, popularity: 75 },
-  { id: "ds", name: "Data Structures", category: "Core CS", difficulty: "Hard", credits: 4, popularity: 98 },
-  { id: "db", name: "Database Systems", category: "Core CS", difficulty: "Medium", credits: 4, popularity: 90 },
-  { id: "ai", name: "Artificial Intelligence", category: "AI/ML", difficulty: "Hard", credits: 3, popularity: 87 },
-  { id: "web", name: "Web Development", category: "Software", difficulty: "Easy", credits: 3, popularity: 82 },
-  { id: "iot", name: "IoT and Cloud Computing", category: "Emerging", difficulty: "Medium", credits: 3, popularity: 78 },
-  { id: "linux", name: "Linux and Shell Scripts", category: "Systems", difficulty: "Easy", credits: 2, popularity: 70 },
-  { id: "security", name: "Network Security", category: "Security", difficulty: "Hard", credits: 3, popularity: 83 },
-  { id: "wireless", name: "Wireless Networks", category: "Networks", difficulty: "Medium", credits: 3, popularity: 72 },
-  { id: "python", name: "Python Programming", category: "Programming", difficulty: "Easy", credits: 3, popularity: 94 },
-  { id: "r", name: "R Programming", category: "Programming", difficulty: "Easy", credits: 2, popularity: 65 },
   { id: "ml", name: "Machine Learning", category: "AI/ML", difficulty: "Hard", credits: 4, popularity: 91 },
   { id: "bigdata", name: "Big Data Analytics", category: "AI/ML", difficulty: "Hard", credits: 3, popularity: 86 },
-  { id: "dw", name: "Data Mining and Date Warehousing", category: "AI/ML", difficulty: "Medium", credits: 3, popularity: 79 },
+  { id: "r_prog", name: "R Programming", category: "Programming", difficulty: "Easy", credits: 2, popularity: 65 },
+  { id: "ds", name: "Data Structures", category: "Core CS", difficulty: "Hard", credits: 4, popularity: 98 },
+  { id: "cn", name: "Computer Networks", category: "Core CS", difficulty: "Medium", credits: 4, popularity: 92 },
+  { id: "os", name: "Operating Systems", category: "Core CS", difficulty: "Hard", credits: 4, popularity: 95 },
+  { id: "db", name: "Database Systems", category: "Core CS", difficulty: "Medium", credits: 4, popularity: 90 },
+  { id: "ai", name: "Artificial Intelligence", category: "AI/ML", difficulty: "Hard", credits: 3, popularity: 87 },
+  { id: "se", name: "Software Engineering", category: "Software", difficulty: "Easy", credits: 3, popularity: 88 },
+  { id: "web", name: "Web Development", category: "Software", difficulty: "Easy", credits: 3, popularity: 82 },
+];
+
+const bloomLevels = [
+  { value: "remember", label: "Remember", description: "Define, list, identify" },
+  { value: "understand", label: "Understand", description: "Explain, describe, summarize" },
+  { value: "apply", label: "Apply", description: "Solve, implement, use" },
+  { value: "analyze", label: "Analyze", description: "Compare, examine, differentiate" },
+  { value: "evaluate", label: "Evaluate", description: "Judge, assess, critique" },
+  { value: "create", label: "Create", description: "Design, construct, develop" },
+];
+
+const paperTypes = [
+  { value: "important", label: "Important Topics Focus", description: "Focus on high-frequency topics" },
+  { value: "balanced", label: "Balanced Paper", description: "Even distribution across topics" },
+  { value: "challenging", label: "Challenging Paper", description: "More analytical questions" },
+];
+
+const questionTypes = [
+  { value: "short", label: "Short Questions", description: "2-5 marks, concise answers" },
+  { value: "long", label: "Long Questions", description: "10-15 marks, detailed answers" },
+  { value: "mixed", label: "Mixed", description: "Combination of short and long" },
 ];
 
 const categories = ["All", "Core CS", "Programming", "AI/ML", "Software", "Systems", "Security", "Networks", "Emerging"];
-
-const syllabusTemplates = [
-  {
-    id: "ds_template",
-    name: "Data Structures Standard",
-    subject: "Data Structures",
-    content: `Unit 1: Introduction to Data Structures
-- Overview, Types of Data Structures
-- Arrays: Operations, Applications
-- Linked Lists: Singly, Doubly, Circular
-
-Unit 2: Stacks and Queues
-- Stack Operations and Applications
-- Queue Types and Implementations
-- Expression Evaluation
-
-Unit 3: Trees
-- Binary Trees, BST
-- Tree Traversals
-- AVL Trees, Red-Black Trees
-
-Unit 4: Graphs
-- Graph Representations
-- BFS, DFS Algorithms
-- Shortest Path Algorithms`,
-  },
-  {
-    id: "cn_template",
-    name: "Computer Networks",
-    subject: "Computer Networks",
-    content: `Unit 1: Introduction and Physical Layer
-- Network Models, OSI, TCP/IP
-- Transmission Media, Switching
-
-Unit 2: Data Link Layer
-- Framing, Error Detection
-- Flow Control, Protocols
-
-Unit 3: Network Layer
-- Routing Algorithms
-- IPv4, IPv6 Addressing
-
-Unit 4: Transport Layer
-- UDP, TCP Protocols
-- Congestion Control`,
-  },
-];
 
 const quickStats = [
   { label: "Total Papers Generated", value: "1,284", icon: FileText, trend: "+12%" },
@@ -126,45 +85,23 @@ const quickStats = [
 
 const examPatterns = [
   { 
-    value: "standard", 
-    label: "Standard (Q1-Q9)", 
-    description: "9 questions with equal marks distribution",
-    preview: [
-      { question: "Q1", marks: 10, type: "Long Answer" },
-      { question: "Q2", marks: 10, type: "Long Answer" },
-      { question: "Q3", marks: 10, type: "Long Answer" },
-      { question: "Q4", marks: 10, type: "Long Answer" },
-      { question: "Q5", marks: 10, type: "Long Answer" },
-      { question: "Q6", marks: 10, type: "Long Answer" },
-      { question: "Q7", marks: 10, type: "Long Answer" },
-      { question: "Q8", marks: 10, type: "Long Answer" },
-      { question: "Q9", marks: 10, type: "Long Answer" },
-    ]
+    value: "university", 
+    label: "University Pattern", 
+    description: "Standard university format with short questions and unit-based long questions",
+    structure: {
+      shortQuestions: { count: 5, marks: 2, total: 10, choice: { generate: 7, attempt: 5 } },
+      longQuestions: { count: 8, marks: 15, total: 60, units: 4, questionsPerUnit: 2 },
+      totalMarks: 70
+    }
   },
   { 
-    value: "choice", 
-    label: "With Internal Choice", 
-    description: "Questions with internal choice (answer any 2 out of 3)",
-    preview: [
-      { question: "Q1(a)(b)(c)", marks: 10, type: "Choice - Answer any 2" },
-      { question: "Q2(a)(b)(c)", marks: 10, type: "Choice - Answer any 2" },
-      { question: "Q3(a)(b)(c)", marks: 10, type: "Choice - Answer any 2" },
-      { question: "Q4(a)(b)(c)", marks: 10, type: "Choice - Answer any 2" },
-      { question: "Q5(a)(b)(c)", marks: 10, type: "Choice - Answer any 2" },
-      { question: "Q6(a)(b)(c)", marks: 10, type: "Choice - Answer any 2" },
-      { question: "Q7(a)(b)(c)", marks: 10, type: "Choice - Answer any 2" },
-      { question: "Q8(a)(b)(c)", marks: 10, type: "Choice - Answer any 2" },
-    ]
-  },
-  { 
-    value: "sections", 
-    label: "Section-wise (A, B, C)", 
-    description: "Divided into sections with different mark values",
-    preview: [
-      { question: "Section A", marks: 20, type: "2x10=20" },
-      { question: "Section B", marks: 30, type: "3x10=30" },
-      { question: "Section C", marks: 30, type: "3x10=30" },
-    ]
+    value: "custom", 
+    label: "Custom Pattern", 
+    description: "Design your own paper structure",
+    structure: {
+      sections: [],
+      totalMarks: 80
+    }
   },
 ];
 
@@ -178,17 +115,104 @@ export default function GeneratePage() {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [selectedTemplate, setSelectedTemplate] = useState("");
   const [showTemplates, setShowTemplates] = useState(false);
-  const [form, setForm] = useState<GenerateRequest>({
+
+  // Form state
+  const [form, setForm] = useState<FormState>({
     subject: "",
     syllabus: "",
-    exam_pattern: "standard",
-    total_marks: 80,
+    exam_pattern: "university",
+    pattern_type: "university",
+    total_marks: 70,
     duration_minutes: 180,
     difficulty_distribution: { easy: 30, medium: 40, hard: 30 },
-    num_questions: 9,
+    num_questions: 13,
     university_name: "",
     semester: "",
+    choice_based: { enabled: false, generate: 7, attempt: 5 },
+    sub_parts: { enabled: false, format: "(a)(b)" },
+    pyq_percentage: 20,
+    bloom_level: "apply",
+    paper_type: "balanced",
+    question_type: "mixed",
+    custom_sections: [],
+    units: [],
+    topics: [],
+    keywords: [],
   });
+
+  // Syllabus templates
+  const syllabusTemplates = [
+    {
+      id: "ml-template",
+      name: "Machine Learning Template",
+      subject: "ml",
+      content: `Unit 1: Introduction to Machine Learning
+- Definition and Overview
+- Types of Learning: Supervised, Unsupervised, Reinforcement
+- Applications and Real-world Examples
+
+Unit 2: Supervised Learning
+- Linear Regression
+- Logistic Regression
+- Decision Trees and Random Forests
+- Support Vector Machines
+
+Unit 3: Unsupervised Learning
+- Clustering Algorithms
+- Dimensionality Reduction
+- Association Rule Mining
+
+Unit 4: Neural Networks
+- Perceptron and Multi-layer Perceptrons
+- Backpropagation Algorithm
+- Convolutional Neural Networks
+- Recurrent Neural Networks`,
+    },
+  ];
+
+  const handleTemplateSelect = (template: any) => {
+    setForm((prev) => ({ ...prev, syllabus: template.content }));
+    setSelectedTemplate(template.id);
+    setShowTemplates(false);
+    processSyllabus(template.content);
+    toast.success(`Template "${template.name}" applied successfully!`);
+  };
+
+  const updateForm = (updates: Partial<FormState>) => {
+    setForm((prev) => ({ ...prev, ...updates }));
+  };
+
+interface ProcessedSyllabus {
+  number: number;
+  title: string;
+  topics: string[];
+}
+
+interface FormState {
+  subject: string;
+  syllabus: string;
+  exam_pattern: string;
+  pattern_type: string;
+  total_marks: number;
+  duration_minutes: number;
+  difficulty_distribution: { easy: number; medium: number; hard: number };
+  num_questions: number;
+  university_name: string;
+  semester: string;
+  // Advanced Settings
+  choice_based: { enabled: boolean; generate: number; attempt: number };
+  sub_parts: { enabled: boolean; format: string };
+  pyq_percentage: number;
+  bloom_level: string;
+  paper_type: string;
+  question_type: string;
+  // Custom Pattern (if selected)
+  custom_sections: any[];
+  // Derived from syllabus (auto-generated)
+  units: ProcessedSyllabus[];
+  topics: string[];
+  keywords: string[];
+}
 
   const filteredSubjects = subjects.filter((subject) => {
     const matchesSearch = subject.name.toLowerCase().includes(searchTerm.toLowerCase());
@@ -205,13 +229,6 @@ export default function GeneratePage() {
     }
   };
 
-  const handleTemplateSelect = (template: typeof syllabusTemplates[0]) => {
-    setForm((prev) => ({ ...prev, syllabus: template.content }));
-    setSelectedTemplate(template.id);
-    setShowTemplates(false);
-    toast.success("Template loaded successfully!");
-  };
-
   const handleSyllabusImport = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -219,14 +236,70 @@ export default function GeneratePage() {
       reader.onload = (e) => {
         const content = e.target?.result as string;
         setForm((prev) => ({ ...prev, syllabus: content }));
+        processSyllabus(content);
         toast.success("Syllabus imported successfully!");
       };
       reader.readAsText(file);
     }
   };
 
-  const updateForm = (updates: Partial<GenerateRequest>) =>
-    setForm((prev) => ({ ...prev, ...updates }));
+  const processSyllabus = (syllabusText: string) => {
+    // Step 1: Unit Detection
+    const unitRegex = /Unit\s+(\d+)[\:\-]/gi;
+    const units: ProcessedSyllabus[] = [];
+    let match;
+    
+    while ((match = unitRegex.exec(syllabusText)) !== null) {
+      units.push({
+        number: parseInt(match[1]),
+        title: `Unit ${match[1]}`,
+        topics: []
+      });
+    }
+
+    // Step 2: Topic Extraction
+    const lines = syllabusText.split('\n');
+    let currentUnit = 0;
+    
+    lines.forEach((line: string) => {
+      const trimmedLine = line.trim();
+      
+      // Check if this is a unit line
+      const unitMatch = trimmedLine.match(/Unit\s+(\d+)/i);
+      if (unitMatch) {
+        currentUnit = parseInt(unitMatch[1]) - 1;
+        return;
+      }
+      
+      // Extract topics (lines starting with -, or containing important keywords)
+      if (trimmedLine.startsWith('-') || trimmedLine.startsWith('•') || 
+          trimmedLine.match(/^(definition|explain|describe|compare|analyze|evaluate)/i)) {
+        const topic = trimmedLine.replace(/^[-•]\s*/, '').trim();
+        if (topic && currentUnit >= 0 && currentUnit < units.length) {
+          units[currentUnit].topics.push(topic);
+        }
+      }
+    });
+
+    // Step 3: Extract keywords
+    const keywords: string[] = [];
+    const technicalTerms = syllabusText.match(/\b[A-Z][a-z]+(?:[A-Z][a-z]+)*\b/g) || [];
+    const commonWords = ['The', 'And', 'Or', 'But', 'For', 'With', 'This', 'That', 'From', 'They', 'Have', 'Been'];
+    
+    technicalTerms.forEach((term: string) => {
+      if (!commonWords.includes(term) && term.length > 3) {
+        keywords.push(term);
+      }
+    });
+
+    // Update form with processed data
+    setForm((prev: FormState) => ({
+      ...prev,
+      units: units,
+      topics: units.flatMap((unit: ProcessedSyllabus) => unit.topics),
+      keywords: keywords.slice(0, 20) // Limit to top 20 keywords
+    }));
+  };
 
   const updateDifficulty = (key: "easy" | "medium" | "hard", value: number) => {
     setForm((prev) => ({
@@ -244,8 +317,10 @@ export default function GeneratePage() {
     form.difficulty_distribution.hard;
 
   const canProceedStep1 = form.subject.length > 0;
-  const canProceedStep2 = form.syllabus.trim().length > 10;
-  const canSubmit = totalDifficulty === 100;
+  const canProceedStep2 = form.syllabus.trim().length > 10 && form.units.length > 0;
+  const canProceedStep3 = form.exam_pattern.length > 0;
+  const canProceedStep4 = totalDifficulty === 100;
+  const canSubmit = canProceedStep1 && canProceedStep2 && canProceedStep3 && canProceedStep4;
 
   const handleGenerate = async () => {
     if (!canSubmit) {
@@ -312,7 +387,7 @@ export default function GeneratePage() {
 
       {/* Stepper */}
       <div className="flex items-center gap-1 mb-6 overflow-x-auto">
-        {[1, 2, 3].map((s) => (
+        {[1, 2, 3, 4, 5].map((s) => (
           <div key={s} className="flex items-center gap-1 flex-1 min-w-0">
             <div
               className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-semibold transition-colors ${
@@ -324,9 +399,9 @@ export default function GeneratePage() {
               {s}
             </div>
             <span className="text-xs font-medium hidden sm:inline truncate">
-              {s === 1 ? "Subject" : s === 2 ? "Syllabus" : "Settings"}
+              {s === 1 ? "Subject" : s === 2 ? "Syllabus" : s === 3 ? "Pattern" : s === 4 ? "Settings" : "Generate"}
             </span>
-            {s < 3 && <Separator className="flex-1 min-w-4" />}
+            {s < 5 && <Separator className="flex-1 min-w-4" />}
           </div>
         ))}
       </div>
@@ -407,7 +482,7 @@ export default function GeneratePage() {
                         ? "ring-2 ring-primary border-primary"
                         : "hover:border-primary/50"
                     }`}
-                    onClick={() => updateForm({ subject: subject.name })}
+                    onClick={() => updateForm({ subject: form.subject === subject.name ? "" : subject.name })}
                   >
                     <CardContent className="p-3">
                       <div className="flex justify-between items-start mb-2">
@@ -577,30 +652,45 @@ export default function GeneratePage() {
             </div>
 
             {/* Syllabus Analysis */}
-            {form.syllabus.length > 50 && (
+            {form.units.length > 0 && (
               <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                <div className="flex items-center gap-2 mb-2">
+                <div className="flex items-center gap-2 mb-3">
                   <BarChart3 className="h-4 w-4 text-blue-600" />
                   <h4 className="font-semibold text-sm text-blue-800">Syllabus Analysis</h4>
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
                   <div>
                     <span className="text-blue-600 font-medium">Units:</span>
-                    <span className="ml-1">{form.syllabus.split(/Unit\s+\d+:/i).length - 1}</span>
+                    <span className="ml-1">{form.units.length}</span>
                   </div>
                   <div>
                     <span className="text-blue-600 font-medium">Topics:</span>
-                    <span className="ml-1">{form.syllabus.split('\n-').length - 1}</span>
+                    <span className="ml-1">{form.topics.length}</span>
                   </div>
                   <div>
-                    <span className="text-blue-600 font-medium">Words:</span>
-                    <span className="ml-1">{form.syllabus.split(/\s+/).length}</span>
+                    <span className="text-blue-600 font-medium">Keywords:</span>
+                    <span className="ml-1">{form.keywords.length}</span>
                   </div>
                   <div>
                     <span className="text-blue-600 font-medium">Complexity:</span>
                     <span className="ml-1">
                       {form.syllabus.length > 500 ? "High" : form.syllabus.length > 200 ? "Medium" : "Low"}
                     </span>
+                  </div>
+                </div>
+                
+                {/* Units Breakdown */}
+                <div className="mt-3 space-y-2">
+                  <h5 className="font-medium text-xs text-blue-800">Detected Units:</h5>
+                  <div className="space-y-1">
+                    {form.units.map((unit: any, index: number) => (
+                      <div key={index} className="flex items-center justify-between text-xs bg-white p-2 rounded">
+                        <span className="font-medium">{unit.title}</span>
+                        <Badge variant="outline" className="text-xs">
+                          {unit.topics?.length || 0} topics
+                        </Badge>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -626,83 +716,29 @@ export default function GeneratePage() {
         </Card>
       )}
 
-      {/* Step 3: Settings */}
+      {/* Step 3: Exam Pattern Configuration */}
       {step === 3 && (
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Sparkles className="h-5 w-5" />
-              Exam Settings
+              <FileText className="h-5 w-5" />
+              Exam Pattern Configuration
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="numQuestions">Number of Questions</Label>
-                <Input
-                  id="numQuestions"
-                  type="number"
-                  min={3}
-                  max={30}
-                  value={form.num_questions}
-                  onChange={(e) =>
-                    updateForm({ num_questions: parseInt(e.target.value) || 9 })
-                  }
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="totalMarks">Total Marks</Label>
-                <Input
-                  id="totalMarks"
-                  type="number"
-                  min={10}
-                  max={200}
-                  value={form.total_marks}
-                  onChange={(e) =>
-                    updateForm({ total_marks: parseInt(e.target.value) || 80 })
-                  }
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="duration">Duration (minutes)</Label>
-                <Input
-                  id="duration"
-                  type="number"
-                  min={30}
-                  max={360}
-                  value={form.duration_minutes}
-                  onChange={(e) =>
-                    updateForm({
-                      duration_minutes: parseInt(e.target.value) || 180,
-                    })
-                  }
-                />
-              </div>
-              <div className="space-y-2">
-                <Label>Marks per Question</Label>
-                <div className="text-sm text-muted-foreground">
-                  {form.total_marks > 0 && form.num_questions > 0
-                    ? `${(form.total_marks / form.num_questions).toFixed(1)} marks each`
-                    : "N/A"}
-                </div>
-              </div>
-            </div>
-
-            <Separator />
-
-            {/* Exam Pattern Selection with Preview */}
+            {/* Pattern Type Selection */}
             <div className="space-y-4">
-              <Label>Exam Pattern</Label>
-              <div className="space-y-3">
+              <Label>Choose Exam Pattern</Label>
+              <div className="grid gap-3">
                 {examPatterns.map((pattern) => (
                   <Card
                     key={pattern.value}
                     className={`cursor-pointer transition-all duration-200 ${
-                      form.exam_pattern === pattern.value
+                      form.pattern_type === pattern.value
                         ? "ring-2 ring-primary border-primary"
                         : "hover:border-primary/50"
                     }`}
-                    onClick={() => updateForm({ exam_pattern: pattern.value })}
+                    onClick={() => updateForm({ pattern_type: pattern.value, exam_pattern: pattern.value })}
                   >
                     <CardContent className="p-4">
                       <div className="flex justify-between items-start mb-3">
@@ -711,194 +747,318 @@ export default function GeneratePage() {
                           <p className="text-sm text-muted-foreground">{pattern.description}</p>
                         </div>
                         <div className="w-4 h-4 rounded-full border-2 border-primary flex items-center justify-center">
-                          {form.exam_pattern === pattern.value && (
+                          {form.pattern_type === pattern.value && (
                             <div className="w-2 h-2 rounded-full bg-primary" />
                           )}
                         </div>
                       </div>
-                      <div className="bg-muted/50 rounded p-3">
-                        <h5 className="text-xs font-semibold mb-2 text-muted-foreground">Preview:</h5>
-                        <div className="space-y-1">
-                          {pattern.preview.map((item, index) => (
-                            <div key={index} className="flex justify-between items-center text-xs">
-                              <span className="font-medium">{item.question}</span>
-                              <div className="flex items-center gap-2">
-                                <span className="text-muted-foreground">{item.type}</span>
-                                <Badge variant="outline" className="text-xs">
-                                  {item.marks} marks
-                                </Badge>
-                              </div>
+                      
+                      {pattern.value === "university" && (
+                        <div className="bg-muted/50 rounded p-3">
+                          <h5 className="text-xs font-semibold mb-2">University Pattern Structure:</h5>
+                          <div className="space-y-2 text-xs">
+                            <div className="flex justify-between">
+                              <span className="font-medium">Short Questions:</span>
+                              <span>5 questions × 2 marks = 10 marks</span>
                             </div>
-                          ))}
+                            <div className="flex justify-between">
+                              <span className="font-medium">Long Questions:</span>
+                              <span>8 questions × 15 marks = 60 marks</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="font-medium">Total:</span>
+                              <span className="font-bold">70 marks</span>
+                            </div>
+                            <div className="mt-2 text-xs text-muted-foreground">
+                              <p>• Attempt 1 question per unit (4 units)</p>
+                              <p>• Short questions: Generate 7, attempt any 5</p>
+                            </div>
+                          </div>
                         </div>
-                      </div>
+                      )}
+                      
+                      {pattern.value === "custom" && (
+                        <div className="bg-muted/50 rounded p-3">
+                          <p className="text-xs text-muted-foreground">
+                            Design your own paper structure with custom sections, marks distribution, and question types.
+                          </p>
+                        </div>
+                      )}
                     </CardContent>
                   </Card>
                 ))}
               </div>
             </div>
 
-            <Separator />
-
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <Label>Difficulty Distribution</Label>
-                <Badge
-                  variant={totalDifficulty === 100 ? "default" : "destructive"}
-                >
-                  Total: {totalDifficulty}%
-                </Badge>
-              </div>
-              <div className="grid grid-cols-3 gap-4">
-                <div className="space-y-2">
-                  <Label className="text-green-600">Easy (%)</Label>
-                  <Input
-                    type="number"
-                    min={0}
-                    max={100}
-                    value={form.difficulty_distribution.easy}
-                    onChange={(e) =>
-                      updateDifficulty("easy", parseInt(e.target.value) || 0)
-                    }
-                  />
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div 
-                      className="bg-green-500 h-2 rounded-full transition-all duration-300" 
-                      style={{ width: `${form.difficulty_distribution.easy}%` }}
-                    />
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <Label className="text-yellow-600">Medium (%)</Label>
-                  <Input
-                    type="number"
-                    min={0}
-                    max={100}
-                    value={form.difficulty_distribution.medium}
-                    onChange={(e) =>
-                      updateDifficulty("medium", parseInt(e.target.value) || 0)
-                    }
-                  />
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div 
-                      className="bg-yellow-500 h-2 rounded-full transition-all duration-300" 
-                      style={{ width: `${form.difficulty_distribution.medium}%` }}
-                    />
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <Label className="text-red-600">Hard (%)</Label>
-                  <Input
-                    type="number"
-                    min={0}
-                    max={100}
-                    value={form.difficulty_distribution.hard}
-                    onChange={(e) =>
-                      updateDifficulty("hard", parseInt(e.target.value) || 0)
-                    }
-                  />
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div 
-                      className="bg-red-500 h-2 rounded-full transition-all duration-300" 
-                      style={{ width: `${form.difficulty_distribution.hard}%` }}
-                    />
-                  </div>
-                </div>
-              </div>
-              {totalDifficulty !== 100 && (
-                <p className="text-sm text-destructive">
-                  Difficulty distribution must add up to 100% (currently {totalDifficulty}%)
-                </p>
-              )}
-            </div>
-
-            {/* Quick Presets */}
-            <div className="space-y-3">
-              <Label>Quick Presets</Label>
-              <div className="flex flex-wrap gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => updateForm({ difficulty_distribution: { easy: 30, medium: 40, hard: 30 } })}
-                  className="gap-2"
-                >
-                  <Settings className="h-3 w-3" />
-                  Balanced
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => updateForm({ difficulty_distribution: { easy: 50, medium: 30, hard: 20 } })}
-                  className="gap-2"
-                >
-                  <Settings className="h-3 w-3" />
-                  Easy
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => updateForm({ difficulty_distribution: { easy: 20, medium: 30, hard: 50 } })}
-                  className="gap-2"
-                >
-                  <Settings className="h-3 w-3" />
-                  Hard
-                </Button>
-              </div>
-            </div>
-
-            <Separator />
-
-            {loading && (
-              <div className="space-y-2">
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-muted-foreground">
-                    {progressValue < 20
-                      ? "Connecting to AI backend..."
-                      : progressValue < 50
-                      ? "Loading AI models (may take a minute on first run)..."
-                      : progressValue < 80
-                      ? "Generating questions from syllabus..."
-                      : "Structuring paper..."}
-                  </span>
-                  <span className="font-medium">
-                    {Math.round(progressValue)}%
-                  </span>
-                </div>
-                <Progress value={progressValue} />
-                {progressValue > 5 && progressValue < 90 && (
-                  <p className="text-xs text-muted-foreground">
-                    This may take 1–3 minutes while AI models load. Please keep this tab open.
-                  </p>
-                )}
-              </div>
-            )}
-
             <div className="flex justify-between">
               <Button
                 variant="outline"
                 onClick={() => setStep(2)}
                 className="gap-2"
-                disabled={loading}
               >
                 <ChevronLeft className="h-4 w-4" /> Back
               </Button>
               <Button
-                onClick={handleGenerate}
-                disabled={loading || !canSubmit}
+                onClick={() => setStep(4)}
+                disabled={!canProceedStep3}
                 className="gap-2"
-                size="lg"
               >
-                {loading ? (
-                  <>
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                    Generating...
-                  </>
-                ) : (
-                  <>
-                    <Brain className="h-5 w-5" />
-                    Generate Paper
-                  </>
-                )}
+                Next <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+      {/* Step 4: Advanced Settings */}
+      {step === 4 && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Sparkles className="h-5 w-5" />
+              Advanced Settings
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <Tabs defaultValue="basic" className="space-y-4">
+              <TabsList className="grid w-full grid-cols-3">
+                <TabsTrigger value="basic" className="text-xs">Basic</TabsTrigger>
+                <TabsTrigger value="advanced" className="text-xs">Advanced</TabsTrigger>
+                <TabsTrigger value="ai" className="text-xs">AI Control</TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="basic" className="space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="duration">Duration (minutes)</Label>
+                    <Input
+                      id="duration"
+                      type="number"
+                      min={30}
+                      max={360}
+                      value={form.duration_minutes}
+                      onChange={(e) =>
+                        updateForm({
+                          duration_minutes: parseInt(e.target.value) || 180,
+                        })
+                      }
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Question Type</Label>
+                    <Select value={form.question_type} onValueChange={(value) => updateForm({ question_type: value })}>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {questionTypes.map((type) => (
+                          <SelectItem key={type.value} value={type.value}>{type.label}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="advanced" className="space-y-4">
+                {/* Choice-Based Questions */}
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <Label>Choice-Based Questions</Label>
+                    {/* <Switch
+                      checked={form.choice_based.enabled}
+                      onCheckedChange={(enabled: any) => 
+                        updateForm({ choice_based: { ...form.choice_based, enabled } })
+                      }
+                    /> */}
+                  </div>
+                  {/* {form.choice_based.enabled && (
+                    <div className="grid grid-cols-2 gap-4 p-3 bg-muted/50 rounded">
+                      <div className="space-y-2">
+                        <Label className="text-xs">Generate Questions</Label>
+                        <Input
+                          type="number"
+                          min={5}
+                          max={10}
+                          value={form.choice_based.generate}
+                          onChange={(e: any) => 
+                            updateForm({ choice_based: { ...form.choice_based, generate: parseInt(e.target.value) || 7 } })
+                          }
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="text-xs">Attempt Questions</Label>
+                        <Input
+                          type="number"
+                          min={3}
+                          max={8}
+                          value={form.choice_based.attempt}
+                          onChange={(e: any) => 
+                            updateForm({ choice_based: { ...form.choice_based, attempt: parseInt(e.target.value) || 5 } })
+                          }
+                        />
+                      </div>
+                    </div>
+                  )} */}
+                </div>
+
+                {/* Sub-Part Questions */}
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <Label>Sub-Part Questions (a/b)</Label>
+                    {/* <Switch
+                      checked={form.sub_parts.enabled}
+                      onCheckedChange={(enabled: any) => 
+                        updateForm({ sub_parts: { ...form.sub_parts, enabled } })
+                      }
+                    /> */}
+                  </div>
+                  {/* {form.sub_parts.enabled && (
+                    <Select value={form.sub_parts.format} onValueChange={(value: any) => updateForm({ sub_parts: { ...form.sub_parts, format: value })}>
+                      <SelectTrigger className="w-full">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="(a)(b)">(a)(b)</SelectItem>
+                        <SelectItem value="(a) OR (b)">(a) OR (b)</SelectItem>
+                        <SelectItem value="(a)/(b)">(a)/(b)</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  ) */}
+                </div>
+
+                {/* PYQ Percentage */}
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <Label>Include Previous Year Questions</Label>
+                    <span className="text-sm text-muted-foreground">{form.pyq_percentage}%</span>
+                  </div>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="ai" className="space-y-4">
+                {/* Bloom's Taxonomy */}
+                <div className="space-y-3">
+                  <Label>Bloom's Taxonomy Level</Label>
+                  <Select value={form.bloom_level} onValueChange={(value) => updateForm({ bloom_level: value })}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {bloomLevels.map((level) => (
+                        <SelectItem key={level.value} value={level.value}>
+                          <div>
+                            <div className="font-medium">{level.label}</div>
+                            <div className="text-xs text-muted-foreground">{level.description}</div>
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {/* Paper Type */}
+                <div className="space-y-3">
+                  <Label>Paper Type (Priority Mode)</Label>
+                  <Select value={form.paper_type} onValueChange={(value) => updateForm({ paper_type: value })}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {paperTypes.map((type) => (
+                        <SelectItem key={type.value} value={type.value}>
+                          <div>
+                            <div className="font-medium">{type.label}</div>
+                            <div className="text-xs text-muted-foreground">{type.description}</div>
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {/* Difficulty Distribution */}
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <Label>Difficulty Distribution</Label>
+                    <Badge variant={totalDifficulty === 100 ? "default" : "destructive"}>
+                      Total: {totalDifficulty}%
+                    </Badge>
+                  </div>
+                  <div className="grid grid-cols-3 gap-4">
+                    <div className="space-y-2">
+                      <Label className="text-green-600">Easy (%)</Label>
+                      <Input
+                        type="number"
+                        min={0}
+                        max={100}
+                        value={form.difficulty_distribution.easy}
+                        onChange={(e) => updateDifficulty("easy", parseInt(e.target.value) || 0)}
+                      />
+                      <div className="w-full bg-gray-200 rounded-full h-2">
+                        <div className="bg-green-500 h-2 rounded-full transition-all duration-300" style={{ width: `${form.difficulty_distribution.easy}%` }} />
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-yellow-600">Medium (%)</Label>
+                      <Input
+                        type="number"
+                        min={0}
+                        max={100}
+                        value={form.difficulty_distribution.medium}
+                        onChange={(e) => updateDifficulty("medium", parseInt(e.target.value) || 0)}
+                      />
+                      <div className="w-full bg-gray-200 rounded-full h-2">
+                        <div className="bg-yellow-500 h-2 rounded-full transition-all duration-300" style={{ width: `${form.difficulty_distribution.medium}%` }} />
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-red-600">Hard (%)</Label>
+                      <Input
+                        type="number"
+                        min={0}
+                        max={100}
+                        value={form.difficulty_distribution.hard}
+                        onChange={(e) => updateDifficulty("hard", parseInt(e.target.value) || 0)}
+                      />
+                      <div className="w-full bg-gray-200 rounded-full h-2">
+                        <div className="bg-red-500 h-2 rounded-full transition-all duration-300" style={{ width: `${form.difficulty_distribution.hard}%` }} />
+                      </div>
+                    </div>
+                  </div>
+                  {totalDifficulty !== 100 && (
+                    <p className="text-sm text-destructive">
+                      Difficulty distribution must add up to 100% (currently {totalDifficulty}%)
+                    </p>
+                  )}
+                </div>
+
+                {/* Quick Presets */}
+                <div className="space-y-3">
+                  <Label>Quick Presets</Label>
+                  <div className="flex flex-wrap gap-2">
+                    <Button variant="outline" size="sm" onClick={() => updateForm({ difficulty_distribution: { easy: 30, medium: 50, hard: 20 } })} className="gap-2">
+                      <Settings className="h-3 w-3" />
+                      Balanced
+                    </Button>
+                    <Button variant="outline" size="sm" onClick={() => updateForm({ difficulty_distribution: { easy: 50, medium: 30, hard: 20 } })} className="gap-2">
+                      <Settings className="h-3 w-3" />
+                      Easy
+                    </Button>
+                    <Button variant="outline" size="sm" onClick={() => updateForm({ difficulty_distribution: { easy: 20, medium: 30, hard: 50 } })} className="gap-2">
+                      <Settings className="h-3 w-3" />
+                      Hard
+                    </Button>
+                  </div>
+                </div>
+              </TabsContent>
+            </Tabs>
+
+            <div className="flex justify-between">
+              <Button variant="outline" onClick={() => setStep(3)} className="gap-2">
+                <ChevronLeft className="h-4 w-4" /> Back
+              </Button>
+              <Button onClick={() => setStep(5)} disabled={!canProceedStep4} className="gap-2">
+                Next <ChevronRight className="h-4 w-4" />
               </Button>
             </div>
           </CardContent>

@@ -1,0 +1,26 @@
+# Copy this file to terraform.tfvars and fill in your values
+# cp terraform.tfvars.example terraform.tfvars
+
+# ─── Required ─────────────────────────────────────────────────────────────────
+
+# Path to your SSH public key (used to create an EC2 key pair)
+public_key_path = "~/.ssh/id_rsa.pub"
+
+# ─── Optional overrides ───────────────────────────────────────────────────────
+
+# AWS region (default: ap-south-1 = Mumbai, closest to India)
+# Other options: us-east-1, eu-west-1, ap-southeast-1
+# aws_region = "ap-south-1"
+
+# Instance type — t2.micro is free-tier eligible
+# Upgrade to t3.small (2 GB) if you want to enable T5 model
+# instance_type = "t2.micro"
+
+# EBS volume size in GB (free tier gives 30 GB total)
+# volume_size_gb = 20
+
+# Restrict SSH to your IP only (recommended)
+# allowed_ssh_cidr = "YOUR_PUBLIC_IP/32"
+
+# Set to false ONLY on t3.small or larger (requires >= 2 GB RAM)
+# disable_t5_model = true

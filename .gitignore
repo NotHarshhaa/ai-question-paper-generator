@@ -62,3 +62,11 @@ htmlcov/
 backend/models/
 .cache/
 backend/.cache/
+
+# Terraform
+terraform/.terraform/
+terraform/.terraform.lock.hcl
+terraform/terraform.tfstate
+terraform/terraform.tfstate.backup
+terraform/terraform.tfvars
+*.tfplan

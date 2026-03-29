@@ -205,7 +205,7 @@ export default function PaperViewPage() {
                   <div className="space-y-4">
                     {section.questions.map((q, qi) => (
                       <div
-                        key={q.id}
+                        key={`section-${si}-question-${qi}-${q.id}`}
                         className="flex gap-3 p-3 rounded-lg bg-muted/50"
                       >
                         <span className="font-semibold text-muted-foreground shrink-0">
@@ -245,7 +245,7 @@ export default function PaperViewPage() {
         <TabsContent value="questions">
           <div className="space-y-3">
             {paper.questions.map((q, i) => (
-              <Card key={q.id}>
+              <Card key={`all-questions-${i}-${q.id}`}>
                 <CardContent className="p-4">
                   <div className="flex gap-3">
                     <span className="font-bold text-lg text-muted-foreground shrink-0">

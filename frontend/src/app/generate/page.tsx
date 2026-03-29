@@ -20,6 +20,7 @@ import {
   BarChart3,
   FolderOpen,
   FileSymlink,
+  Loader2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -34,6 +35,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 // import { Switch } from "@/components/ui/switch";
@@ -244,18 +246,42 @@ interface FormState {
   };
 
   const processSyllabus = (syllabusText: string) => {
-    // Step 1: Unit Detection
-    const unitRegex = /Unit\s+(\d+)[\:\-]/gi;
-    const units: ProcessedSyllabus[] = [];
-    let match;
+    // Step 1: Unit Detection - Support multiple formats
+    const unitPatterns = [
+      /Unit\s+([IVX]+)[\:\-]/gi,  // Unit-I, Unit-II, etc.
+      /Unit\s+(\d+)[\:\-]/gi,     // Unit-1, Unit-2, etc.
+      /Unit\s+([IVX]+)/gi,        // Unit I, Unit II, etc.
+      /Unit\s+(\d+)/gi            // Unit 1, Unit 2, etc.
+    ];
     
-    while ((match = unitRegex.exec(syllabusText)) !== null) {
-      units.push({
-        number: parseInt(match[1]),
-        title: `Unit ${match[1]}`,
-        topics: []
-      });
-    }
+    const units: ProcessedSyllabus[] = [];
+    const unitMap: { [key: string]: number } = {};
+    
+    // Try each pattern
+    unitPatterns.forEach((pattern) => {
+      let match;
+      while ((match = pattern.exec(syllabusText)) !== null) {
+        const unitIdentifier = match[1];
+        let unitNumber: number;
+        
+        // Convert Roman numerals to numbers
+        if (/^[IVX]+$/.test(unitIdentifier)) {
+          const romanMap: { [key: string]: number } = { I: 1, II: 2, III: 3, IV: 4, V: 5, VI: 6, VII: 7, VIII: 8, IX: 9, X: 10 };
+          unitNumber = romanMap[unitIdentifier] || 1;
+        } else {
+          unitNumber = parseInt(unitIdentifier);
+        }
+        
+        if (!unitMap[match[0]]) {
+          units.push({
+            number: unitNumber,
+            title: match[0],
+            topics: []
+          });
+          unitMap[match[0]] = units.length - 1;
+        }
+      }
+    });
 
     // If no units detected, create a default unit
     if (units.length === 0 && syllabusText.trim().length > 10) {
@@ -268,29 +294,40 @@ interface FormState {
 
     // Step 2: Topic Extraction
     const lines = syllabusText.split('\n');
-    let currentUnit = 0;
+    let currentUnitIndex = 0;
     
     lines.forEach((line: string) => {
       const trimmedLine = line.trim();
       
-      // Check if this is a unit line
-      const unitMatch = trimmedLine.match(/Unit\s+(\d+)/i);
-      if (unitMatch) {
-        currentUnit = parseInt(unitMatch[1]) - 1;
-        return;
-      }
+      // Check if this is a unit line using any pattern
+      let isUnitLine = false;
+      unitPatterns.forEach((pattern) => {
+        const unitMatch = trimmedLine.match(pattern);
+        if (unitMatch) {
+          isUnitLine = true;
+          // Find the corresponding unit index
+          for (let i = 0; i < units.length; i++) {
+            if (units[i].title === unitMatch[0]) {
+              currentUnitIndex = i;
+              break;
+            }
+          }
+        }
+      });
       
-      // Extract topics (lines starting with -, or containing important keywords)
-      if (trimmedLine.startsWith('-') || trimmedLine.startsWith('•') || 
+      if (isUnitLine) return;
+      
+      // Extract topics (lines starting with • or -, or containing important keywords)
+      if (trimmedLine.startsWith('•') || trimmedLine.startsWith('-') || 
           trimmedLine.match(/^(definition|explain|describe|compare|analyze|evaluate)/i)) {
-        const topic = trimmedLine.replace(/^[-•]\s*/, '').trim();
-        if (topic && currentUnit >= 0 && currentUnit < units.length) {
-          units[currentUnit].topics.push(topic);
+        const topic = trimmedLine.replace(/^[•\-]\s*/, '').trim();
+        if (topic && currentUnitIndex >= 0 && currentUnitIndex < units.length) {
+          units[currentUnitIndex].topics.push(topic);
         }
       } else if (trimmedLine.length > 5 && !trimmedLine.toLowerCase().includes('unit') && units.length > 0) {
         // Add non-unit lines as topics if they're substantial enough
-        if (currentUnit >= 0 && currentUnit < units.length) {
-          units[currentUnit].topics.push(trimmedLine);
+        if (currentUnitIndex >= 0 && currentUnitIndex < units.length) {
+          units[currentUnitIndex].topics.push(trimmedLine);
         }
       }
     });
@@ -1084,6 +1121,122 @@ interface FormState {
               </Button>
               <Button onClick={() => setStep(5)} disabled={!canProceedStep4} className="gap-2">
                 Next <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+      
+      {/* Step 5: Generate */}
+      {step === 5 && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Sparkles className="h-5 w-5" />
+              Generate Question Paper
+            </CardTitle>
+            <p className="text-sm text-muted-foreground">
+              Review your settings and generate the AI-powered question paper
+            </p>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            {/* Summary */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-3">
+                <h4 className="font-semibold text-sm">Paper Details</h4>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Subject:</span>
+                    <span className="font-medium">{form.subject}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Total Marks:</span>
+                    <span className="font-medium">{form.total_marks}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Duration:</span>
+                    <span className="font-medium">{form.duration_minutes} minutes</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Pattern:</span>
+                    <span className="font-medium">{form.exam_pattern}</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="space-y-3">
+                <h4 className="font-semibold text-sm">Syllabus Overview</h4>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Units:</span>
+                    <span className="font-medium">{form.units.length}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Topics:</span>
+                    <span className="font-medium">{form.topics.length}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Keywords:</span>
+                    <span className="font-medium">{form.keywords.length}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Difficulty:</span>
+                    <span className="font-medium">
+                      {form.difficulty_distribution.easy}% Easy / {form.difficulty_distribution.medium}% Medium / {form.difficulty_distribution.hard}% Hard
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Units Preview */}
+            <div className="space-y-3">
+              <h4 className="font-semibold text-sm">Units & Topics</h4>
+              <div className="space-y-2 max-h-40 overflow-y-auto">
+                {form.units.map((unit, index) => (
+                  <div key={index} className="p-2 bg-muted/50 rounded text-sm">
+                    <div className="font-medium text-xs mb-1">{unit.title}</div>
+                    <div className="text-xs text-muted-foreground">
+                      {unit.topics.slice(0, 3).join(", ")}
+                      {unit.topics.length > 3 && `... +${unit.topics.length - 3} more`}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Progress Bar */}
+            {loading && (
+              <div className="space-y-2">
+                <div className="flex justify-between text-sm">
+                  <span>Generating paper...</span>
+                  <span>{progressValue}%</span>
+                </div>
+                <Progress value={progressValue} className="w-full" />
+              </div>
+            )}
+
+            {/* Generate Button */}
+            <div className="flex justify-between">
+              <Button variant="outline" onClick={() => setStep(4)} className="gap-2">
+                <ChevronLeft className="h-4 w-4" /> Back
+              </Button>
+              <Button 
+                onClick={handleGenerate} 
+                disabled={!canSubmit || loading} 
+                className="gap-2"
+              >
+                {loading ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Generating...
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="h-4 w-4" />
+                    Generate Paper
+                  </>
+                )}
               </Button>
             </div>
           </CardContent>

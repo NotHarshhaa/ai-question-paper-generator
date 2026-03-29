@@ -26,7 +26,7 @@ async function request<T>(
       throw new Error("Request timed out. The backend may be loading AI models for the first time — please try again in a moment.");
     }
     if (err instanceof TypeError && err.message === "Failed to fetch") {
-      throw new Error("Cannot connect to backend. Make sure the Flask server is running on http://127.0.0.1:5000");
+      throw new Error("Cannot connect to backend. Please check if the backend server is running and accessible.");
     }
     throw err;
   }

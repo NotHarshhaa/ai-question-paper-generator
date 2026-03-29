@@ -22,7 +22,8 @@ logger = logging.getLogger(__name__)
 
 # Initialize Flask app
 app = Flask(__name__)
-CORS(app, origins=["http://localhost:3000", "http://127.0.0.1:3000"])
+# Allow all origins (frontend could be on Vercel, Netlify, or local network IP)
+CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 # Initialize components
 nlp = NLPProcessor()

@@ -159,7 +159,7 @@ export default function Home() {
           <div className="grid gap-4 md:gap-6 lg:grid-cols-2 max-w-5xl mx-auto">
             <Card className="group hover:shadow-lg transition-all duration-300">
               <CardContent className="p-4 md:p-6">
-                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100 text-blue-600 mb-4 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary mb-4 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
                   <Database className="h-6 w-6" />
                 </div>
                 <h3 className="text-lg md:text-xl font-bold mb-3">Question Bank Management</h3>
@@ -169,23 +169,23 @@ export default function Home() {
                 </p>
                 <div className="space-y-2">
                   <div className="flex items-center gap-2">
-                    <CheckCircle className="h-3 w-3 text-green-500" />
+                    <CheckCircle className="h-3 w-3 text-primary" />
                     <span className="text-xs">Organize questions by subject and difficulty</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <CheckCircle className="h-3 w-3 text-green-500" />
+                    <CheckCircle className="h-3 w-3 text-primary" />
                     <span className="text-xs">Rate and review question quality</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <CheckCircle className="h-3 w-3 text-green-500" />
+                    <CheckCircle className="h-3 w-3 text-primary" />
                     <span className="text-xs">Track usage statistics and patterns</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <CheckCircle className="h-3 w-3 text-green-500" />
+                    <CheckCircle className="h-3 w-3 text-primary" />
                     <span className="text-xs">Import/export question collections</span>
                   </div>
                 </div>
-                <Link href="/question-bank" className="inline-flex items-center gap-2 mt-4 text-blue-600 hover:text-blue-700 font-medium text-sm">
+                <Link href="/question-bank" className="inline-flex items-center gap-2 mt-4 text-primary hover:text-primary/80 font-medium text-sm">
                   Explore Question Bank <ArrowRight className="h-4 w-4" />
                 </Link>
               </CardContent>
@@ -193,7 +193,7 @@ export default function Home() {
 
             <Card className="group hover:shadow-lg transition-all duration-300">
               <CardContent className="p-4 md:p-6">
-                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-purple-100 text-purple-600 mb-4 group-hover:bg-purple-600 group-hover:text-white transition-colors">
+                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary mb-4 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
                   <TrendingUp className="h-6 w-6" />
                 </div>
                 <h3 className="text-lg md:text-xl font-bold mb-3">Analytics Dashboard</h3>
@@ -203,23 +203,23 @@ export default function Home() {
                 </p>
                 <div className="space-y-2">
                   <div className="flex items-center gap-2">
-                    <CheckCircle className="h-3 w-3 text-green-500" />
+                    <CheckCircle className="h-3 w-3 text-primary" />
                     <span className="text-xs">Track generation statistics</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <CheckCircle className="h-3 w-3 text-green-500" />
+                    <CheckCircle className="h-3 w-3 text-primary" />
                     <span className="text-xs">Monitor AI performance metrics</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <CheckCircle className="h-3 w-3 text-green-500" />
+                    <CheckCircle className="h-3 w-3 text-primary" />
                     <span className="text-xs">Analyze subject-wise usage</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <CheckCircle className="h-3 w-3 text-green-500" />
+                    <CheckCircle className="h-3 w-3 text-primary" />
                     <span className="text-xs">Export detailed reports</span>
                   </div>
                 </div>
-                <Link href="/analytics" className="inline-flex items-center gap-2 mt-4 text-purple-600 hover:text-purple-700 font-medium text-sm">
+                <Link href="/analytics" className="inline-flex items-center gap-2 mt-4 text-primary hover:text-primary/80 font-medium text-sm">
                   View Analytics <ArrowRight className="h-4 w-4" />
                 </Link>
               </CardContent>
@@ -272,7 +272,7 @@ export default function Home() {
             </p>
           </div>
 
-          <Card className="overflow-hidden border-2 hover:shadow-2xl transition-all duration-300">
+          <Card className="overflow-hidden border-2 hover:shadow-2xl transition-all duration-300 rounded-none">
             <CardContent className="p-0">
               <div className="grid sm:grid-cols-5 gap-0">
                 <div className="sm:col-span-2 from-primary/10 via-primary/5 to-background p-4 md:p-6 flex items-center justify-center">
@@ -348,7 +348,7 @@ export default function Home() {
 
       {/* CTA */}
       <section className="container mx-auto px-4 py-8 md:py-12 lg:py-16">
-        <div className="bg-primary rounded-xl p-4 md:p-6 lg:p-8 text-center text-primary-foreground max-w-3xl mx-auto">
+        <div className="bg-primary p-4 md:p-6 lg:p-8 text-center text-primary-foreground max-w-3xl mx-auto">
           <h2 className="text-xl md:text-2xl font-bold mb-2">Ready to Get Started?</h2>
           <p className="text-primary-foreground/80 text-sm md:text-base mb-3 md:mb-4 max-w-xl mx-auto">
             Generate your first AI-powered question paper in minutes. No expensive

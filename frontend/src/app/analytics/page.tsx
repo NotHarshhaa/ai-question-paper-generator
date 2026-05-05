@@ -198,11 +198,11 @@ export default function AnalyticsPage() {
       </div>
 
       <Tabs defaultValue="subjects" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-4 h-auto">
-          <TabsTrigger value="subjects" className="text-xs py-2 px-1">Subjects</TabsTrigger>
-          <TabsTrigger value="usage" className="text-xs py-2 px-1">Usage</TabsTrigger>
-          <TabsTrigger value="activity" className="text-xs py-2 px-1">Activity</TabsTrigger>
-          <TabsTrigger value="insights" className="text-xs py-2 px-1">AI Insights</TabsTrigger>
+        <TabsList className="inline-flex w-full">
+          <TabsTrigger value="subjects" className="text-xs py-2 px-1 flex items-center justify-center">Subjects</TabsTrigger>
+          <TabsTrigger value="usage" className="text-xs py-2 px-1 flex items-center justify-center">Usage</TabsTrigger>
+          <TabsTrigger value="activity" className="text-xs py-2 px-1 flex items-center justify-center">Activity</TabsTrigger>
+          <TabsTrigger value="insights" className="text-xs py-2 px-1 flex items-center justify-center">AI Insights</TabsTrigger>
         </TabsList>
 
         {/* Subject Statistics */}
@@ -287,7 +287,7 @@ export default function AnalyticsPage() {
                   <div key={day.day} className="text-center">
                     <p className="text-xs text-muted-foreground mb-1">{day.day}</p>
                     <div className="relative">
-                      <div className="w-full bg-gray-200 rounded-t-lg" style={{ height: `${Math.max(day.papers * 1.5, 15)}px` }}>
+                      <div className="w-full bg-muted rounded-t-lg" style={{ height: `${Math.max(day.papers * 1.5, 15)}px` }}>
                         <div 
                           className="bg-primary rounded-t-lg transition-all duration-300" 
                           style={{ height: `${day.papers * 1.5}px` }}
@@ -299,20 +299,20 @@ export default function AnalyticsPage() {
                 ))}
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-center">
-                <div className="p-2 bg-green-50 rounded-lg">
-                  <p className="text-xs text-green-600 font-medium">Peak Day</p>
-                  <p className="text-sm font-bold text-green-700">Thursday</p>
-                  <p className="text-xs text-green-600">61 papers</p>
+                <div className="p-2 bg-green-100 dark:bg-green-900/20 border border-green-200 dark:border-green-800/30 rounded-lg">
+                  <p className="text-xs text-green-700 dark:text-green-400 font-medium">Peak Day</p>
+                  <p className="text-sm font-bold text-green-800 dark:text-green-300">Thursday</p>
+                  <p className="text-xs text-green-600 dark:text-green-400">61 papers</p>
                 </div>
-                <div className="p-2 bg-blue-50 rounded-lg">
-                  <p className="text-xs text-blue-600 font-medium">Daily Avg</p>
-                  <p className="text-sm font-bold text-blue-700">49 papers</p>
-                  <p className="text-xs text-blue-600">All subjects</p>
+                <div className="p-2 bg-blue-100 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800/30 rounded-lg">
+                  <p className="text-xs text-blue-700 dark:text-blue-400 font-medium">Daily Avg</p>
+                  <p className="text-sm font-bold text-blue-800 dark:text-blue-300">49 papers</p>
+                  <p className="text-xs text-blue-600 dark:text-blue-400">All subjects</p>
                 </div>
-                <div className="p-2 bg-purple-50 rounded-lg">
-                  <p className="text-xs text-purple-600 font-medium">Weekend</p>
-                  <p className="text-sm font-bold text-purple-700">23%</p>
-                  <p className="text-xs text-purple-600">of activity</p>
+                <div className="p-2 bg-purple-100 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800/30 rounded-lg">
+                  <p className="text-xs text-purple-700 dark:text-purple-400 font-medium">Weekend</p>
+                  <p className="text-sm font-bold text-purple-800 dark:text-purple-300">23%</p>
+                  <p className="text-xs text-purple-600 dark:text-purple-400">of activity</p>
                 </div>
               </div>
             </CardContent>
@@ -401,17 +401,17 @@ export default function AnalyticsPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <div className="p-2 bg-blue-50 rounded-lg">
-                  <h4 className="font-medium text-blue-800 text-xs mb-1">Model Optimization</h4>
-                  <p className="text-xs text-blue-600">Fine-tune BERT for domain-specific terms.</p>
+                <div className="p-2 bg-blue-100 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800/30 rounded-lg">
+                  <h4 className="font-medium text-blue-800 dark:text-blue-400 text-xs mb-1">Model Optimization</h4>
+                  <p className="text-xs text-blue-700 dark:text-blue-300">Fine-tune BERT for domain-specific terms.</p>
                 </div>
-                <div className="p-2 bg-green-50 rounded-lg">
-                  <h4 className="font-medium text-green-800 text-xs mb-1">User Experience</h4>
-                  <p className="text-xs text-green-600">Add more template options for popular subjects.</p>
+                <div className="p-2 bg-green-100 dark:bg-green-900/20 border border-green-200 dark:border-green-800/30 rounded-lg">
+                  <h4 className="font-medium text-green-800 dark:text-green-400 text-xs mb-1">User Experience</h4>
+                  <p className="text-xs text-green-700 dark:text-green-300">Add more template options for popular subjects.</p>
                 </div>
-                <div className="p-2 bg-purple-50 rounded-lg">
-                  <h4 className="font-medium text-purple-800 text-xs mb-1">Performance</h4>
-                  <p className="text-xs text-purple-600">Implement caching for syllabus patterns.</p>
+                <div className="p-2 bg-purple-100 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800/30 rounded-lg">
+                  <h4 className="font-medium text-purple-800 dark:text-purple-400 text-xs mb-1">Performance</h4>
+                  <p className="text-xs text-purple-700 dark:text-purple-300">Implement caching for syllabus patterns.</p>
                 </div>
               </CardContent>
             </Card>

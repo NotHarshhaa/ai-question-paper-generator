@@ -44,55 +44,97 @@ SUBJECT_MAP = {
 
 
 def extract_text_from_pdf(pdf_path: str) -> str:
-    """Extract all text from a PDF file. Falls back to OCR for scanned PDFs."""
-    full_text = []
-    is_scanned = False
+    """Extract all text from a PDF file.
+
+    Runs OCR only on the specific pages that lack extractable text (e.g. a
+    slide-deck PDF with a mix of text slides and image/screenshot slides),
+    instead of OCR'ing the whole document just because some pages are blank.
+    Falls back to full-document OCR only if pdfplumber fails to open the file.
+    """
+    full_text: list[str] = []
+    pages_needing_ocr: list[int] = []  # 0-based indices
 
     try:
         with pdfplumber.open(pdf_path) as pdf:
-            for page in pdf.pages:
+            for idx, page in enumerate(pdf.pages):
                 text = page.extract_text()
                 if text and text.strip():
                     full_text.append(text)
                 else:
-                    is_scanned = True
+                    full_text.append("")  # placeholder, filled in below if OCR'd
+                    pages_needing_ocr.append(idx)
     except Exception as e:
         logger.error("Failed to read PDF %s: %s", pdf_path, e)
-        is_scanned = True
+        # Could not open with pdfplumber at all — fall back to full OCR
+        return extract_text_with_ocr(pdf_path)
 
-    # If we got text from at least some pages, return it
-    if full_text and not is_scanned:
+    if not pages_needing_ocr:
         return "\n".join(full_text)
 
-    # Scanned PDF — use OCR
-    logger.info("  Using OCR for scanned PDF: %s", os.path.basename(pdf_path))
-    return extract_text_with_ocr(pdf_path)
+    total_pages = len(full_text)
+    if len(pages_needing_ocr) == total_pages:
+        # Entire document is scanned/image-only
+        logger.info("  Using OCR for fully scanned PDF: %s", os.path.basename(pdf_path))
+        return extract_text_with_ocr(pdf_path)
+
+    # Mixed document — OCR only the pages that lack text
+    logger.info(
+        "  %s: %d/%d pages need OCR (rest already have extractable text)",
+        os.path.basename(pdf_path), len(pages_needing_ocr), total_pages,
+    )
+    ocr_text_by_page = extract_text_with_ocr(pdf_path, page_indices=pages_needing_ocr)
+    for idx, ocr_text in ocr_text_by_page.items():
+        full_text[idx] = ocr_text
+
+    return "\n".join(t for t in full_text if t)
 
 
-def extract_text_with_ocr(pdf_path: str) -> str:
-    """Extract text from scanned PDF using EasyOCR via pdfplumber images."""
+def extract_text_with_ocr(pdf_path: str, page_indices: list[int] | None = None):
+    """Extract text from a PDF using EasyOCR via pdfplumber images.
+
+    - If `page_indices` is None: OCRs the whole document and returns the
+      joined text as a single string (original/full-document behavior).
+    - If `page_indices` is provided: OCRs only those 0-based page indices
+      and returns a dict of {page_index: text} for the caller to splice
+      back into a partially-extracted document.
+    """
     reader = get_ocr_reader()
-    full_text = []
 
+    def ocr_page(page) -> str:
+        # Convert page to image at lower resolution for speed
+        img = page.to_image(resolution=150)
+        buf = io.BytesIO()
+        img.save(buf, format="PNG")
+        buf.seek(0)
+        # Read with PIL and convert to grayscale for faster OCR
+        pil_img = Image.open(buf).convert("L")
+        img_array = np.array(pil_img)
+        results = reader.readtext(img_array, detail=0, paragraph=True)
+        return "\n".join(results)
+
+    if page_indices is not None:
+        ocr_results: dict[int, str] = {}
+        try:
+            with pdfplumber.open(pdf_path) as pdf:
+                total = len(page_indices)
+                for i, idx in enumerate(page_indices, 1):
+                    if i % 5 == 1:
+                        logger.info("    OCR page %d/%d (page #%d in doc)...", i, total, idx + 1)
+                    page_text = ocr_page(pdf.pages[idx])
+                    if page_text.strip():
+                        ocr_results[idx] = page_text
+        except Exception as e:
+            logger.error("OCR failed for %s: %s", pdf_path, e)
+        return ocr_results
+
+    full_text = []
     try:
         with pdfplumber.open(pdf_path) as pdf:
             total_pages = len(pdf.pages)
             for page_num, page in enumerate(pdf.pages, 1):
                 if page_num % 5 == 1:
                     logger.info("    OCR pages %d-%d/%d...", page_num, min(page_num + 4, total_pages), total_pages)
-                # Convert page to image at lower resolution for speed
-                img = page.to_image(resolution=150)
-                # Save to bytes buffer
-                buf = io.BytesIO()
-                img.save(buf, format="PNG")
-                buf.seek(0)
-                # Read with PIL and convert to grayscale for faster OCR
-                pil_img = Image.open(buf).convert("L")
-                # Convert to numpy array for easyocr
-                img_array = np.array(pil_img)
-                # Run OCR
-                results = reader.readtext(img_array, detail=0, paragraph=True)
-                page_text = "\n".join(results)
+                page_text = ocr_page(page)
                 if page_text.strip():
                     full_text.append(page_text)
     except Exception as e:

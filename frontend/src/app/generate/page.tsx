@@ -43,16 +43,24 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { api } from "@/lib/api";
 
 const subjects = [
-  { id: "ml", name: "Machine Learning", category: "AI/ML", difficulty: "Hard", credits: 4, popularity: 91 },
-  { id: "bigdata", name: "Big Data Analytics", category: "AI/ML", difficulty: "Hard", credits: 3, popularity: 86 },
-  { id: "r_prog", name: "R Programming", category: "Programming", difficulty: "Easy", credits: 2, popularity: 65 },
-  { id: "ds", name: "Data Structures", category: "Core CS", difficulty: "Hard", credits: 4, popularity: 98 },
-  { id: "cn", name: "Computer Networks", category: "Core CS", difficulty: "Medium", credits: 4, popularity: 92 },
-  { id: "os", name: "Operating Systems", category: "Core CS", difficulty: "Hard", credits: 4, popularity: 95 },
-  { id: "db", name: "Database Systems", category: "Core CS", difficulty: "Medium", credits: 4, popularity: 90 },
-  { id: "ai", name: "Artificial Intelligence", category: "AI/ML", difficulty: "Hard", credits: 3, popularity: 87 },
-  { id: "se", name: "Software Engineering", category: "Software", difficulty: "Easy", credits: 3, popularity: 88 },
-  { id: "web", name: "Web Development", category: "Software", difficulty: "Easy", credits: 3, popularity: 82 },
+  { id: "aws_fundamentals", name: "AWS Cloud Fundamentals", category: "AWS", difficulty: "Easy", credits: 3, popularity: 95 },
+  { id: "aws_compute", name: "AWS Compute (EC2 & Auto Scaling)", category: "AWS", difficulty: "Medium", credits: 4, popularity: 92 },
+  { id: "aws_storage", name: "AWS Storage & Databases", category: "AWS", difficulty: "Medium", credits: 4, popularity: 90 },
+  { id: "aws_networking", name: "AWS Networking (VPC, Route 53, CloudFront)", category: "AWS", difficulty: "Hard", credits: 4, popularity: 87 },
+  { id: "aws_security", name: "AWS Security & IAM", category: "Security", difficulty: "Hard", credits: 3, popularity: 89 },
+  { id: "aws_serverless", name: "AWS Serverless (Lambda, API Gateway, Step Functions)", category: "AWS", difficulty: "Hard", credits: 3, popularity: 86 },
+  { id: "docker", name: "Docker & Containerization", category: "Containers", difficulty: "Medium", credits: 3, popularity: 98 },
+  { id: "kubernetes", name: "Kubernetes & Container Orchestration", category: "Containers", difficulty: "Hard", credits: 4, popularity: 96 },
+  { id: "cicd", name: "CI/CD Pipelines", category: "DevOps", difficulty: "Medium", credits: 3, popularity: 94 },
+  { id: "jenkins", name: "Jenkins", category: "DevOps", difficulty: "Medium", credits: 2, popularity: 85 },
+  { id: "terraform", name: "Terraform & Infrastructure as Code", category: "DevOps", difficulty: "Hard", credits: 4, popularity: 93 },
+  { id: "ansible", name: "Ansible & Configuration Management", category: "DevOps", difficulty: "Medium", credits: 3, popularity: 84 },
+  { id: "linux", name: "Linux Administration & Shell Scripting", category: "Systems", difficulty: "Medium", credits: 3, popularity: 91 },
+  { id: "git", name: "Git & Version Control", category: "DevOps", difficulty: "Easy", credits: 2, popularity: 88 },
+  { id: "monitoring", name: "Monitoring & Logging (CloudWatch, Prometheus, Grafana)", category: "Observability", difficulty: "Medium", credits: 3, popularity: 83 },
+  { id: "sre", name: "Site Reliability Engineering (SRE)", category: "Observability", difficulty: "Hard", credits: 3, popularity: 80 },
+  { id: "devsecops", name: "DevSecOps & Cloud Security", category: "Security", difficulty: "Hard", credits: 3, popularity: 82 },
+  { id: "microservices", name: "Microservices Architecture", category: "Architecture", difficulty: "Hard", credits: 3, popularity: 85 },
 ];
 
 const bloomLevels = [
@@ -76,7 +84,7 @@ const questionTypes = [
   { value: "mixed", label: "Mixed", description: "Combination of short and long" },
 ];
 
-const categories = ["All", "Core CS", "Programming", "AI/ML", "Software", "Systems", "Security", "Networks", "Emerging"];
+const categories = ["All", "AWS", "DevOps", "Containers", "Systems", "Security", "Observability", "Architecture"];
 
 const quickStats = [
   { label: "Total Papers Generated", value: "1,284", icon: FileText, trend: "+12%" },
@@ -87,9 +95,9 @@ const quickStats = [
 
 const examPatterns = [
   { 
-    value: "university", 
-    label: "University Pattern", 
-    description: "Standard university format with short questions and unit-based long questions",
+    value: "certification", 
+    label: "Certification Exam Pattern", 
+    description: "Standard certification format with short questions and domain-based long questions",
     structure: {
       shortQuestions: { count: 5, marks: 2, total: 10, choice: { generate: 7, attempt: 5 } },
       longQuestions: { count: 8, marks: 15, total: 60, units: 4, questionsPerUnit: 2 },
@@ -122,13 +130,13 @@ export default function GeneratePage() {
   const [form, setForm] = useState<FormState>({
     subject: "",
     syllabus: "",
-    exam_pattern: "university",
-    pattern_type: "university",
+    exam_pattern: "certification",
+    pattern_type: "certification",
     total_marks: 70,
     duration_minutes: 180,
     difficulty_distribution: { easy: 30, medium: 40, hard: 30 },
     num_questions: 13,
-    university_name: "",
+    organization_name: "",
     semester: "",
     choice_based: { enabled: false, generate: 7, attempt: 5 },
     sub_parts: { enabled: false, format: "(a)(b)" },
@@ -145,30 +153,28 @@ export default function GeneratePage() {
   // Syllabus templates
   const syllabusTemplates = [
     {
-      id: "ml-template",
-      name: "Machine Learning Template",
-      subject: "ml",
-      content: `Unit 1: Introduction to Machine Learning
-- Definition and Overview
-- Types of Learning: Supervised, Unsupervised, Reinforcement
-- Applications and Real-world Examples
+      id: "aws-template",
+      name: "AWS Cloud Fundamentals Template",
+      subject: "aws_fundamentals",
+      content: `Unit 1: Introduction to Cloud Computing and AWS
+- Cloud Computing Models: IaaS, PaaS, SaaS
+- AWS Global Infrastructure: Regions, Availability Zones, Edge Locations
+- AWS Free Tier and Pricing Models
 
-Unit 2: Supervised Learning
-- Linear Regression
-- Logistic Regression
-- Decision Trees and Random Forests
-- Support Vector Machines
+Unit 2: Core AWS Services
+- Amazon EC2 and Auto Scaling
+- Amazon S3 and Storage Classes
+- Amazon VPC and Networking Basics
 
-Unit 3: Unsupervised Learning
-- Clustering Algorithms
-- Dimensionality Reduction
-- Association Rule Mining
+Unit 3: AWS Identity and Security
+- IAM Users, Groups, Roles and Policies
+- Security Groups and NACLs
+- AWS Shared Responsibility Model
 
-Unit 4: Neural Networks
-- Perceptron and Multi-layer Perceptrons
-- Backpropagation Algorithm
-- Convolutional Neural Networks
-- Recurrent Neural Networks`,
+Unit 4: AWS Management and Monitoring
+- AWS CloudWatch and CloudTrail
+- AWS Billing and Cost Management
+- AWS Well-Architected Framework`,
     },
   ];
 
@@ -199,7 +205,7 @@ interface FormState {
   duration_minutes: number;
   difficulty_distribution: { easy: number; medium: number; hard: number };
   num_questions: number;
-  university_name: string;
+  organization_name: string;
   semester: string;
   // Advanced Settings
   choice_based: { enabled: boolean; generate: number; attempt: number };
@@ -532,13 +538,13 @@ interface FormState {
           <CardContent className="space-y-4">
             <div className="grid grid-cols-1 gap-3">
               <div className="space-y-2">
-                <Label htmlFor="university">University Name</Label>
+                <Label htmlFor="organization">Organization / Certification Name</Label>
                 <Input
-                  id="university"
-                  placeholder="e.g., Anna University"
-                  value={form.university_name}
+                  id="organization"
+                  placeholder="e.g., AWS Certified DevOps Engineer"
+                  value={form.organization_name}
                   onChange={(e) =>
-                    updateForm({ university_name: e.target.value })
+                    updateForm({ organization_name: e.target.value })
                   }
                 />
               </div>
@@ -734,7 +740,7 @@ interface FormState {
               </Label>
               <Textarea
                 id="syllabus"
-                placeholder={`Unit 1: Introduction to Data Structures\n- Arrays, Linked Lists, Stacks, Queues\n\nUnit 2: Trees\n- Binary Trees, BST, AVL Trees\n\nUnit 3: Graphs\n- BFS, DFS, Shortest Path Algorithms`}
+                placeholder={`Unit 1: Introduction to AWS Cloud\n- Cloud Concepts, EC2, S3, IAM\n\nUnit 2: Containers & Orchestration\n- Docker, Kubernetes, ECS\n\nUnit 3: CI/CD & Infrastructure as Code\n- Jenkins Pipelines, Terraform, Ansible`}
                 rows={12}
                 value={form.syllabus}
                 onChange={(e) => {
@@ -878,9 +884,9 @@ interface FormState {
                         </div>
                       </div>
                       
-                      {pattern.value === "university" && (
+                      {pattern.value === "certification" && (
                         <div className="bg-muted/50 rounded p-3">
-                          <h5 className="text-xs font-semibold mb-2">University Pattern Structure:</h5>
+                          <h5 className="text-xs font-semibold mb-2">Certification Exam Pattern Structure:</h5>
                           <div className="space-y-2 text-xs">
                             <div className="flex justify-between">
                               <span className="font-medium">Short Questions:</span>
@@ -895,7 +901,7 @@ interface FormState {
                               <span className="font-bold">70 marks</span>
                             </div>
                             <div className="mt-2 text-xs text-muted-foreground">
-                              <p>• Attempt 1 question per unit (4 units)</p>
+                              <p>• Attempt 1 question per domain (4 domains)</p>
                               <p>• Short questions: Generate 7, attempt any 5</p>
                             </div>
                           </div>

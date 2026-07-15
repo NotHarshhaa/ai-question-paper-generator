@@ -70,7 +70,7 @@ export interface GenerateRequest {
     hard: number;
   };
   num_questions: number;
-  university_name?: string;
+  organization_name?: string;
   semester?: string;
   // Flattened exam pattern fields for backend compatibility
   short_questions_count?: number;
@@ -98,7 +98,7 @@ export interface Question {
 export interface GeneratedPaper {
   id: string;
   subject: string;
-  university_name: string;
+  organization_name: string;
   semester: string;
   total_marks: number;
   duration_minutes: number;
@@ -121,7 +121,7 @@ export interface PaperHistoryItem {
   total_marks: number;
   created_at: string;
   num_questions: number;
-  university_name: string;
+  organization_name: string;
 }
 
 export const api = {

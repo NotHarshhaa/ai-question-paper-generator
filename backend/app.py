@@ -59,10 +59,10 @@ def generate_paper():
         duration_minutes = int(data.get("duration_minutes", 180))
         num_questions = int(data.get("num_questions", 9))
         difficulty_distribution = data.get("difficulty_distribution", {"easy": 30, "medium": 50, "hard": 20})
-        university_name = data.get("university_name", "").strip()
+        organization_name = data.get("organization_name", "").strip()
         semester = data.get("semester", "").strip()
 
-        # Extract exam pattern details for university pattern
+        # Extract exam pattern details for certification pattern
         exam_structure = data.get("exam_structure", {})
         short_questions_count = int(data.get("short_questions_count", 5))
         short_questions_marks = int(data.get("short_questions_marks", 2))
@@ -96,8 +96,8 @@ def generate_paper():
         # Step 2: AI — Generate questions using PYQ patterns with fallbacks
         all_questions = []
         
-        # For university pattern, generate specific numbers of short and long questions
-        if exam_pattern == "university":
+        # For certification pattern, generate specific numbers of short and long questions
+        if exam_pattern == "certification":
             # Generate short questions (2 marks each)
             short_questions_per_topic = max(1, (short_questions_count * 2) // max(len(important_topics), 1))
             long_questions_per_topic = max(1, (long_questions_count * 2) // max(len(important_topics), 1))
@@ -196,8 +196,8 @@ def generate_paper():
         logger.info("Generated %d raw questions", len(all_questions))
 
         # Step 3: Smart Selection with fallback
-        if exam_pattern == "university":
-            # For university pattern, select specific numbers of short and long questions
+        if exam_pattern == "certification":
+            # For certification pattern, select specific numbers of short and long questions
             short_questions = [q for q in all_questions if q.get("question_type") == "short"]
             long_questions = [q for q in all_questions if q.get("question_type") == "long"]
             
@@ -206,7 +206,7 @@ def generate_paper():
             selected_long = long_questions[:long_questions_count]
             selected = selected_short + selected_long
             
-            logger.info("University pattern: selected %d short, %d long questions", 
+            logger.info("Certification pattern: selected %d short, %d long questions", 
                        len(selected_short), len(selected_long))
         else:
             # Original logic for other patterns
@@ -223,9 +223,9 @@ def generate_paper():
 
         # Step 4: Structure paper with fallback
         try:
-            # Pass exam pattern details to structurer for university pattern
-            if exam_pattern == "university":
-                sections = structurer.structure_university_paper(
+            # Pass exam pattern details to structurer for certification pattern
+            if exam_pattern == "certification":
+                sections = structurer.structure_certification_paper(
                     selected, 
                     short_questions_count, short_questions_marks, short_questions_total,
                     short_questions_choice_generate, short_questions_choice_attempt,
@@ -249,7 +249,7 @@ def generate_paper():
         paper = {
             "id": paper_id,
             "subject": subject,
-            "university_name": university_name,
+            "organization_name": organization_name,
             "semester": semester,
             "syllabus": syllabus,
             "exam_pattern": exam_pattern,
@@ -330,24 +330,24 @@ def export_pdf(paper_id):
 @app.route("/api/subjects", methods=["GET"])
 def list_subjects():
     subjects = [
-        "Computer Architecture and Parallel Processing",
-        "Computer Networks",
-        "Software Engineering",
-        "Operating Systems",
-        "Java and .NET and C#",
-        "Data Structures",
-        "Database Systems",
-        "Artificial Intelligence",
-        "Web Development",
-        "IoT and Cloud Computing",
-        "Linux and Shell Scripts",
-        "Network Security",
-        "Wireless Networks",
-        "Python Programming",
-        "R Programming",
-        "Machine Learning",
-        "Big Data Analytics",
-        "Data Mining and Date Warehousing",
+        "AWS Cloud Fundamentals",
+        "AWS Compute (EC2 & Auto Scaling)",
+        "AWS Storage & Databases",
+        "AWS Networking (VPC, Route 53, CloudFront)",
+        "AWS Security & IAM",
+        "AWS Serverless (Lambda, API Gateway, Step Functions)",
+        "Docker & Containerization",
+        "Kubernetes & Container Orchestration",
+        "CI/CD Pipelines",
+        "Jenkins",
+        "Terraform & Infrastructure as Code",
+        "Ansible & Configuration Management",
+        "Linux Administration & Shell Scripting",
+        "Git & Version Control",
+        "Monitoring & Logging (CloudWatch, Prometheus, Grafana)",
+        "Site Reliability Engineering (SRE)",
+        "DevSecOps & Cloud Security",
+        "Microservices Architecture",
     ]
     return jsonify(subjects)
 

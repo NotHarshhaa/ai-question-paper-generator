@@ -127,9 +127,9 @@ export default function HistoryPage() {
                   <div>
                     <h3 className="font-semibold text-lg">{paper.subject}</h3>
                     <div className="flex flex-wrap items-center gap-2 mt-1">
-                      {paper.university_name && (
+                      {paper.organization_name && (
                         <Badge variant="secondary">
-                          {paper.university_name}
+                          {paper.organization_name}
                         </Badge>
                       )}
                       <Badge variant="outline">

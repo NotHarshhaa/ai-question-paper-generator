@@ -45,11 +45,11 @@ const analyticsData = {
     monthlyGrowth: 12.4,
   },
   subjectStats: [
-    { subject: "Data Structures", papers: 156, avgRating: 4.8, trend: "+15%" },
-    { subject: "Computer Networks", papers: 142, avgRating: 4.6, trend: "+8%" },
-    { subject: "Operating Systems", papers: 128, avgRating: 4.7, trend: "+12%" },
-    { subject: "Database Systems", papers: 115, avgRating: 4.5, trend: "+5%" },
-    { subject: "Machine Learning", papers: 98, avgRating: 4.9, trend: "+22%" },
+    { subject: "AWS Cloud Fundamentals", papers: 156, avgRating: 4.8, trend: "+15%" },
+    { subject: "Kubernetes & Container Orchestration", papers: 142, avgRating: 4.6, trend: "+8%" },
+    { subject: "Docker & Containerization", papers: 128, avgRating: 4.7, trend: "+12%" },
+    { subject: "Terraform & Infrastructure as Code", papers: 115, avgRating: 4.5, trend: "+5%" },
+    { subject: "CI/CD Pipelines", papers: 98, avgRating: 4.9, trend: "+22%" },
   ],
   usagePatterns: [
     { day: "Mon", papers: 45, users: 23 },
@@ -66,11 +66,11 @@ const analyticsData = {
     { difficulty: "Hard", percentage: 20, color: "bg-red-500" },
   ],
   recentActivity: [
-    { id: 1, user: "Prof. Kumar", subject: "Data Structures", time: "2 mins ago", status: "completed" },
-    { id: 2, user: "Dr. Smith", subject: "Computer Networks", time: "5 mins ago", status: "completed" },
-    { id: 3, user: "Prof. Lee", subject: "Machine Learning", time: "8 mins ago", status: "processing" },
-    { id: 4, user: "Dr. Johnson", subject: "Operating Systems", time: "12 mins ago", status: "completed" },
-    { id: 5, user: "Prof. Chen", subject: "Database Systems", time: "15 mins ago", status: "failed" },
+    { id: 1, user: "A. Sharma", subject: "AWS Cloud Fundamentals", time: "2 mins ago", status: "completed" },
+    { id: 2, user: "R. Patel", subject: "Kubernetes & Container Orchestration", time: "5 mins ago", status: "completed" },
+    { id: 3, user: "S. Lee", subject: "CI/CD Pipelines", time: "8 mins ago", status: "processing" },
+    { id: 4, user: "M. Johnson", subject: "Docker & Containerization", time: "12 mins ago", status: "completed" },
+    { id: 5, user: "K. Chen", subject: "Terraform & Infrastructure as Code", time: "15 mins ago", status: "failed" },
   ],
 };
 

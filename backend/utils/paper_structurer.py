@@ -112,14 +112,14 @@ class PaperStructurer:
             }
         ]
 
-    def structure_university_paper(
+    def structure_certification_paper(
         self, 
         questions: list[dict], 
         short_count: int, short_marks: int, short_total: int,
         short_choice_generate: int, short_choice_attempt: int,
         long_count: int, long_marks: int, long_total: int
     ) -> list[dict]:
-        """Structure paper in university format with short and long questions"""
+        """Structure paper in certification format with short and long questions"""
         sections = []
         
         # Separate short and long questions

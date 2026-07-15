@@ -2,7 +2,7 @@
 
 ## Overview
 
-The AI Question Paper Generator follows a **client-server architecture** with a clear separation between the frontend (Next.js) and backend (Flask).
+The AI Question Paper Generator follows a **client-server architecture** with a clear separation between the frontend (Next.js) and backend (Flask). It generates DevOps and AWS certification-style question papers from a user-supplied syllabus.
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -178,7 +178,7 @@ The AI Question Paper Generator follows a **client-server architecture** with a 
 **Responsibilities:**
 - Generate professional PDF output
 - Format header, sections, questions
-- Add university branding
+- Add organization/certification branding
 - Include marks and instructions
 
 ---
@@ -194,7 +194,7 @@ The AI Question Paper Generator follows a **client-server architecture** with a 
 CREATE TABLE papers (
     id TEXT PRIMARY KEY,
     subject TEXT NOT NULL,
-    university_name TEXT,
+    organization_name TEXT,
     semester TEXT,
     syllabus TEXT,
     exam_pattern TEXT,
@@ -300,4 +300,4 @@ CREATE TABLE papers (
 
 ---
 
-This architecture provides a solid foundation for an academic project while being extensible for production use.
+This architecture provides a solid foundation for a DevOps/AWS certification prep tool while being extensible for production use.

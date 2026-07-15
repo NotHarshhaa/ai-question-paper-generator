@@ -18,7 +18,7 @@ def init_db():
         CREATE TABLE IF NOT EXISTS papers (
             id TEXT PRIMARY KEY,
             subject TEXT NOT NULL,
-            university_name TEXT DEFAULT '',
+            organization_name TEXT DEFAULT '',
             semester TEXT DEFAULT '',
             syllabus TEXT NOT NULL,
             exam_pattern TEXT NOT NULL,
@@ -42,7 +42,7 @@ def save_paper(paper_data: dict):
     cursor.execute(
         """
         INSERT INTO papers (
-            id, subject, university_name, semester, syllabus,
+            id, subject, organization_name, semester, syllabus,
             exam_pattern, total_marks, duration_minutes, num_questions,
             difficulty_distribution, questions, sections, syllabus_topics, created_at
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -50,7 +50,7 @@ def save_paper(paper_data: dict):
         (
             paper_data["id"],
             paper_data["subject"],
-            paper_data.get("university_name", ""),
+            paper_data.get("organization_name", ""),
             paper_data.get("semester", ""),
             paper_data.get("syllabus", ""),
             paper_data.get("exam_pattern", "standard"),
@@ -72,7 +72,7 @@ def get_all_papers():
     conn = get_connection()
     cursor = conn.cursor()
     cursor.execute(
-        "SELECT id, subject, total_marks, created_at, num_questions, university_name FROM papers ORDER BY created_at DESC"
+        "SELECT id, subject, total_marks, created_at, num_questions, organization_name FROM papers ORDER BY created_at DESC"
     )
     rows = cursor.fetchall()
     conn.close()

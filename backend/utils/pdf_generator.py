@@ -26,7 +26,7 @@ class PDFGenerator:
     def _add_custom_styles(self):
         self.styles.add(
             ParagraphStyle(
-                "UniversityName",
+                "OrganizationName",
                 parent=self.styles["Title"],
                 fontSize=16,
                 alignment=TA_CENTER,
@@ -108,9 +108,9 @@ class PDFGenerator:
         elements = []
 
         # Header
-        if paper.get("university_name"):
+        if paper.get("organization_name"):
             elements.append(
-                Paragraph(paper["university_name"], self.styles["UniversityName"])
+                Paragraph(paper["organization_name"], self.styles["OrganizationName"])
             )
 
         elements.append(

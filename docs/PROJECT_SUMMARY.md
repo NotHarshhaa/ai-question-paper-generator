@@ -1,8 +1,8 @@
-# 🎓 AI Question Paper Generator - Project Summary
+# ☁️ AI DevOps & AWS Question Paper Generator - Project Summary
 
 ## ✅ Project Status: COMPLETE
 
-A fully functional full-stack application for automatically generating university-style question papers using AI and NLP techniques.
+A fully functional full-stack application for automatically generating DevOps and AWS certification-style question papers using AI and NLP techniques.
 
 ---
 
@@ -234,9 +234,9 @@ ai-question-paper-generator/
 2. **Navigate to** `http://localhost:3000`
 3. **Click "Generate Paper"**
 4. **Fill the form:**
-   - University: "Anna University"
-   - Semester: "5th Semester"
-   - Subject: "Data Structures"
+   - Organization/Certification: "AWS Certified DevOps Engineer"
+   - Semester: "N/A" (optional)
+   - Subject: "Kubernetes & Container Orchestration"
    - Syllabus: Paste your syllabus content
    - Total Marks: 80
    - Duration: 180 minutes
@@ -248,7 +248,7 @@ ai-question-paper-generator/
 
 ---
 
-## 🎓 Academic Project Details
+## ☁️ DevOps & AWS Project Details
 
 **Demonstrates:**
 - Natural Language Processing (NLP)
@@ -261,8 +261,8 @@ ai-question-paper-generator/
 - Software Architecture
 
 **Suitable for:**
-- Semester projects
-- Final year projects
+- AWS/DevOps certification exam prep
+- Internal training and mock assessments
 - Portfolio showcase
 - Learning AI/ML integration
 
@@ -330,7 +330,7 @@ ai-question-paper-generator/
 
 ## 🎉 Project Complete!
 
-The AI Question Paper Generator is fully functional and ready to use. All components are integrated, tested, and documented.
+The AI DevOps & AWS Question Paper Generator is fully functional and ready to use. All components are integrated, tested, and documented.
 
 **Next Steps:**
 1. Run the start scripts to launch the application

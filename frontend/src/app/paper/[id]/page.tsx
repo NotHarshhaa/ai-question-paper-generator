@@ -176,8 +176,8 @@ export default function PaperViewPage() {
           {/* Formatted Paper View */}
           <Card>
             <CardHeader className="text-center border-b">
-              {paper.university_name && (
-                <p className="text-lg font-semibold">{paper.university_name}</p>
+              {paper.organization_name && (
+                <p className="text-lg font-semibold">{paper.organization_name}</p>
               )}
               <CardTitle className="text-xl">{paper.subject}</CardTitle>
               {paper.semester && (

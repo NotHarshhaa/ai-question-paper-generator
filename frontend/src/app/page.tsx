@@ -85,8 +85,8 @@ export default function Home() {
               </span>
             </h1>
             <p className="text-sm md:text-base text-muted-foreground max-w-2xl">
-              An intelligent system that automatically generates university-style
-              question papers using NLP and Machine Learning techniques.
+              An intelligent system that automatically generates DevOps and AWS
+              certification-style question papers using NLP and Machine Learning techniques.
             </p>
             <div className="flex flex-col sm:flex-row gap-2 mt-2 w-full sm:w-auto">
               <Link href="/generate" className="w-full sm:w-auto">

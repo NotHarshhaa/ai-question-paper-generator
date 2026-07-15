@@ -1,4 +1,4 @@
-# Setup Guide - AI Question Paper Generator
+# Setup Guide - AI DevOps & AWS Question Paper Generator
 
 ## Quick Start
 
@@ -74,7 +74,7 @@ No manual setup required.
 1. **Open Frontend:** Navigate to `http://localhost:3000`
 2. **Click "Generate Paper"** or go to `/generate`
 3. **Fill the form:**
-   - Enter University Name (optional)
+   - Enter Organization/Certification Name (optional)
    - Enter Semester (optional)
    - Select Subject
    - Paste your syllabus content

@@ -22,20 +22,24 @@ def get_ocr_reader():
 
 # Map PDF filenames to subject names used in the platform
 SUBJECT_MAP = {
-    "Artificial Intelligence - Previous Year QPs.pdf": "Artificial Intelligence",
-    "Computer Architecture - QPs.pdf": "Computer Architecture and Parallel Processing",
-    "Computer Network - QPs.pdf": "Computer Networks",
-    "Data Structures - Previous Year QPs.pdf": "Data Structures",
-    "Database Systems - Previous Year QPs.pdf": "Database Systems",
-    "IoT and Cloud Computing - PYQPs.pdf": "IoT and Cloud Computing",
-    "Java & C# - QPs.pdf": "Java and .NET and C#",
-    "Linux and Shell Script - PYQPs.pdf": "Linux and Shell Scripts",
-    "Network Security - PYQPs.pdf": "Network Security",
-    "Operating System - QPs.pdf": "Operating Systems",
-    "Software Engineering - QPs.pdf": "Software Engineering",
-    "Web Development - PYQPs.pdf": "Web Development",
-    "Web Development - Previous Year QPs.pdf": "Web Development",
-    "Wireless Network - PYQPs.pdf": "Wireless Networks",
+    "AWS Cloud Fundamentals - Previous Year QPs.pdf": "AWS Cloud Fundamentals",
+    "AWS Compute EC2 Auto Scaling - QPs.pdf": "AWS Compute (EC2 & Auto Scaling)",
+    "AWS Storage and Databases - QPs.pdf": "AWS Storage & Databases",
+    "AWS Networking VPC Route53 CloudFront - QPs.pdf": "AWS Networking (VPC, Route 53, CloudFront)",
+    "AWS Security and IAM - QPs.pdf": "AWS Security & IAM",
+    "AWS Serverless Lambda API Gateway - QPs.pdf": "AWS Serverless (Lambda, API Gateway, Step Functions)",
+    "Docker and Containerization - QPs.pdf": "Docker & Containerization",
+    "Kubernetes and Container Orchestration - QPs.pdf": "Kubernetes & Container Orchestration",
+    "CI CD Pipelines - QPs.pdf": "CI/CD Pipelines",
+    "Jenkins - QPs.pdf": "Jenkins",
+    "Terraform and Infrastructure as Code - QPs.pdf": "Terraform & Infrastructure as Code",
+    "Ansible and Configuration Management - QPs.pdf": "Ansible & Configuration Management",
+    "Linux Administration and Shell Scripting - QPs.pdf": "Linux Administration & Shell Scripting",
+    "Git and Version Control - QPs.pdf": "Git & Version Control",
+    "Monitoring and Logging CloudWatch Prometheus Grafana - QPs.pdf": "Monitoring & Logging (CloudWatch, Prometheus, Grafana)",
+    "Site Reliability Engineering SRE - QPs.pdf": "Site Reliability Engineering (SRE)",
+    "DevSecOps and Cloud Security - QPs.pdf": "DevSecOps & Cloud Security",
+    "Microservices Architecture - QPs.pdf": "Microservices Architecture",
 }
 
 

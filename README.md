@@ -1,13 +1,13 @@
-# 🧠 AI-Based Question Paper Generator
+# 🧠 AI-Based DevOps & AWS Question Paper Generator
 
-An intelligent system that automatically generates university-style question papers using **NLP and Machine Learning** techniques.
+An intelligent system that automatically generates **DevOps and AWS certification-style question papers** using **NLP and Machine Learning** techniques.
 
 ---
 
 ## 🚀 Features
 
-* 📘 Syllabus-based question generation
-* 📊 Previous Year Paper (PYQ) pattern analysis
+* ☁️ DevOps & AWS syllabus-based question generation
+* 📊 Previous Year Question (PYQ) pattern analysis
 * 🤖 AI-powered question generation (T5)
 * 🧠 Question classification & similarity check (BERT)
 * ⚖️ Difficulty balancing (Easy / Medium / Hard)
@@ -22,7 +22,7 @@ The system follows a **layered architecture**:
 
 1. **Frontend (User Input)**
 
-   * Subject selection
+   * Subject selection (AWS, Docker, Kubernetes, CI/CD, Terraform, etc.)
    * Syllabus input
    * Exam pattern
 
@@ -39,7 +39,7 @@ The system follows a **layered architecture**:
 4. **Pattern Analysis**
 
    * Topic frequency from PYQs
-   * Unit-wise weightage
+   * Domain-wise weightage
 
 5. **AI Engine**
 
@@ -59,12 +59,35 @@ The system follows a **layered architecture**:
 
 ## 🧰 Tech Stack
 
-* **Frontend:** HTML, CSS, JavaScript
+* **Frontend:** Next.js, TypeScript, Tailwind CSS, Shadcn UI
 * **Backend:** Flask (Python)
 * **NLP:** NLTK, Scikit-learn
 * **Machine Learning:** Hugging Face Transformers (T5, BERT)
-* **Database:** SQLite / MongoDB
+* **Database:** SQLite
 * **PDF Generation:** ReportLab
+
+---
+
+## 📚 Supported Subjects
+
+* AWS Cloud Fundamentals
+* AWS Compute (EC2 & Auto Scaling)
+* AWS Storage & Databases
+* AWS Networking (VPC, Route 53, CloudFront)
+* AWS Security & IAM
+* AWS Serverless (Lambda, API Gateway, Step Functions)
+* Docker & Containerization
+* Kubernetes & Container Orchestration
+* CI/CD Pipelines
+* Jenkins
+* Terraform & Infrastructure as Code
+* Ansible & Configuration Management
+* Linux Administration & Shell Scripting
+* Git & Version Control
+* Monitoring & Logging (CloudWatch, Prometheus, Grafana)
+* Site Reliability Engineering (SRE)
+* DevSecOps & Cloud Security
+* Microservices Architecture
 
 ---
 
@@ -94,7 +117,7 @@ http://127.0.0.1:5000
 
 ## 🧠 How It Works
 
-1. User inputs syllabus
+1. User selects a DevOps/AWS subject and inputs syllabus
 2. NLP extracts key topics
 3. PYQs are analyzed for patterns
 4. AI generates questions
@@ -119,16 +142,6 @@ This project uses **pretrained models**, so:
 * 🌐 Deploy as web app
 * 📊 Analytics dashboard
 * 🧾 Multiple exam formats
-
----
-
-## 👨‍🎓 Academic Use
-
-This project is developed as part of a **semester project** and demonstrates the application of:
-
-* Natural Language Processing (NLP)
-* Machine Learning
-* AI in Education
 
 ---
 

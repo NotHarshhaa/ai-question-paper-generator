@@ -272,7 +272,9 @@ def generate_paper():
         # Step 5: Bloom's Taxonomy Cognitive Classification
         selected = bloom.tag_questions(selected)
         for sec in sections:
-            sec["questions"] = bloom.tag_questions(sec.get("questions", []))
+            sec_questions = sec.get("questions")
+            if isinstance(sec_questions, list):
+                sec["questions"] = bloom.tag_questions(sec_questions)
 
         # Build final paper object
         paper_id = str(uuid.uuid4())
@@ -350,7 +352,12 @@ def get_paper_solutions(paper_id):
             return jsonify({"error": "Paper not found"}), 404
 
         questions = paper.get("questions", [])
-        solutions = get_solutions_for_questions(questions)
+        from utils.solution_generator import generate_smart_solution
+        from database.db import get_connection
+        conn = get_connection()
+        cursor = conn.cursor()
+        solutions = [generate_smart_solution(q, db_cursor=cursor) for q in questions]
+        conn.close()
         return jsonify({
             "paper_id": paper_id,
             "subject": paper.get("subject", ""),

@@ -483,36 +483,16 @@ def get_all_pyq_analytics() -> dict:
 
 def get_solutions_for_questions(questions: list[dict]) -> list[dict]:
     """Retrieve or generate model solutions/answers for a list of questions."""
+    from utils.solution_generator import generate_smart_solution
+
     conn = get_connection()
     cursor = conn.cursor()
 
     solutions = []
     for q in questions:
-        q_text = q.get("text", "")
-        q_id = q.get("id", "")
-        
-        # Search for matching question in pyq_questions
-        cursor.execute("SELECT answer, topic, source_file FROM pyq_questions WHERE text LIKE ? LIMIT 1", (f"%{q_text[:30]}%",))
-        row = cursor.fetchone()
-        
-        if row and row["answer"]:
-            answer_text = row["answer"]
-        else:
-            # Generate structured solution hint
-            answer_text = f"Key concepts to address for {q.get('topic', 'this topic')}:\n• Define the core terminology and architecture.\n• State the operational principles and key configuration commands/parameters.\n• Highlight best practices and security implications in production environments."
-
-        solutions.append({
-            "question_id": q_id,
-            "text": q_text,
-            "marks": q.get("marks", 5),
-            "difficulty": q.get("difficulty", "medium"),
-            "solution": answer_text,
-            "key_points": [
-                "Definition & Concept Overview",
-                "Working Principle & Implementation",
-                "Practical Example & Production Best Practices"
-            ]
-        })
+        sol_data = generate_smart_solution(q, db_cursor=cursor)
+        solutions.append(sol_data)
 
     conn.close()
     return solutions
+

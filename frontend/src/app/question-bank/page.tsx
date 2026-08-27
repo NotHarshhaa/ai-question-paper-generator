@@ -110,7 +110,7 @@ export default function QuestionBankPage() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-7xl">
+    <div className="container mx-auto px-4 py-6 max-w-6xl">
       {/* Hero Header */}
       <QuestionBankHero totalQuestions={data?.total} />
 

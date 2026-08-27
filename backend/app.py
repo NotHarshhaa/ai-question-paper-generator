@@ -23,6 +23,10 @@ from utils.ai_engine import AIEngine
 from utils.smart_selector import SmartSelector
 from utils.paper_structurer import PaperStructurer
 from utils.pdf_generator import PDFGenerator
+from utils.bloom_classifier import BloomClassifier
+from utils.rag_engine import VectorRAGEngine
+from utils.answer_evaluator import AnswerEvaluator
+from utils.mcq_generator import MCQGenerator
 
 # Configure logging
 logging.basicConfig(
@@ -42,6 +46,10 @@ ai_engine = AIEngine(T5_MODEL_NAME, BERT_MODEL_NAME)
 selector = SmartSelector(ai_engine)
 structurer = PaperStructurer()
 pdf_gen = PDFGenerator()
+bloom = BloomClassifier()
+rag_engine = VectorRAGEngine(ai_engine)
+evaluator = AnswerEvaluator(ai_engine)
+mcq_generator = MCQGenerator()
 
 # Initialize database
 init_db()
@@ -52,6 +60,12 @@ logger.info("Pre-loading AI models at startup (this may take a few minutes on fi
 try:
     ai_engine.load_models()
     logger.info("AI models loaded successfully.")
+    # Build Vector RAG index
+    try:
+        pyqs = get_pyq_questions_paginated(limit=3000)["questions"]
+        rag_engine.build_index(pyqs)
+    except Exception as _rag_err:
+        logger.warning("Vector RAG indexing deferred: %s", _rag_err)
 except Exception as _exc:
     logger.warning("Model pre-load encountered an error (fallback will be used): %s", _exc)
 
@@ -255,6 +269,11 @@ def generate_paper():
                 "total_marks": sum(q["marks"] for q in selected)
             }]
 
+        # Step 5: Bloom's Taxonomy Cognitive Classification
+        selected = bloom.tag_questions(selected)
+        for sec in sections:
+            sec["questions"] = bloom.tag_questions(sec.get("questions", []))
+
         # Build final paper object
         paper_id = str(uuid.uuid4())
         paper = {
@@ -387,6 +406,52 @@ def get_analytics():
         return jsonify(data)
     except Exception as e:
         logger.exception("Error getting analytics data")
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/evaluate-answer", methods=["POST"])
+def evaluate_student_answer():
+    """AI Auto-Grading & Semantic Evaluation of a student's answer."""
+    try:
+        data = request.get_json() or {}
+        question = data.get("question", "").strip()
+        model_answer = data.get("model_answer", "").strip()
+        student_answer = data.get("student_answer", "").strip()
+        max_marks = int(data.get("max_marks", 5))
+
+        if not question:
+            return jsonify({"error": "Question text is required"}), 400
+
+        result = evaluator.evaluate_answer(
+            question_text=question,
+            model_answer=model_answer,
+            student_answer=student_answer,
+            max_marks=max_marks
+        )
+        return jsonify(result)
+    except Exception as e:
+        logger.exception("Error evaluating answer")
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/generate-mcq", methods=["POST"])
+def generate_mcqs():
+    """Generate 4-option certification MCQs with distractors & explanations."""
+    try:
+        data = request.get_json() or {}
+        subject = data.get("subject", "AWS").strip()
+        topic = data.get("topic", "").strip()
+        count = int(data.get("count", 5))
+
+        mcqs = mcq_generator.generate_mcqs_for_subject(
+            subject=subject,
+            topic=topic,
+            count=count,
+            rag_engine=rag_engine
+        )
+        return jsonify({"subject": subject, "topic": topic, "mcqs": mcqs})
+    except Exception as e:
+        logger.exception("Error generating MCQs")
         return jsonify({"error": str(e)}), 500
 
 

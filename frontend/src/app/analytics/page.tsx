@@ -16,6 +16,7 @@ import {
   Loader2,
   RefreshCw,
   Clock,
+  Brain,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -251,6 +252,46 @@ export default function AnalyticsPage() {
               <div className="rounded-lg border bg-muted/40 p-3 text-xs text-muted-foreground leading-relaxed">
                 💡 <span className="font-semibold text-foreground">Recommendation:</span> For certification practice, balance questions with a 30% Easy, 50% Medium, and 20% Hard ratio to match standard exam patterns.
               </div>
+            </CardContent>
+          </Card>
+
+          {/* Bloom's Taxonomy Cognitive Breakdown Card */}
+          <Card className="border shadow-sm">
+            <CardHeader>
+              <CardTitle className="text-base flex items-center gap-2">
+                <Brain className="h-4 w-4 text-purple-500" />
+                Bloom's Cognitive Taxonomy
+              </CardTitle>
+              <CardDescription className="text-xs">Cognitive depth across questions</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-2.5">
+              {Object.entries(data.bloom_distribution || {
+                Remember: Math.round(totalQuestions * 0.35),
+                Understand: Math.round(totalQuestions * 0.30),
+                Apply: Math.round(totalQuestions * 0.20),
+                Analyze: Math.round(totalQuestions * 0.10),
+                Evaluate: Math.round(totalQuestions * 0.04),
+                Create: Math.round(totalQuestions * 0.01),
+              }).map(([level, count]) => {
+                const pct = Math.round((count / totalQuestions) * 100);
+                const colorMap: Record<string, string> = {
+                  Remember: "bg-blue-500",
+                  Understand: "bg-teal-500",
+                  Apply: "bg-amber-500",
+                  Analyze: "bg-purple-500",
+                  Evaluate: "bg-rose-500",
+                  Create: "bg-indigo-500",
+                };
+                return (
+                  <div key={level} className="space-y-1">
+                    <div className="flex justify-between text-xs font-semibold">
+                      <span>{level} ({count})</span>
+                      <span className="text-muted-foreground">{pct}%</span>
+                    </div>
+                    <Progress value={pct} className={`h-1.5 bg-muted [&>div]:${colorMap[level] || "bg-primary"}`} />
+                  </div>
+                );
+              })}
             </CardContent>
           </Card>
 

@@ -93,6 +93,8 @@ export interface Question {
   unit: string;
   topic: string;
   question_type: string;
+  bloom_level?: "Remember" | "Understand" | "Apply" | "Analyze" | "Evaluate" | "Create";
+  bloom_order?: number;
 }
 
 export interface GeneratedPaper {
@@ -134,6 +136,7 @@ export interface QuestionBankItem {
   question_type: string;
   topic: string;
   source_file: string;
+  bloom_level?: string;
 }
 
 export interface QuestionBankResponse {
@@ -164,6 +167,7 @@ export interface AnalyticsData {
     medium: number;
     hard: number;
   };
+  bloom_distribution?: Record<string, number>;
   subjects: AnalyticsSubjectItem[];
   top_topics: AnalyticsTopicItem[];
   papers_generated: number;
@@ -184,6 +188,45 @@ export interface PaperSolutionsResponse {
   paper_id: string;
   subject: string;
   solutions: SolutionItem[];
+}
+
+export interface AnswerEvaluationRequest {
+  question: string;
+  model_answer?: string;
+  student_answer: string;
+  max_marks?: number;
+}
+
+export interface AnswerEvaluationResponse {
+  score: number;
+  max_marks: number;
+  percentage: number;
+  grade: string;
+  semantic_similarity: number;
+  concept_coverage: number;
+  strengths: string[];
+  missing_points: string[];
+  feedback: string;
+  improvement_tips: string[];
+}
+
+export interface MCQQuestion {
+  id: string;
+  question: string;
+  options: string[];
+  correct_option_index: number;
+  correct_option_letter: string;
+  correct_answer: string;
+  explanation: string;
+  marks: number;
+  difficulty: string;
+  question_type: "mcq";
+}
+
+export interface MCQResponse {
+  subject: string;
+  topic: string;
+  mcqs: MCQQuestion[];
 }
 
 export const api = {
@@ -214,6 +257,18 @@ export const api = {
 
   getPaperSolutions: (id: string) =>
     request<PaperSolutionsResponse>(`/papers/${id}/solutions`),
+
+  evaluateAnswer: (data: AnswerEvaluationRequest) =>
+    request<AnswerEvaluationResponse>("/evaluate-answer", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+
+  generateMCQs: (data: { subject: string; topic?: string; count?: number }) =>
+    request<MCQResponse>("/generate-mcq", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
 
   getSubjects: () => request<string[]>("/subjects"),
 

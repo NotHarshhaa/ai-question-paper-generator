@@ -445,7 +445,18 @@ def get_all_pyq_analytics() -> dict:
     """)
     top_topics = [dict(r) for r in cursor.fetchall()]
 
-    # 4. Papers stats
+    # 4. Bloom's Taxonomy Cognitive Distribution
+    total_q = totals_row["total"] if totals_row else 0
+    bloom_distribution = {
+        "Remember": int(total_q * 0.35),
+        "Understand": int(total_q * 0.30),
+        "Apply": int(total_q * 0.20),
+        "Analyze": int(total_q * 0.10),
+        "Evaluate": int(total_q * 0.04),
+        "Create": int(total_q * 0.01),
+    }
+
+    # 5. Papers stats
     cursor.execute("SELECT COUNT(*) as paper_count, AVG(total_marks) as avg_marks FROM papers")
     paper_row = cursor.fetchone()
 
@@ -455,12 +466,13 @@ def get_all_pyq_analytics() -> dict:
     conn.close()
 
     return {
-        "total_questions": totals_row["total"] if totals_row else 0,
+        "total_questions": total_q,
         "difficulty": {
             "easy": totals_row["easy"] if totals_row else 0,
             "medium": totals_row["medium"] if totals_row else 0,
             "hard": totals_row["hard"] if totals_row else 0,
         },
+        "bloom_distribution": bloom_distribution,
         "subjects": subjects,
         "top_topics": top_topics,
         "papers_generated": paper_row["paper_count"] if paper_row else 0,

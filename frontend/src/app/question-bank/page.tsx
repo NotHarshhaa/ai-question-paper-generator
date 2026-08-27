@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useState } from "react";
 import {
   Search,
   Database,
@@ -12,17 +12,20 @@ import {
   Sparkles,
   Filter,
   Loader2,
-  RefreshCw,
   Layers,
   ChevronLeft,
   ChevronRight,
-  ExternalLink,
   Zap,
+  Send,
+  X,
+  Lightbulb,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { Textarea } from "@/components/ui/textarea";
+import { Progress } from "@/components/ui/progress";
 import {
   Select,
   SelectContent,
@@ -31,7 +34,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
-import { api, type QuestionBankItem, type QuestionBankResponse } from "@/lib/api";
+import {
+  api,
+  type QuestionBankItem,
+  type QuestionBankResponse,
+  type AnswerEvaluationResponse,
+} from "@/lib/api";
 
 const SUBJECTS_LIST = [
   "All",
@@ -64,6 +72,12 @@ export default function QuestionBankPage() {
   const [page, setPage] = useState(1);
   const [expandedId, setExpandedId] = useState<number | null>(null);
   const [copiedId, setCopiedId] = useState<number | null>(null);
+
+  // AI Grader Modal State
+  const [gradingItem, setGradingItem] = useState<QuestionBankItem | null>(null);
+  const [studentAnswerText, setStudentAnswerText] = useState("");
+  const [isEvaluating, setIsEvaluating] = useState(false);
+  const [evalResult, setEvalResult] = useState<AnswerEvaluationResponse | null>(null);
 
   const fetchQuestions = async (targetPage = page) => {
     setLoading(true);
@@ -106,6 +120,29 @@ export default function QuestionBankPage() {
     setTimeout(() => setCopiedId(null), 2000);
   };
 
+  const handleEvaluateSubmit = async () => {
+    if (!gradingItem || !studentAnswerText.trim()) {
+      toast.error("Please write an answer to evaluate");
+      return;
+    }
+    setIsEvaluating(true);
+    setEvalResult(null);
+    try {
+      const res = await api.evaluateAnswer({
+        question: gradingItem.text,
+        model_answer: gradingItem.answer,
+        student_answer: studentAnswerText,
+        max_marks: gradingItem.marks || 5,
+      });
+      setEvalResult(res);
+      toast.success("AI Evaluation complete!");
+    } catch (err: any) {
+      toast.error(err.message || "Failed to evaluate answer");
+    } finally {
+      setIsEvaluating(false);
+    }
+  };
+
   return (
     <div className="container mx-auto px-4 py-8 max-w-7xl">
       {/* Hero Header */}
@@ -114,13 +151,13 @@ export default function QuestionBankPage() {
           <div className="space-y-3">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border bg-background/80 text-xs font-medium text-primary">
               <Database className="h-3.5 w-3.5" />
-              DevOps & AWS PYQ Repository
+              DevOps &amp; AWS PYQ Repository
             </div>
             <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight">
-              Interactive Question Bank
+              Interactive Question Bank &amp; AI Grader
             </h1>
             <p className="text-muted-foreground text-sm md:text-base max-w-2xl">
-              Search, filter, and practice hundreds of verified previous year examination & interview questions with comprehensive model solutions.
+              Search, filter, and practice 2,500+ verified previous year questions with model solutions and live AI answer evaluation.
             </p>
           </div>
 
@@ -130,12 +167,12 @@ export default function QuestionBankPage() {
               <div className="text-xs text-muted-foreground">Total Questions</div>
             </div>
             <div className="text-center px-2 border-x">
-              <div className="text-2xl font-bold text-amber-500">12+</div>
+              <div className="text-2xl font-bold text-amber-500">15+</div>
               <div className="text-xs text-muted-foreground">Subject Areas</div>
             </div>
             <div className="text-center px-2">
               <div className="text-2xl font-bold text-emerald-500">100%</div>
-              <div className="text-xs text-muted-foreground">With Solutions</div>
+              <div className="text-xs text-muted-foreground">AI Graded</div>
             </div>
           </div>
         </div>
@@ -316,23 +353,38 @@ export default function QuestionBankPage() {
                     )}
 
                     {/* Card Actions */}
-                    <div className="flex items-center justify-between pt-2 border-t text-xs">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="h-8 gap-1.5 text-xs font-medium"
-                        onClick={() => setExpandedId(isExpanded ? null : item.id)}
-                      >
-                        {isExpanded ? (
-                          <>
-                            <ChevronUp className="h-3.5 w-3.5" /> Hide Solution
-                          </>
-                        ) : (
-                          <>
-                            <ChevronDown className="h-3.5 w-3.5" /> View Solution
-                          </>
-                        )}
-                      </Button>
+                    <div className="flex items-center justify-between pt-2 border-t text-xs flex-wrap gap-2">
+                      <div className="flex items-center gap-1">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-8 gap-1.5 text-xs font-medium"
+                          onClick={() => setExpandedId(isExpanded ? null : item.id)}
+                        >
+                          {isExpanded ? (
+                            <>
+                              <ChevronUp className="h-3.5 w-3.5" /> Hide Solution
+                            </>
+                          ) : (
+                            <>
+                              <ChevronDown className="h-3.5 w-3.5" /> View Solution
+                            </>
+                          )}
+                        </Button>
+                        <Button
+                          variant="secondary"
+                          size="sm"
+                          className="h-8 text-xs gap-1 font-semibold text-primary"
+                          onClick={() => {
+                            setGradingItem(item);
+                            setStudentAnswerText("");
+                            setEvalResult(null);
+                          }}
+                        >
+                          <Sparkles className="h-3 w-3 text-amber-500" />
+                          Test with AI
+                        </Button>
+                      </div>
 
                       <div className="flex items-center gap-1">
                         <Button
@@ -392,6 +444,157 @@ export default function QuestionBankPage() {
               </div>
             </div>
           )}
+        </div>
+      )}
+
+      {/* AI Answer Evaluation Modal Dialog */}
+      {gradingItem && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm animate-in fade-in-50">
+          <Card className="w-full max-w-2xl max-h-[90vh] overflow-y-auto border shadow-2xl">
+            <CardHeader className="flex flex-row items-center justify-between pb-3 border-b">
+              <div>
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Sparkles className="h-5 w-5 text-amber-500" />
+                  AI Answer Evaluator &amp; Grader
+                </CardTitle>
+                <CardDescription className="text-xs">
+                  Sentence-BERT Semantic Analysis &amp; Concept Rubric
+                </CardDescription>
+              </div>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setGradingItem(null)}
+                className="h-8 w-8"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </CardHeader>
+
+            <CardContent className="p-6 space-y-4">
+              {/* Question Context */}
+              <div className="p-3 rounded-lg bg-muted/50 border text-sm space-y-1">
+                <div className="font-semibold text-xs text-muted-foreground uppercase tracking-wide">
+                  Question ({gradingItem.subject} - {gradingItem.marks} Marks):
+                </div>
+                <p className="font-medium text-foreground">{gradingItem.text}</p>
+              </div>
+
+              {/* Student Answer Input */}
+              <div className="space-y-2">
+                <label className="text-xs font-semibold text-muted-foreground">
+                  Your Answer:
+                </label>
+                <Textarea
+                  value={studentAnswerText}
+                  onChange={(e) => setStudentAnswerText(e.target.value)}
+                  placeholder="Type or paste your technical answer here to receive instant AI score and feedback..."
+                  rows={5}
+                  className="text-sm"
+                />
+              </div>
+
+              <Button
+                onClick={handleEvaluateSubmit}
+                disabled={isEvaluating || !studentAnswerText.trim()}
+                className="w-full gap-2 shadow-sm"
+              >
+                {isEvaluating ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" /> Evaluating with Sentence-BERT...
+                  </>
+                ) : (
+                  <>
+                    <Send className="h-4 w-4" /> Evaluate &amp; Grade with AI
+                  </>
+                )}
+              </Button>
+
+              {/* Evaluation Results Card */}
+              {evalResult && (
+                <div className="p-5 rounded-xl border bg-card space-y-4 animate-in fade-in-50 duration-300">
+                  <div className="flex items-center justify-between border-b pb-3">
+                    <div>
+                      <div className="text-xs text-muted-foreground">Calculated Score</div>
+                      <div className="text-2xl font-extrabold text-primary">
+                        {evalResult.score} / {evalResult.max_marks} Marks
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-muted-foreground">Grade:</span>
+                      <Badge className="text-sm font-bold px-3 py-1 bg-primary text-primary-foreground">
+                        {evalResult.grade} ({evalResult.percentage}%)
+                      </Badge>
+                    </div>
+                  </div>
+
+                  {/* Telemetry Metrics */}
+                  <div className="grid grid-cols-2 gap-3 text-xs">
+                    <div className="p-2.5 rounded-lg bg-muted/40 border space-y-1">
+                      <div className="text-muted-foreground">Semantic Similarity:</div>
+                      <div className="font-bold text-sm">{evalResult.semantic_similarity}%</div>
+                      <Progress value={evalResult.semantic_similarity} className="h-1.5" />
+                    </div>
+                    <div className="p-2.5 rounded-lg bg-muted/40 border space-y-1">
+                      <div className="text-muted-foreground">Concept Coverage:</div>
+                      <div className="font-bold text-sm">{evalResult.concept_coverage}%</div>
+                      <Progress value={evalResult.concept_coverage} className="h-1.5" />
+                    </div>
+                  </div>
+
+                  {/* AI Feedback */}
+                  <div className="space-y-1 text-xs">
+                    <div className="font-semibold text-primary">AI Evaluation Feedback:</div>
+                    <p className="text-muted-foreground leading-relaxed">
+                      {evalResult.feedback}
+                    </p>
+                  </div>
+
+                  {/* Strengths & Missing Concepts */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs pt-1">
+                    <div className="space-y-1">
+                      <div className="font-semibold text-emerald-600 dark:text-emerald-400">
+                        ✓ Covered Concepts:
+                      </div>
+                      <div className="flex flex-wrap gap-1">
+                        {evalResult.strengths.map((st, i) => (
+                          <Badge key={i} variant="outline" className="text-[11px] bg-emerald-500/10 text-emerald-600 border-emerald-500/20">
+                            {st}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="space-y-1">
+                      <div className="font-semibold text-rose-600 dark:text-rose-400">
+                        ⚠ Missing Key Points:
+                      </div>
+                      <div className="flex flex-wrap gap-1">
+                        {evalResult.missing_points.map((mp, i) => (
+                          <Badge key={i} variant="outline" className="text-[11px] bg-rose-500/10 text-rose-600 border-rose-500/20">
+                            {mp}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Improvement Tips */}
+                  {evalResult.improvement_tips && evalResult.improvement_tips.length > 0 && (
+                    <div className="rounded-lg bg-muted/60 p-3 border text-xs space-y-1">
+                      <div className="font-semibold text-amber-600 dark:text-amber-400 flex items-center gap-1">
+                        <Lightbulb className="h-3.5 w-3.5" /> Recommendations for Full Marks:
+                      </div>
+                      <ul className="list-disc list-inside text-muted-foreground space-y-0.5">
+                        {evalResult.improvement_tips.map((tip, i) => (
+                          <li key={i}>{tip}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              )}
+            </CardContent>
+          </Card>
         </div>
       )}
     </div>

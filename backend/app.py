@@ -6,7 +6,18 @@ from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 
 from config import FLASK_HOST, FLASK_PORT, FLASK_DEBUG, T5_MODEL_NAME, BERT_MODEL_NAME
-from database.db import init_db, save_paper, get_all_papers, get_paper_by_id, delete_paper_by_id, get_pyq_stats_by_subject
+from database.db import (
+    init_db,
+    save_paper,
+    get_all_papers,
+    get_paper_by_id,
+    delete_paper_by_id,
+    update_paper,
+    get_pyq_stats_by_subject,
+    get_pyq_questions_paginated,
+    get_all_pyq_analytics,
+    get_solutions_for_questions,
+)
 from utils.nlp_processor import NLPProcessor
 from utils.ai_engine import AIEngine
 from utils.smart_selector import SmartSelector
@@ -23,7 +34,7 @@ logger = logging.getLogger(__name__)
 # Initialize Flask app
 app = Flask(__name__)
 # Allow all origins (frontend could be on Vercel, Netlify, or local network IP)
-CORS(app, resources={r"/api/*": {"origins": "*"}})
+CORS(app, resources={r"/api/*": {"origins": "*"}})  # type: ignore
 
 # Initialize components
 nlp = NLPProcessor()
@@ -106,9 +117,9 @@ def generate_paper():
                 # Find which unit this topic belongs to
                 topic_unit = "Unit 1"
                 for unit_name, unit_topics in unit_topic_map.items():
-                    unit_topics_list: list[str] = [str(t) for t in unit_topics]
+                    unit_topics_list: list[str] = list(unit_topics)
                     if any(topic.lower() in t.lower() or t.lower() in topic.lower() for t in unit_topics_list):
-                        topic_unit = str(unit_name)
+                        topic_unit = unit_name
                         break
 
                 # Generate short questions
@@ -162,9 +173,9 @@ def generate_paper():
                 # Find which unit this topic belongs to
                 topic_unit = "Unit 1"
                 for unit_name, unit_topics in unit_topic_map.items():
-                    unit_topics_list: list[str] = [str(t) for t in unit_topics]
+                    unit_topics_list: list[str] = list(unit_topics)
                     if any(topic.lower() in t.lower() or t.lower() in topic.lower() for t in unit_topics_list):
-                        topic_unit = str(unit_name)
+                        topic_unit = unit_name
                         break
 
                 # Try PYQ pattern generation with timeout protection
@@ -296,6 +307,41 @@ def get_paper(paper_id):
         return jsonify({"error": str(e)}), 500
 
 
+@app.route("/api/papers/<paper_id>", methods=["PUT"])
+def modify_paper(paper_id):
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({"error": "No JSON data provided"}), 400
+
+        updated = update_paper(paper_id, data)
+        if not updated:
+            return jsonify({"error": "Paper not found or no changes made"}), 404
+        return jsonify({"message": "Paper updated successfully", "paper": data})
+    except Exception as e:
+        logger.exception("Error updating paper")
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/papers/<paper_id>/solutions", methods=["GET"])
+def get_paper_solutions(paper_id):
+    try:
+        paper = get_paper_by_id(paper_id)
+        if paper is None:
+            return jsonify({"error": "Paper not found"}), 404
+
+        questions = paper.get("questions", [])
+        solutions = get_solutions_for_questions(questions)
+        return jsonify({
+            "paper_id": paper_id,
+            "subject": paper.get("subject", ""),
+            "solutions": solutions
+        })
+    except Exception as e:
+        logger.exception("Error generating solutions for paper")
+        return jsonify({"error": str(e)}), 500
+
+
 @app.route("/api/papers/<paper_id>", methods=["DELETE"])
 def delete_paper(paper_id):
     try:
@@ -305,6 +351,42 @@ def delete_paper(paper_id):
         return jsonify({"message": "Paper deleted successfully"})
     except Exception as e:
         logger.exception("Error deleting paper")
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/question-bank", methods=["GET"])
+def get_question_bank():
+    """Fetch filtered/paginated question bank entries."""
+    try:
+        subject = request.args.get("subject", None)
+        difficulty = request.args.get("difficulty", None)
+        question_type = request.args.get("type", None)
+        search = request.args.get("search", None)
+        page = int(request.args.get("page", 1))
+        limit = int(request.args.get("limit", 20))
+
+        result = get_pyq_questions_paginated(
+            subject=subject,
+            difficulty=difficulty,
+            question_type=question_type,
+            search=search,
+            page=page,
+            limit=limit,
+        )
+        return jsonify(result)
+    except Exception as e:
+        logger.exception("Error querying question bank")
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/analytics", methods=["GET"])
+def get_analytics():
+    """Get overall platform analytics, topic frequencies, and PYQ stats."""
+    try:
+        data = get_all_pyq_analytics()
+        return jsonify(data)
+    except Exception as e:
+        logger.exception("Error getting analytics data")
         return jsonify({"error": str(e)}), 500
 
 

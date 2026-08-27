@@ -1,32 +1,28 @@
 "use client";
 
-import { useState } from "react";
-import { toast } from "sonner";
+import { useEffect, useState, useTransition } from "react";
 import {
-  Database,
   Search,
-  Plus,
-  Edit,
-  Trash2,
-  Copy,
-  Download,
-  Star,
-  Clock,
-  Tag,
+  Database,
   BookOpen,
-  CheckCircle,
-  XCircle,
-  AlertCircle,
-  Grid3X3,
-  List,
+  Copy,
+  Check,
+  ChevronDown,
+  ChevronUp,
+  Sparkles,
+  Filter,
+  Loader2,
+  RefreshCw,
+  Layers,
+  ChevronLeft,
+  ChevronRight,
+  ExternalLink,
+  Zap,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
 import {
   Select,
   SelectContent,
@@ -34,474 +30,368 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { toast } from "sonner";
+import { api, type QuestionBankItem, type QuestionBankResponse } from "@/lib/api";
 
-const questionBank = [
-  {
-    id: 1,
-    question: "Explain the difference between Docker containers and virtual machines in terms of resource isolation and performance.",
-    subject: "Docker & Containerization",
-    difficulty: "Medium",
-    marks: 10,
-    topic: "Container Fundamentals",
-    rating: 4.5,
-    usage: 45,
-    status: "approved",
-    created: "2024-01-15",
-    tags: ["docker", "containers", "virtualization"],
-  },
-  {
-    id: 2,
-    question: "Design a Kubernetes deployment with a rolling update strategy, including readiness and liveness probes.",
-    subject: "Kubernetes & Container Orchestration",
-    difficulty: "Hard",
-    marks: 15,
-    topic: "Deployments",
-    rating: 4.8,
-    usage: 38,
-    status: "approved",
-    created: "2024-01-20",
-    tags: ["kubernetes", "deployment", "orchestration"],
-  },
-  {
-    id: 3,
-    question: "Compare and contrast Amazon EC2 Auto Scaling policies in terms of scaling triggers, cooldown periods, and cost efficiency.",
-    subject: "AWS Compute (EC2 & Auto Scaling)",
-    difficulty: "Medium",
-    marks: 10,
-    topic: "Auto Scaling",
-    rating: 4.6,
-    usage: 52,
-    status: "approved",
-    created: "2024-01-18",
-    tags: ["aws", "ec2", "auto-scaling"],
-  },
-  {
-    id: 4,
-    question: "Implement a CI/CD pipeline stage that runs automated tests and blocks deployment on failure.",
-    subject: "CI/CD Pipelines",
-    difficulty: "Hard",
-    marks: 15,
-    topic: "Pipeline Automation",
-    rating: 4.7,
-    usage: 29,
-    status: "pending",
-    created: "2024-01-22",
-    tags: ["cicd", "automation", "testing"],
-  },
-  {
-    id: 5,
-    question: "Explain the principle of least privilege in AWS IAM with examples of policy design.",
-    subject: "AWS Security & IAM",
-    difficulty: "Easy",
-    marks: 8,
-    topic: "IAM Policies",
-    rating: 4.3,
-    usage: 61,
-    status: "approved",
-    created: "2024-01-10",
-    tags: ["iam", "security", "aws"],
-  },
+const SUBJECTS_LIST = [
+  "All",
+  "AWS",
+  "Terraform",
+  "Docker",
+  "Kubernetes",
+  "Linux",
+  "Jenkins",
+  "Ansible",
+  "Git",
+  "CI/CD",
+  "Python",
+  "Microservices",
 ];
 
-const subjects = ["All", "AWS Cloud Fundamentals", "Docker & Containerization", "Kubernetes & Container Orchestration", "CI/CD Pipelines", "AWS Security & IAM"];
-const difficulties = ["All", "Easy", "Medium", "Hard"];
-const topics = ["All", "Container Fundamentals", "Deployments", "Auto Scaling", "Pipeline Automation", "IAM Policies"];
+const DIFFICULTY_MAP: Record<string, { bg: string; text: string; border: string }> = {
+  easy: { bg: "bg-emerald-500/10", text: "text-emerald-600 dark:text-emerald-400", border: "border-emerald-500/20" },
+  medium: { bg: "bg-amber-500/10", text: "text-amber-600 dark:text-amber-400", border: "border-amber-500/20" },
+  hard: { bg: "bg-rose-500/10", text: "text-rose-600 dark:text-rose-400", border: "border-rose-500/20" },
+};
 
 export default function QuestionBankPage() {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedSubject, setSelectedSubject] = useState("All");
-  const [selectedDifficulty, setSelectedDifficulty] = useState("All");
-  const [selectedTopic, setSelectedTopic] = useState("All");
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
-  const [showAddDialog, setShowAddDialog] = useState(false);
-  const [newQuestion, setNewQuestion] = useState({
-    question: "",
-    subject: "",
-    difficulty: "Medium",
-    marks: 10,
-    topic: "",
-    tags: "",
-  });
+  const [data, setData] = useState<QuestionBankResponse | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+  const [subject, setSubject] = useState("All");
+  const [difficulty, setDifficulty] = useState("All");
+  const [questionType, setQuestionType] = useState("All");
+  const [page, setPage] = useState(1);
+  const [expandedId, setExpandedId] = useState<number | null>(null);
+  const [copiedId, setCopiedId] = useState<number | null>(null);
 
-  const filteredQuestions = questionBank.filter((q) => {
-    const matchesSearch = q.question.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         q.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
-    const matchesSubject = selectedSubject === "All" || q.subject === selectedSubject;
-    const matchesDifficulty = selectedDifficulty === "All" || q.difficulty === selectedDifficulty;
-    const matchesTopic = selectedTopic === "All" || q.topic === selectedTopic;
-    return matchesSearch && matchesSubject && matchesDifficulty && matchesTopic;
-  });
-
-  const getDifficultyColor = (difficulty: string) => {
-    switch (difficulty) {
-      case "Easy": return "bg-green-100 text-green-800 border-green-200";
-      case "Medium": return "bg-yellow-100 text-yellow-800 border-yellow-200";
-      case "Hard": return "bg-red-100 text-red-800 border-red-200";
-      default: return "bg-gray-100 text-gray-800 border-gray-200";
+  const fetchQuestions = async (targetPage = page) => {
+    setLoading(true);
+    try {
+      const res = await api.getQuestionBank({
+        subject: subject === "All" ? undefined : subject,
+        difficulty: difficulty === "All" ? undefined : difficulty,
+        type: questionType === "All" ? undefined : questionType,
+        search: search.trim() || undefined,
+        page: targetPage,
+        limit: 12,
+      });
+      setData(res);
+      setPage(res.page);
+    } catch (err: any) {
+      toast.error(err.message || "Failed to load question bank");
+    } finally {
+      setLoading(false);
     }
   };
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "approved": return "bg-green-100 text-green-800";
-      case "pending": return "bg-yellow-100 text-yellow-800";
-      case "rejected": return "bg-red-100 text-red-800";
-      default: return "bg-gray-100 text-gray-800";
-    }
+  useEffect(() => {
+    fetchQuestions(1);
+  }, [subject, difficulty, questionType]);
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    fetchQuestions(1);
   };
 
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case "approved": return <CheckCircle className="h-3 w-3" />;
-      case "pending": return <AlertCircle className="h-3 w-3" />;
-      case "rejected": return <XCircle className="h-3 w-3" />;
-      default: return <Clock className="h-3 w-3" />;
-    }
-  };
+  const handleCopy = (item: QuestionBankItem, type: "question" | "markdown") => {
+    const text =
+      type === "markdown"
+        ? `### ${item.text}\n\n**Subject:** ${item.subject} | **Difficulty:** ${item.difficulty.toUpperCase()} | **Marks:** ${item.marks}M\n\n**Answer/Solution:**\n${item.answer || "Refer to core documentation."}`
+        : item.text;
 
-  const handleAddQuestion = () => {
-    if (!newQuestion.question.trim() || !newQuestion.subject || !newQuestion.topic) {
-      toast.error("Please fill in all required fields");
-      return;
-    }
-    
-    toast.success("Question added successfully!");
-    setNewQuestion({
-      question: "",
-      subject: "",
-      difficulty: "Medium",
-      marks: 10,
-      topic: "",
-      tags: "",
-    });
-    setShowAddDialog(false);
-  };
-
-  const handleCopyQuestion = (question: string) => {
-    navigator.clipboard.writeText(question);
-    toast.success("Question copied to clipboard!");
-  };
-
-  const handleExportQuestions = () => {
-    const dataStr = JSON.stringify(filteredQuestions, null, 2);
-    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-    const exportFileDefaultName = 'question-bank.json';
-    
-    const linkElement = document.createElement('a');
-    linkElement.setAttribute('href', dataUri);
-    linkElement.setAttribute('download', exportFileDefaultName);
-    linkElement.click();
-    
-    toast.success("Questions exported successfully!");
+    navigator.clipboard.writeText(text);
+    setCopiedId(item.id);
+    toast.success(type === "markdown" ? "Copied question and answer in Markdown!" : "Copied question text!");
+    setTimeout(() => setCopiedId(null), 2000);
   };
 
   return (
-    <div className="container mx-auto px-4 py-6 max-w-7xl">
-      <div className="mb-6">
-        <div className="flex flex-col gap-3">
-          <div>
-            <h1 className="text-2xl font-bold tracking-tight flex items-center gap-2">
-              <Database className="h-6 w-6" />
-              Question Bank
+    <div className="container mx-auto px-4 py-8 max-w-7xl">
+      {/* Hero Header */}
+      <div className="relative overflow-hidden rounded-2xl border bg-gradient-to-br from-primary/10 via-background to-primary/5 p-6 md:p-10 mb-8">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div className="space-y-3">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border bg-background/80 text-xs font-medium text-primary">
+              <Database className="h-3.5 w-3.5" />
+              DevOps & AWS PYQ Repository
+            </div>
+            <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight">
+              Interactive Question Bank
             </h1>
-            <p className="text-muted-foreground text-sm mt-1">
-              Manage, review, and organize your question database.
+            <p className="text-muted-foreground text-sm md:text-base max-w-2xl">
+              Search, filter, and practice hundreds of verified previous year examination & interview questions with comprehensive model solutions.
             </p>
           </div>
-          <div className="flex flex-col sm:flex-row gap-2">
-            <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
-              <DialogTrigger asChild>
-                <Button className="gap-2 w-full sm:w-auto">
-                  <Plus className="h-4 w-4" />
-                  Add Question
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-                <DialogHeader>
-                  <DialogTitle>Add New Question</DialogTitle>
-                </DialogHeader>
-                <div className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="question">Question *</Label>
-                    <Textarea
-                      id="question"
-                      placeholder="Enter the question text..."
-                      rows={4}
-                      value={newQuestion.question}
-                      onChange={(e) => setNewQuestion(prev => ({ ...prev, question: e.target.value }))}
-                    />
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="subject">Subject *</Label>
-                      <Select value={newQuestion.subject} onValueChange={(value) => setNewQuestion(prev => ({ ...prev, subject: value }))}>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select subject" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {subjects.slice(1).map((subject) => (
-                            <SelectItem key={subject} value={subject}>{subject}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="difficulty">Difficulty</Label>
-                      <Select value={newQuestion.difficulty} onValueChange={(value) => setNewQuestion(prev => ({ ...prev, difficulty: value }))}>
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {difficulties.slice(1).map((difficulty) => (
-                            <SelectItem key={difficulty} value={difficulty}>{difficulty}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="topic">Topic *</Label>
-                      <Input
-                        id="topic"
-                        placeholder="e.g., Algorithm Analysis"
-                        value={newQuestion.topic}
-                        onChange={(e) => setNewQuestion(prev => ({ ...prev, topic: e.target.value }))}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="marks">Marks</Label>
-                      <Input
-                        id="marks"
-                        type="number"
-                        min={1}
-                        max={20}
-                        value={newQuestion.marks}
-                        onChange={(e) => setNewQuestion(prev => ({ ...prev, marks: parseInt(e.target.value) || 10 }))}
-                      />
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="tags">Tags (comma-separated)</Label>
-                    <Input
-                      id="tags"
-                      placeholder="algorithm, complexity, analysis"
-                      value={newQuestion.tags}
-                      onChange={(e) => setNewQuestion(prev => ({ ...prev, tags: e.target.value }))}
-                    />
-                  </div>
-                  <div className="flex justify-end gap-2">
-                    <Button variant="outline" onClick={() => setShowAddDialog(false)}>
-                      Cancel
-                    </Button>
-                    <Button onClick={handleAddQuestion}>
-                      Add Question
-                    </Button>
-                  </div>
-                </div>
-              </DialogContent>
-            </Dialog>
-            <Button variant="outline" onClick={handleExportQuestions} className="gap-2 w-full sm:w-auto">
-              <Download className="h-4 w-4" />
-              <span className="hidden sm:inline">Export</span>
-              <span className="sm:hidden">Export</span>
-            </Button>
+
+          <div className="grid grid-cols-3 gap-3 self-stretch md:self-auto bg-background/80 backdrop-blur border rounded-xl p-4 shadow-sm">
+            <div className="text-center px-2">
+              <div className="text-2xl font-bold text-primary">{data?.total ?? "..."}</div>
+              <div className="text-xs text-muted-foreground">Total Questions</div>
+            </div>
+            <div className="text-center px-2 border-x">
+              <div className="text-2xl font-bold text-amber-500">12+</div>
+              <div className="text-xs text-muted-foreground">Subject Areas</div>
+            </div>
+            <div className="text-center px-2">
+              <div className="text-2xl font-bold text-emerald-500">100%</div>
+              <div className="text-xs text-muted-foreground">With Solutions</div>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Stats Overview */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div className="flex-1">
-                <p className="text-xs text-muted-foreground">Total Questions</p>
-                <p className="text-xl font-bold">{questionBank.length}</p>
-              </div>
-              <Database className="h-8 w-8 text-primary/20 flex-shrink-0" />
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div className="flex-1">
-                <p className="text-xs text-muted-foreground">Approved</p>
-                <p className="text-xl font-bold">{questionBank.filter(q => q.status === 'approved').length}</p>
-              </div>
-              <CheckCircle className="h-8 w-8 text-green-500/20 flex-shrink-0" />
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div className="flex-1">
-                <p className="text-xs text-muted-foreground">Pending</p>
-                <p className="text-xl font-bold">{questionBank.filter(q => q.status === 'pending').length}</p>
-              </div>
-              <AlertCircle className="h-8 w-8 text-yellow-500/20 flex-shrink-0" />
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div className="flex-1">
-                <p className="text-xs text-muted-foreground">Avg Rating</p>
-                <p className="text-xl font-bold">4.6</p>
-              </div>
-              <Star className="h-8 w-8 text-yellow-500/20 flex-shrink-0" />
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Filters and Search */}
-      <Card className="mb-4">
-        <CardContent className="p-4">
-          <div className="flex flex-col gap-3">
-            <div className="relative">
-              <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+      {/* Filter Bar */}
+      <Card className="mb-8 border shadow-sm">
+        <CardContent className="p-4 md:p-6 space-y-4">
+          <form onSubmit={handleSearchSubmit} className="flex gap-2">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Search questions or tags..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search by keyword, concept, command, or topic..."
+                className="pl-9"
               />
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-              <Select value={selectedSubject} onValueChange={setSelectedSubject}>
-                <SelectTrigger className="text-sm">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {subjects.map((subject) => (
-                    <SelectItem key={subject} value={subject}>{subject}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <Select value={selectedDifficulty} onValueChange={setSelectedDifficulty}>
-                <SelectTrigger className="text-sm">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {difficulties.map((difficulty) => (
-                    <SelectItem key={difficulty} value={difficulty}>{difficulty}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <Select value={selectedTopic} onValueChange={setSelectedTopic}>
-                <SelectTrigger className="text-sm">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {topics.map((topic) => (
-                    <SelectItem key={topic} value={topic}>{topic}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setViewMode(viewMode === "grid" ? "list" : "grid")}
-                className="gap-2 text-sm"
-              >
-                {viewMode === "grid" ? <List className="h-4 w-4" /> : <Grid3X3 className="h-4 w-4" />}
-                {viewMode === "grid" ? "List" : "Grid"}
-              </Button>
+            <Button type="submit" className="gap-2">
+              <Search className="h-4 w-4" />
+              Search
+            </Button>
+          </form>
+
+          {/* Filter dropdowns & pills */}
+          <div className="flex flex-wrap items-center gap-3 pt-2">
+            <div className="flex items-center gap-1.5 text-xs text-muted-foreground font-medium mr-1">
+              <Filter className="h-3.5 w-3.5" />
+              Filters:
             </div>
+
+            {/* Subject Select */}
+            <Select value={subject} onValueChange={(val) => { setSubject(val); setPage(1); }}>
+              <SelectTrigger className="w-[160px] h-9 text-xs">
+                <SelectValue placeholder="Subject" />
+              </SelectTrigger>
+              <SelectContent>
+                {SUBJECTS_LIST.map((s) => (
+                  <SelectItem key={s} value={s}>
+                    {s}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            {/* Difficulty Select */}
+            <Select value={difficulty} onValueChange={(val) => { setDifficulty(val); setPage(1); }}>
+              <SelectTrigger className="w-[140px] h-9 text-xs">
+                <SelectValue placeholder="Difficulty" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="All">All Difficulties</SelectItem>
+                <SelectItem value="easy">Easy</SelectItem>
+                <SelectItem value="medium">Medium</SelectItem>
+                <SelectItem value="hard">Hard</SelectItem>
+              </SelectContent>
+            </Select>
+
+            {/* Question Type Select */}
+            <Select value={questionType} onValueChange={(val) => { setQuestionType(val); setPage(1); }}>
+              <SelectTrigger className="w-[140px] h-9 text-xs">
+                <SelectValue placeholder="Question Type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="All">All Types</SelectItem>
+                <SelectItem value="short">Short Answer</SelectItem>
+                <SelectItem value="long">Long Answer</SelectItem>
+                <SelectItem value="descriptive">Descriptive</SelectItem>
+              </SelectContent>
+            </Select>
+
+            {(subject !== "All" || difficulty !== "All" || questionType !== "All" || search) && (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-9 text-xs text-muted-foreground hover:text-foreground"
+                onClick={() => {
+                  setSearch("");
+                  setSubject("All");
+                  setDifficulty("All");
+                  setQuestionType("All");
+                }}
+              >
+                Reset Filters
+              </Button>
+            )}
           </div>
         </CardContent>
       </Card>
 
-      {/* Questions Display */}
-      <div className={viewMode === "grid" ? "grid grid-cols-1 gap-4" : "space-y-3"}>
-        {filteredQuestions.map((question) => (
-          <Card key={question.id} className="hover:shadow-md transition-shadow">
-            <CardContent className="p-4">
-              <div className="flex justify-between items-start mb-3">
-                <div className="flex-1 min-w-0">
-                  <div className="flex flex-wrap items-center gap-1 mb-2">
-                    <Badge className={`${getDifficultyColor(question.difficulty)} text-xs`}>
-                      {question.difficulty}
-                    </Badge>
-                    <Badge variant="outline" className="text-xs">{question.marks}m</Badge>
-                    <Badge className={`${getStatusColor(question.status)} text-xs`}>
-                      <span className="flex items-center gap-1">
-                        {getStatusIcon(question.status)}
-                        {question.status}
-                      </span>
-                    </Badge>
-                  </div>
-                  <h3 className="font-medium text-sm mb-2 line-clamp-3 leading-relaxed">{question.question}</h3>
-                  <div className="flex flex-wrap gap-1 mb-2">
-                    <Badge variant="secondary" className="text-xs">
-                      <BookOpen className="h-3 w-3 mr-1" />
-                      {question.subject}
-                    </Badge>
-                    <Badge variant="secondary" className="text-xs">
-                      <Tag className="h-3 w-3 mr-1" />
-                      {question.topic}
-                    </Badge>
-                  </div>
-                  <div className="flex flex-wrap gap-1 mb-3">
-                    {question.tags.map((tag) => (
-                      <Badge key={tag} variant="outline" className="text-xs">
-                        #{tag}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-                <div className="flex gap-1 ml-2 flex-shrink-0">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => handleCopyQuestion(question.question)}
-                    className="h-6 w-6 p-0"
-                  >
-                    <Copy className="h-3 w-3" />
-                  </Button>
-                  <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
-                    <Edit className="h-3 w-3" />
-                  </Button>
-                  <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
-                    <Trash2 className="h-3 w-3" />
-                  </Button>
-                </div>
-              </div>
-              <Separator className="my-3" />
-              <div className="flex justify-between items-center text-xs text-muted-foreground">
-                <div className="flex items-center gap-3">
-                  <div className="flex items-center gap-1">
-                    <Star className="h-3 w-3 text-yellow-500 fill-yellow-500" />
-                    <span>{question.rating}</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Database className="h-3 w-3" />
-                    <span>{question.usage} uses</span>
-                  </div>
-                </div>
-                <span>{question.created}</span>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+      {/* Questions Grid */}
+      {loading ? (
+        <div className="flex flex-col items-center justify-center min-h-[300px] gap-3">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          <p className="text-sm text-muted-foreground font-medium">Fetching question bank entries...</p>
+        </div>
+      ) : data?.questions.length === 0 ? (
+        <Card className="text-center p-12">
+          <CardContent className="space-y-4">
+            <BookOpen className="h-12 w-12 mx-auto text-muted-foreground/50" />
+            <h3 className="text-lg font-semibold">No questions found</h3>
+            <p className="text-sm text-muted-foreground max-w-sm mx-auto">
+              We couldn't find any questions matching your current search criteria. Try adjusting your search query or filters.
+            </p>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                setSearch("");
+                setSubject("All");
+                setDifficulty("All");
+                setQuestionType("All");
+              }}
+            >
+              Clear All Filters
+            </Button>
+          </CardContent>
+        </Card>
+      ) : (
+        <div className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {data?.questions.map((item) => {
+              const diffStyle = DIFFICULTY_MAP[item.difficulty] || DIFFICULTY_MAP.medium;
+              const isExpanded = expandedId === item.id;
+              const isCopied = copiedId === item.id;
 
-      {filteredQuestions.length === 0 && (
-        <div className="text-center py-8">
-          <Database className="h-10 w-10 mx-auto mb-3 text-muted-foreground" />
-          <h3 className="text-base font-semibold mb-2">No questions found</h3>
-          <p className="text-muted-foreground text-sm">Try adjusting your filters or search terms.</p>
+              return (
+                <Card
+                  key={item.id}
+                  className="flex flex-col justify-between border hover:border-primary/40 transition-all duration-200 shadow-sm"
+                >
+                  <CardHeader className="pb-3 space-y-2.5">
+                    <div className="flex items-center justify-between gap-2 flex-wrap">
+                      <div className="flex items-center gap-2">
+                        <Badge variant="secondary" className="font-semibold text-xs">
+                          {item.subject}
+                        </Badge>
+                        <span
+                          className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium border ${diffStyle.bg} ${diffStyle.text} ${diffStyle.border}`}
+                        >
+                          {item.difficulty.toUpperCase()}
+                        </span>
+                      </div>
+                      <span className="text-xs font-semibold text-muted-foreground bg-muted px-2 py-0.5 rounded">
+                        {item.marks} Marks
+                      </span>
+                    </div>
+
+                    <CardTitle className="text-base font-semibold leading-snug">
+                      {item.text}
+                    </CardTitle>
+
+                    {item.topic && item.topic !== item.subject && (
+                      <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                        <Layers className="h-3 w-3" />
+                        <span>Topic: {item.topic}</span>
+                      </div>
+                    )}
+                  </CardHeader>
+
+                  <CardContent className="pt-0 space-y-3">
+                    {/* Collapsible Solution Box */}
+                    {isExpanded && (
+                      <div className="rounded-lg bg-muted/60 p-4 border text-sm space-y-2 animate-in fade-in-50 duration-200">
+                        <div className="flex items-center gap-1.5 font-semibold text-xs text-primary">
+                          <Sparkles className="h-3.5 w-3.5" />
+                          Model Answer / Solution
+                        </div>
+                        <p className="text-muted-foreground leading-relaxed whitespace-pre-line text-xs md:text-sm">
+                          {item.answer || "No detailed explanation recorded. Refer to standard documentation."}
+                        </p>
+                        {item.source_file && (
+                          <div className="text-[11px] text-muted-foreground/75 pt-1 border-t">
+                            Source: {item.source_file}
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Card Actions */}
+                    <div className="flex items-center justify-between pt-2 border-t text-xs">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-8 gap-1.5 text-xs font-medium"
+                        onClick={() => setExpandedId(isExpanded ? null : item.id)}
+                      >
+                        {isExpanded ? (
+                          <>
+                            <ChevronUp className="h-3.5 w-3.5" /> Hide Solution
+                          </>
+                        ) : (
+                          <>
+                            <ChevronDown className="h-3.5 w-3.5" /> View Solution
+                          </>
+                        )}
+                      </Button>
+
+                      <div className="flex items-center gap-1">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-8 gap-1 text-xs"
+                          onClick={() => handleCopy(item, "question")}
+                        >
+                          {isCopied ? <Check className="h-3.5 w-3.5 text-emerald-500" /> : <Copy className="h-3.5 w-3.5" />}
+                          Copy
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="h-8 text-xs gap-1"
+                          onClick={() => handleCopy(item, "markdown")}
+                        >
+                          <Zap className="h-3 w-3 text-amber-500" />
+                          MD
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+
+          {/* Pagination */}
+          {data && data.total_pages > 1 && (
+            <div className="flex items-center justify-between pt-6 border-t">
+              <div className="text-xs text-muted-foreground">
+                Showing page <span className="font-semibold">{data.page}</span> of{" "}
+                <span className="font-semibold">{data.total_pages}</span> ({data.total} total)
+              </div>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={data.page <= 1}
+                  onClick={() => fetchQuestions(data.page - 1)}
+                  className="gap-1 text-xs"
+                >
+                  <ChevronLeft className="h-3.5 w-3.5" />
+                  Previous
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={data.page >= data.total_pages}
+                  onClick={() => fetchQuestions(data.page + 1)}
+                  className="gap-1 text-xs"
+                >
+                  Next
+                  <ChevronRight className="h-3.5 w-3.5" />
+                </Button>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>

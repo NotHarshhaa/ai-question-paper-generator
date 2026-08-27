@@ -1,423 +1,331 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Link from "next/link";
 import {
   BarChart3,
   TrendingUp,
-  Users,
+  Database,
   FileText,
-  Clock,
-  Calendar,
-  Download,
-  Brain,
-  Star,
-  Activity,
   PieChart,
-  ArrowUp,
-  ArrowDown,
+  Layers,
+  Sparkles,
+  ArrowUpRight,
   BookOpen,
+  Award,
+  Loader2,
+  RefreshCw,
+  Clock,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { Separator } from "@/components/ui/separator";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs";
-
-const analyticsData = {
-  overview: {
-    totalPapers: 1284,
-    activeUsers: 342,
-    avgGenerationTime: 2.3,
-    successRate: 98.5,
-    monthlyGrowth: 12.4,
-  },
-  subjectStats: [
-    { subject: "AWS Cloud Fundamentals", papers: 156, avgRating: 4.8, trend: "+15%" },
-    { subject: "Kubernetes & Container Orchestration", papers: 142, avgRating: 4.6, trend: "+8%" },
-    { subject: "Docker & Containerization", papers: 128, avgRating: 4.7, trend: "+12%" },
-    { subject: "Terraform & Infrastructure as Code", papers: 115, avgRating: 4.5, trend: "+5%" },
-    { subject: "CI/CD Pipelines", papers: 98, avgRating: 4.9, trend: "+22%" },
-  ],
-  usagePatterns: [
-    { day: "Mon", papers: 45, users: 23 },
-    { day: "Tue", papers: 52, users: 28 },
-    { day: "Wed", papers: 48, users: 25 },
-    { day: "Thu", papers: 61, users: 32 },
-    { day: "Fri", papers: 58, users: 30 },
-    { day: "Sat", papers: 38, users: 18 },
-    { day: "Sun", papers: 42, users: 20 },
-  ],
-  difficultyDistribution: [
-    { difficulty: "Easy", percentage: 35, color: "bg-green-500" },
-    { difficulty: "Medium", percentage: 45, color: "bg-yellow-500" },
-    { difficulty: "Hard", percentage: 20, color: "bg-red-500" },
-  ],
-  recentActivity: [
-    { id: 1, user: "A. Sharma", subject: "AWS Cloud Fundamentals", time: "2 mins ago", status: "completed" },
-    { id: 2, user: "R. Patel", subject: "Kubernetes & Container Orchestration", time: "5 mins ago", status: "completed" },
-    { id: 3, user: "S. Lee", subject: "CI/CD Pipelines", time: "8 mins ago", status: "processing" },
-    { id: 4, user: "M. Johnson", subject: "Docker & Containerization", time: "12 mins ago", status: "completed" },
-    { id: 5, user: "K. Chen", subject: "Terraform & Infrastructure as Code", time: "15 mins ago", status: "failed" },
-  ],
-};
+import { toast } from "sonner";
+import { api, type AnalyticsData } from "@/lib/api";
 
 export default function AnalyticsPage() {
-  const [timeRange, setTimeRange] = useState("7d");
-  const [searchTerm, setSearchTerm] = useState("");
+  const [data, setData] = useState<AnalyticsData | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "completed": return "bg-green-100 text-green-800";
-      case "processing": return "bg-blue-100 text-blue-800";
-      case "failed": return "bg-red-100 text-red-800";
-      default: return "bg-gray-100 text-gray-800";
+  const fetchAnalytics = async () => {
+    setLoading(true);
+    try {
+      const res = await api.getAnalytics();
+      setData(res);
+    } catch (err: any) {
+      toast.error(err.message || "Failed to load analytics");
+    } finally {
+      setLoading(false);
     }
   };
 
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case "completed": return <TrendingUp className="h-3 w-3" />;
-      case "processing": return <Clock className="h-3 w-3" />;
-      case "failed": return <ArrowDown className="h-3 w-3" />;
-      default: return <Activity className="h-3 w-3" />;
-    }
-  };
+  useEffect(() => {
+    fetchAnalytics();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="container mx-auto px-4 py-20 flex flex-col items-center justify-center min-h-[50vh] gap-3">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <p className="text-sm text-muted-foreground font-medium">Aggregating platform intelligence metrics...</p>
+      </div>
+    );
+  }
+
+  if (!data) {
+    return (
+      <div className="container mx-auto px-4 py-20 text-center space-y-4">
+        <p className="text-muted-foreground">Unable to load analytics data.</p>
+        <Button onClick={fetchAnalytics} variant="outline" size="sm">
+          <RefreshCw className="h-4 w-4 mr-2" /> Retry
+        </Button>
+      </div>
+    );
+  }
+
+  const totalQuestions = data.total_questions || 1;
+  const easyPct = Math.round((data.difficulty.easy / totalQuestions) * 100);
+  const medPct = Math.round((data.difficulty.medium / totalQuestions) * 100);
+  const hardPct = Math.max(0, 100 - easyPct - medPct);
 
   return (
-    <div className="container mx-auto px-4 py-6 max-w-7xl">
-      <div className="mb-6">
-        <div className="flex flex-col gap-3">
-          <div>
-            <h1 className="text-2xl font-bold tracking-tight flex items-center gap-2">
-              <BarChart3 className="h-6 w-6" />
-              Analytics Dashboard
+    <div className="container mx-auto px-4 py-8 max-w-7xl space-y-8">
+      {/* Header Banner */}
+      <div className="relative overflow-hidden rounded-2xl border bg-gradient-to-br from-primary/10 via-background to-primary/5 p-6 md:p-10">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div className="space-y-3">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border bg-background/80 text-xs font-medium text-primary">
+              <BarChart3 className="h-3.5 w-3.5" />
+              DevOps & AWS Intelligence
+            </div>
+            <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight">
+              Platform Analytics & PYQ Insights
             </h1>
-            <p className="text-muted-foreground text-sm mt-1">
-              Monitor usage patterns, performance metrics, and user insights.
+            <p className="text-muted-foreground text-sm md:text-base max-w-2xl">
+              Real-time telemetry on question bank distributions, domain weightages, cognitive difficulty ratios, and exam generation activity.
             </p>
           </div>
-          <div className="flex flex-col sm:flex-row gap-2">
-            <Select value={timeRange} onValueChange={setTimeRange}>
-              <SelectTrigger className="w-full sm:w-32">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="24h">Last 24h</SelectItem>
-                <SelectItem value="7d">Last 7 days</SelectItem>
-                <SelectItem value="30d">Last 30 days</SelectItem>
-                <SelectItem value="90d">Last 90 days</SelectItem>
-              </SelectContent>
-            </Select>
-            <Button variant="outline" className="gap-2 w-full sm:w-auto">
-              <Download className="h-4 w-4" />
-              <span className="hidden sm:inline">Export</span>
-              <span className="sm:hidden">Export</span>
-            </Button>
+
+          <div className="flex gap-3">
+            <Link href="/generate">
+              <Button className="gap-2 shadow-sm">
+                <Sparkles className="h-4 w-4" />
+                Generate Paper
+              </Button>
+            </Link>
+            <Link href="/question-bank">
+              <Button variant="outline" className="gap-2">
+                <Database className="h-4 w-4" />
+                Browse Bank
+              </Button>
+            </Link>
           </div>
         </div>
       </div>
 
-      {/* Key Metrics */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
-        <Card className="border-l-4 border-l-blue-500">
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div className="flex-1">
-                <p className="text-xs text-muted-foreground">Total Papers</p>
-                <p className="text-xl font-bold">{analyticsData.overview.totalPapers}</p>
-                <div className="flex items-center mt-1 text-xs text-green-600">
-                  <ArrowUp className="h-3 w-3 mr-1" />
-                  <span className="truncate">{analyticsData.overview.monthlyGrowth}%</span>
-                </div>
-              </div>
-              <FileText className="h-8 w-8 text-blue-500/20 flex-shrink-0" />
-            </div>
+      {/* KPI Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <Card className="border shadow-sm">
+          <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+            <CardTitle className="text-sm font-medium text-muted-foreground">Total Questions</CardTitle>
+            <Database className="h-4 w-4 text-primary" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-3xl font-bold">{data.total_questions}</div>
+            <p className="text-xs text-muted-foreground mt-1">Curated DevOps & Cloud PYQs</p>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-green-500">
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div className="flex-1">
-                <p className="text-xs text-muted-foreground">Active Users</p>
-                <p className="text-xl font-bold">{analyticsData.overview.activeUsers}</p>
-                <div className="flex items-center mt-1 text-xs text-green-600">
-                  <ArrowUp className="h-3 w-3 mr-1" />
-                  <span>+8% this week</span>
-                </div>
-              </div>
-              <Users className="h-8 w-8 text-green-500/20 flex-shrink-0" />
-            </div>
+        <Card className="border shadow-sm">
+          <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+            <CardTitle className="text-sm font-medium text-muted-foreground">Subject Areas</CardTitle>
+            <Layers className="h-4 w-4 text-amber-500" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-3xl font-bold">{data.subjects.length}</div>
+            <p className="text-xs text-muted-foreground mt-1">Specialized domains covered</p>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-yellow-500">
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div className="flex-1">
-                <p className="text-xs text-muted-foreground">Avg. Time</p>
-                <p className="text-xl font-bold">{analyticsData.overview.avgGenerationTime}m</p>
-                <div className="flex items-center mt-1 text-xs text-green-600">
-                  <ArrowDown className="h-3 w-3 mr-1" />
-                  <span>-18%</span>
-                </div>
-              </div>
-              <Clock className="h-8 w-8 text-yellow-500/20 flex-shrink-0" />
-            </div>
+        <Card className="border shadow-sm">
+          <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+            <CardTitle className="text-sm font-medium text-muted-foreground">Papers Generated</CardTitle>
+            <FileText className="h-4 w-4 text-emerald-500" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-3xl font-bold">{data.papers_generated}</div>
+            <p className="text-xs text-muted-foreground mt-1">Saved in local repository</p>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-purple-500">
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div className="flex-1">
-                <p className="text-xs text-muted-foreground">Success Rate</p>
-                <p className="text-xl font-bold">{analyticsData.overview.successRate}%</p>
-                <div className="flex items-center mt-1 text-xs text-green-600">
-                  <ArrowUp className="h-3 w-3 mr-1" />
-                  <span>+0.3%</span>
-                </div>
-              </div>
-              <Activity className="h-8 w-8 text-purple-500/20 flex-shrink-0" />
-            </div>
+        <Card className="border shadow-sm">
+          <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+            <CardTitle className="text-sm font-medium text-muted-foreground">Avg Paper Marks</CardTitle>
+            <Award className="h-4 w-4 text-indigo-500" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-3xl font-bold">{data.avg_paper_marks} M</div>
+            <p className="text-xs text-muted-foreground mt-1">Standardized exam weightage</p>
           </CardContent>
         </Card>
       </div>
 
-      <Tabs defaultValue="subjects" className="space-y-4">
-        <TabsList className="inline-flex w-full">
-          <TabsTrigger value="subjects" className="text-xs py-2 px-1 flex items-center justify-center">Subjects</TabsTrigger>
-          <TabsTrigger value="usage" className="text-xs py-2 px-1 flex items-center justify-center">Usage</TabsTrigger>
-          <TabsTrigger value="activity" className="text-xs py-2 px-1 flex items-center justify-center">Activity</TabsTrigger>
-          <TabsTrigger value="insights" className="text-xs py-2 px-1 flex items-center justify-center">AI Insights</TabsTrigger>
-        </TabsList>
-
-        {/* Subject Statistics */}
-        <TabsContent value="subjects" className="space-y-4">
-          <div className="grid grid-cols-1 gap-4">
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="flex items-center gap-2 text-lg">
-                  <BookOpen className="h-5 w-5" />
-                  Top Subjects
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {analyticsData.subjectStats.map((subject, index) => (
-                  <div key={subject.subject} className="flex items-center justify-between p-3 rounded-lg border">
-                    <div className="flex items-center gap-2 flex-1 min-w-0">
-                      <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-xs font-semibold flex-shrink-0">
-                        {index + 1}
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <p className="font-medium text-sm truncate">{subject.subject}</p>
-                        <p className="text-xs text-muted-foreground">{subject.papers} papers</p>
-                      </div>
-                    </div>
-                    <div className="text-right flex-shrink-0">
-                      <div className="flex items-center gap-1 mb-1">
-                        <Star className="h-3 w-3 text-yellow-500 fill-yellow-500" />
-                        <span className="text-xs font-medium">{subject.avgRating}</span>
-                      </div>
-                      <Badge variant="outline" className="text-xs">
-                        {subject.trend}
-                      </Badge>
+      {/* Main Charts & Analytics Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Subject Breakdown */}
+        <Card className="lg:col-span-2 border shadow-sm">
+          <CardHeader>
+            <CardTitle className="text-lg flex items-center gap-2">
+              <TrendingUp className="h-5 w-5 text-primary" />
+              Question Distribution by Subject
+            </CardTitle>
+            <CardDescription>
+              Volume and difficulty breakdown across DevOps, AWS, and Cloud Engineering modules.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-5">
+            {data.subjects.map((s) => {
+              const pct = Math.round((s.count / totalQuestions) * 100);
+              return (
+                <div key={s.subject} className="space-y-1.5">
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="font-semibold">{s.subject}</span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-muted-foreground">
+                        {s.count} questions ({pct}%)
+                      </span>
                     </div>
                   </div>
-                ))}
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="flex items-center gap-2 text-lg">
-                  <PieChart className="h-5 w-5" />
-                  Difficulty Distribution
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {analyticsData.difficultyDistribution.map((item) => (
-                  <div key={item.difficulty} className="space-y-2">
-                    <div className="flex justify-between text-sm">
-                      <span className="font-medium">{item.difficulty}</span>
-                      <span>{item.percentage}%</span>
-                    </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div 
-                        className={`${item.color} h-2 rounded-full transition-all duration-300`} 
-                        style={{ width: `${item.percentage}%` }}
-                      />
-                    </div>
+                  <div className="h-2.5 w-full bg-muted rounded-full overflow-hidden flex">
+                    <div
+                      style={{ width: `${(s.easy / (s.count || 1)) * 100}%` }}
+                      className="bg-emerald-500 transition-all"
+                      title={`Easy: ${s.easy}`}
+                    />
+                    <div
+                      style={{ width: `${(s.medium / (s.count || 1)) * 100}%` }}
+                      className="bg-amber-500 transition-all"
+                      title={`Medium: ${s.medium}`}
+                    />
+                    <div
+                      style={{ width: `${(s.hard / (s.count || 1)) * 100}%` }}
+                      className="bg-rose-500 transition-all"
+                      title={`Hard: ${s.hard}`}
+                    />
                   </div>
-                ))}
-                <Separator className="my-3" />
-                <div className="text-xs text-muted-foreground">
-                  <p>Most users prefer balanced difficulty settings.</p>
+                  <div className="flex items-center gap-3 text-[11px] text-muted-foreground">
+                    <span className="flex items-center gap-1">
+                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" /> Easy: {s.easy}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <span className="h-1.5 w-1.5 rounded-full bg-amber-500" /> Medium: {s.medium}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <span className="h-1.5 w-1.5 rounded-full bg-rose-500" /> Hard: {s.hard}
+                    </span>
+                  </div>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
-        </TabsContent>
+              );
+            })}
+          </CardContent>
+        </Card>
 
-        {/* Usage Patterns */}
-        <TabsContent value="usage" className="space-y-4">
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="flex items-center gap-2 text-lg">
-                <Calendar className="h-5 w-5" />
-                Weekly Usage
+        {/* Difficulty Ratio Card */}
+        <div className="space-y-6">
+          <Card className="border shadow-sm">
+            <CardHeader>
+              <CardTitle className="text-lg flex items-center gap-2">
+                <PieChart className="h-5 w-5 text-amber-500" />
+                Overall Difficulty Ratio
               </CardTitle>
+              <CardDescription>Aggregate distribution across all subjects</CardDescription>
             </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-7 gap-1 mb-4">
-                {analyticsData.usagePatterns.map((day) => (
-                  <div key={day.day} className="text-center">
-                    <p className="text-xs text-muted-foreground mb-1">{day.day}</p>
-                    <div className="relative">
-                      <div className="w-full bg-muted rounded-t-lg" style={{ height: `${Math.max(day.papers * 1.5, 15)}px` }}>
-                        <div 
-                          className="bg-primary rounded-t-lg transition-all duration-300" 
-                          style={{ height: `${day.papers * 1.5}px` }}
-                        />
-                      </div>
-                      <p className="text-xs font-medium mt-1">{day.papers}</p>
-                    </div>
+            <CardContent className="space-y-4">
+              <div className="space-y-3">
+                <div className="space-y-1">
+                  <div className="flex justify-between text-xs font-semibold">
+                    <span className="text-emerald-600 dark:text-emerald-400">Easy ({data.difficulty.easy})</span>
+                    <span>{easyPct}%</span>
                   </div>
-                ))}
+                  <Progress value={easyPct} className="h-2 bg-muted [&>div]:bg-emerald-500" />
+                </div>
+
+                <div className="space-y-1">
+                  <div className="flex justify-between text-xs font-semibold">
+                    <span className="text-amber-600 dark:text-amber-400">Medium ({data.difficulty.medium})</span>
+                    <span>{medPct}%</span>
+                  </div>
+                  <Progress value={medPct} className="h-2 bg-muted [&>div]:bg-amber-500" />
+                </div>
+
+                <div className="space-y-1">
+                  <div className="flex justify-between text-xs font-semibold">
+                    <span className="text-rose-600 dark:text-rose-400">Hard ({data.difficulty.hard})</span>
+                    <span>{hardPct}%</span>
+                  </div>
+                  <Progress value={hardPct} className="h-2 bg-muted [&>div]:bg-rose-500" />
+                </div>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-center">
-                <div className="p-2 bg-green-100 dark:bg-green-900/20 border border-green-200 dark:border-green-800/30 rounded-lg">
-                  <p className="text-xs text-green-700 dark:text-green-400 font-medium">Peak Day</p>
-                  <p className="text-sm font-bold text-green-800 dark:text-green-300">Thursday</p>
-                  <p className="text-xs text-green-600 dark:text-green-400">61 papers</p>
-                </div>
-                <div className="p-2 bg-blue-100 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800/30 rounded-lg">
-                  <p className="text-xs text-blue-700 dark:text-blue-400 font-medium">Daily Avg</p>
-                  <p className="text-sm font-bold text-blue-800 dark:text-blue-300">49 papers</p>
-                  <p className="text-xs text-blue-600 dark:text-blue-400">All subjects</p>
-                </div>
-                <div className="p-2 bg-purple-100 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800/30 rounded-lg">
-                  <p className="text-xs text-purple-700 dark:text-purple-400 font-medium">Weekend</p>
-                  <p className="text-sm font-bold text-purple-800 dark:text-purple-300">23%</p>
-                  <p className="text-xs text-purple-600 dark:text-purple-400">of activity</p>
-                </div>
+
+              <div className="rounded-lg border bg-muted/40 p-3 text-xs text-muted-foreground leading-relaxed">
+                💡 <span className="font-semibold text-foreground">Recommendation:</span> For certification practice, balance questions with a 30% Easy, 50% Medium, and 20% Hard ratio to match standard exam patterns.
               </div>
             </CardContent>
           </Card>
-        </TabsContent>
 
-        {/* Recent Activity */}
-        <TabsContent value="activity" className="space-y-4">
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="flex items-center gap-2 text-lg">
-                <Activity className="h-5 w-5" />
-                Recent Activity
+          {/* Top Frequent Topics */}
+          <Card className="border shadow-sm">
+            <CardHeader>
+              <CardTitle className="text-base flex items-center gap-2">
+                <BookOpen className="h-4 w-4 text-primary" />
+                High-Frequency Topics
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-2">
-                {analyticsData.recentActivity.map((activity) => (
-                  <div key={activity.id} className="flex items-center justify-between p-2 rounded-lg border">
-                    <div className="flex items-center gap-2 flex-1 min-w-0">
-                      <div className={`p-1.5 rounded-full ${getStatusColor(activity.status)}`}>
-                        {getStatusIcon(activity.status)}
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <p className="font-medium text-sm truncate">{activity.user}</p>
-                        <p className="text-xs text-muted-foreground truncate">{activity.subject}</p>
-                      </div>
-                    </div>
-                    <div className="text-right flex-shrink-0">
-                      <p className="text-xs text-muted-foreground">{activity.time}</p>
-                      <Badge className={`text-xs ${getStatusColor(activity.status)}`}>
-                        {activity.status}
-                      </Badge>
-                    </div>
-                  </div>
+              <div className="flex flex-wrap gap-1.5">
+                {data.top_topics.map((t) => (
+                  <Badge key={t.topic} variant="secondary" className="text-xs py-1 px-2.5">
+                    {t.topic}
+                    <span className="ml-1.5 opacity-70 font-normal">({t.count})</span>
+                  </Badge>
                 ))}
               </div>
             </CardContent>
           </Card>
-        </TabsContent>
+        </div>
+      </div>
 
-        {/* AI Insights */}
-        <TabsContent value="insights" className="space-y-4">
-          <div className="grid grid-cols-1 gap-4">
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="flex items-center gap-2 text-lg">
-                  <Brain className="h-5 w-5" />
-                  AI Performance
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="space-y-2">
-                  <div className="flex justify-between items-center">
-                    <span className="text-xs">Question Quality</span>
-                    <span className="text-xs font-medium">94.2%</span>
+      {/* Recent Papers Section */}
+      {data.recent_papers && data.recent_papers.length > 0 && (
+        <Card className="border shadow-sm">
+          <CardHeader className="flex flex-row items-center justify-between">
+            <div>
+              <CardTitle className="text-lg">Recent Generated Papers</CardTitle>
+              <CardDescription>Quick access to your latest customized exams</CardDescription>
+            </div>
+            <Link href="/history">
+              <Button variant="ghost" size="sm" className="gap-1 text-xs">
+                View All History <ArrowUpRight className="h-3.5 w-3.5" />
+              </Button>
+            </Link>
+          </CardHeader>
+          <CardContent>
+            <div className="divide-y">
+              {data.recent_papers.map((p) => (
+                <div key={p.id} className="py-3 flex items-center justify-between gap-4">
+                  <div className="space-y-1">
+                    <Link
+                      href={`/paper/${p.id}`}
+                      className="font-semibold text-sm hover:underline hover:text-primary transition-colors flex items-center gap-1.5"
+                    >
+                      {p.subject}
+                      <ArrowUpRight className="h-3.5 w-3.5 text-muted-foreground" />
+                    </Link>
+                    <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                      <span>{p.num_questions} Questions</span>
+                      <span>•</span>
+                      <span>{p.total_marks} Marks</span>
+                      {p.organization_name && (
+                        <>
+                          <span>•</span>
+                          <span>{p.organization_name}</span>
+                        </>
+                      )}
+                    </div>
                   </div>
-                  <Progress value={94.2} className="h-1.5" />
-                </div>
-                <div className="space-y-2">
-                  <div className="flex justify-between items-center">
-                    <span className="text-xs">Syllabus Coverage</span>
-                    <span className="text-xs font-medium">87.8%</span>
-                  </div>
-                  <Progress value={87.8} className="h-1.5" />
-                </div>
-                <div className="space-y-2">
-                  <div className="flex justify-between items-center">
-                    <span className="text-xs">Pattern Matching</span>
-                    <span className="text-xs font-medium">91.5%</span>
-                  </div>
-                  <Progress value={91.5} className="h-1.5" />
-                </div>
-                <Separator className="my-3" />
-                <div className="text-xs text-muted-foreground">
-                  <p>AI models performing optimally across all subjects.</p>
-                </div>
-              </CardContent>
-            </Card>
 
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="flex items-center gap-2 text-lg">
-                  <TrendingUp className="h-5 w-5" />
-                  Improvements
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="p-2 bg-blue-100 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800/30 rounded-lg">
-                  <h4 className="font-medium text-blue-800 dark:text-blue-400 text-xs mb-1">Model Optimization</h4>
-                  <p className="text-xs text-blue-700 dark:text-blue-300">Fine-tune BERT for domain-specific terms.</p>
+                  <Link href={`/paper/${p.id}`}>
+                    <Button variant="outline" size="sm" className="text-xs">
+                      Open Paper
+                    </Button>
+                  </Link>
                 </div>
-                <div className="p-2 bg-green-100 dark:bg-green-900/20 border border-green-200 dark:border-green-800/30 rounded-lg">
-                  <h4 className="font-medium text-green-800 dark:text-green-400 text-xs mb-1">User Experience</h4>
-                  <p className="text-xs text-green-700 dark:text-green-300">Add more template options for popular subjects.</p>
-                </div>
-                <div className="p-2 bg-purple-100 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800/30 rounded-lg">
-                  <h4 className="font-medium text-purple-800 dark:text-purple-400 text-xs mb-1">Performance</h4>
-                  <p className="text-xs text-purple-700 dark:text-purple-300">Implement caching for syllabus patterns.</p>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </TabsContent>
-      </Tabs>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }

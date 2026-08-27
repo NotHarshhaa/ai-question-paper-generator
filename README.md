@@ -1,150 +1,132 @@
 # 🧠 AI-Based DevOps & AWS Question Paper Generator
 
-An intelligent system that automatically generates **DevOps and AWS certification-style question papers** using **NLP and Machine Learning** techniques.
+An intelligent full-stack system that automatically generates **DevOps and AWS certification & university-style question papers** using **NLP and Machine Learning** techniques. Includes an interactive **2,500+ Question Bank**, **Platform Analytics Dashboard**, **Teacher Solution Key Mode**, and **Multi-Format Exporters**.
 
 ---
 
-## 🚀 Features
+## 🚀 Key Features
 
-* ☁️ DevOps & AWS syllabus-based question generation
-* 📊 Previous Year Question (PYQ) pattern analysis
-* 🤖 AI-powered question generation (T5)
-* 🧠 Question classification & similarity check (BERT)
-* ⚖️ Difficulty balancing (Easy / Medium / Hard)
-* 📑 Automatic exam paper formatting (Q1–Q9 structure)
-* 📄 PDF export support
+* ☁️ **Syllabus-Based Topic Extraction**: Analyzes syllabus units and extracts high-weightage topics using NLTK and TF-IDF.
+* 🗂️ **Interactive Question Bank (2,500+ Questions)**: Browse, search, filter, and practice curated PYQ questions with complete model answers across 15+ DevOps & Cloud subject areas.
+* 🤖 **AI-Powered Question Generation**: Uses Hugging Face **T5 Transformer** (`valhalla/t5-base-qg-hl`) with smart fallback question pattern engines.
+* 🧠 **Semantic Deduplication & Similarity Checking**: Utilizes **BERT / Sentence-Transformers** (`all-MiniLM-L6-v2`) to eliminate redundant questions.
+* ⚖️ **Difficulty Balancing**: Calibrates and maintains exact **Easy / Medium / Hard** cognitive difficulty distributions.
+* ✍️ **Interactive Paper Editor**: Modify questions, update marks, rebalance sections, or add custom questions inline.
+* 🔑 **Teacher Solution Key Mode**: Instantly toggle to view comprehensive model answers, key concepts, and grading criteria for instructors.
+* 📊 **Platform Analytics & PYQ Intelligence**: Real-time visual metrics on subject question volume, cognitive difficulty ratios, and top recurring topics.
+* 📄 **Multi-Format Export**: Export exams to **PDF** (via ReportLab), **Markdown (`.md`)**, **JSON (`.json`)**, or formatted **Clipboard Copy**.
 
 ---
 
 ## 🏗️ System Architecture
 
-The system follows a **layered architecture**:
-
-1. **Frontend (User Input)**
-
-   * Subject selection (AWS, Docker, Kubernetes, CI/CD, Terraform, etc.)
-   * Syllabus input
-   * Exam pattern
-
-2. **Backend (Flask Server)**
-
-   * Handles workflow and API requests
-
-3. **NLP Layer**
-
-   * Tokenization
-   * Stopword removal
-   * TF-IDF for important topics
-
-4. **Pattern Analysis**
-
-   * Topic frequency from PYQs
-   * Domain-wise weightage
-
-5. **AI Engine**
-
-   * T5 → Question generation
-   * BERT → Similarity & classification
-
-6. **Smart Selection Engine**
-
-   * Removes duplicates
-   * Ensures balanced paper
-
-7. **Paper Structuring**
-
-   * Formats questions into exam pattern
+```
+[ Frontend: Next.js + React + Tailwind ] 
+                     │  (HTTP / REST API)
+                     ▼
+[ Backend: Python Flask Server ]
+   ├── NLP Layer (NLTK + TF-IDF) ────────► Extracts syllabus units & keywords
+   ├── AI Engine (T5 + PYQ Dataset) ─────► Generates contextual candidate questions
+   ├── Smart Selector (Sentence-BERT) ───► Eliminates duplicates & balances difficulty
+   ├── Paper Structurer ─────────────────► Formats into Section A/B/C or Q1–Q9 layouts
+   ├── SQLite Database (papers.db) ──────► Auto-seeds & stores 2,500+ PYQs and papers
+   └── PDF Generator (ReportLab) ────────► Renders print-ready formatted PDFs
+```
 
 ---
 
 ## 🧰 Tech Stack
 
-* **Frontend:** Next.js, TypeScript, Tailwind CSS, Shadcn UI
-* **Backend:** Flask (Python)
-* **NLP:** NLTK, Scikit-learn
-* **Machine Learning:** Hugging Face Transformers (T5, BERT)
-* **Database:** SQLite
-* **PDF Generation:** ReportLab
+* **Frontend:** Next.js 15 (App Router), React 19, TypeScript, Tailwind CSS, Lucide Icons, Sonner
+* **Backend:** Python 3.11+, Flask, Flask-CORS
+* **NLP & Information Retrieval:** NLTK, Scikit-learn (TF-IDF)
+* **Machine Learning:** Hugging Face Transformers (T5 Seq2Seq LM), Sentence-Transformers (BERT MiniLM)
+* **Database:** SQLite (WAL mode, auto-seeded with 2,500+ questions & solutions)
+* **Document Export:** ReportLab (PDF), Markdown, JSON
 
 ---
 
-## 📚 Supported Subjects
+## 📚 Supported Subjects & Domains
 
-* AWS Cloud Fundamentals
-* AWS Compute (EC2 & Auto Scaling)
-* AWS Storage & Databases
-* AWS Networking (VPC, Route 53, CloudFront)
-* AWS Security & IAM
-* AWS Serverless (Lambda, API Gateway, Step Functions)
-* Docker & Containerization
-* Kubernetes & Container Orchestration
-* CI/CD Pipelines
-* Jenkins
-* Terraform & Infrastructure as Code
-* Ansible & Configuration Management
-* Linux Administration & Shell Scripting
-* Git & Version Control
-* Monitoring & Logging (CloudWatch, Prometheus, Grafana)
-* Site Reliability Engineering (SRE)
-* DevSecOps & Cloud Security
-* Microservices Architecture
+* ☁️ **AWS Cloud Fundamentals**
+* 💻 **AWS Compute (EC2, Auto Scaling, Load Balancing)**
+* 🗄️ **AWS Storage & Databases (S3, RDS, DynamoDB)**
+* 🌐 **AWS Networking (VPC, Route 53, CloudFront)**
+* 🔒 **AWS Security, IAM & Governance**
+* ⚡ **AWS Serverless (Lambda, API Gateway, Step Functions)**
+* 🐳 **Docker & Containerization**
+* ☸️ **Kubernetes & Container Orchestration**
+* 🔄 **CI/CD Pipelines & Automation**
+* 🛠️ **Jenkins**
+* 🏗️ **Terraform & Infrastructure as Code (IaC)**
+* 📜 **Ansible & Configuration Management**
+* 🐧 **Linux Administration & Shell Scripting**
+* 🌿 **Git & Distributed Version Control**
+* 📈 **Monitoring & Observability (CloudWatch, Prometheus, Grafana)**
+* 🛡️ **Site Reliability Engineering (SRE) & DevSecOps**
+* 🧩 **Microservices Architecture & Distributed Systems**
 
 ---
 
-## ⚙️ Installation
+## ⚙️ Installation & Setup
 
+### 1. Clone the Repository
 ```bash
 git clone https://github.com/NotHarshhaa/ai-question-paper-generator.git
 cd ai-question-paper-generator
-pip install -r requirements.txt
 ```
 
----
-
-## ▶️ Run the Project
-
+### 2. Backend Setup
 ```bash
+cd backend
+python -m venv venv
+# Windows:
+venv\Scripts\activate
+# Linux/macOS:
+source venv/bin/activate
+
+pip install -r requirements.txt
 python app.py
 ```
+> The backend server will start at `http://127.0.0.1:5000` and automatically seed the database with 2,500+ DevOps PYQs.
 
-Open in browser:
-
+### 3. Frontend Setup
+```bash
+cd frontend
+npm install
+npm run dev
 ```
-http://127.0.0.1:5000
-```
+> Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
 
-## 🧠 How It Works
+## 📡 API Endpoints
 
-1. User selects a DevOps/AWS subject and inputs syllabus
-2. NLP extracts key topics
-3. PYQs are analyzed for patterns
-4. AI generates questions
-5. Smart engine selects best questions
-6. Final paper is formatted and exported
-
----
-
-## 💰 Cost Efficiency
-
-This project uses **pretrained models**, so:
-
-* ❌ No expensive training required
-* ✅ Runs on standard CPU
-* ✅ Minimal cost
+| Endpoint | Method | Description |
+| :--- | :---: | :--- |
+| `/api/generate` | `POST` | Generates a new structured question paper from syllabus & parameters |
+| `/api/papers` | `GET` | Retrieves all previously generated papers |
+| `/api/papers/<id>` | `GET` | Retrieves details for a specific paper |
+| `/api/papers/<id>` | `PUT` | Updates paper content (modified questions, marks, title) |
+| `/api/papers/<id>` | `DELETE` | Deletes a paper from the history |
+| `/api/papers/<id>/solutions` | `GET` | Returns model solutions, explanations, and grading rubrics |
+| `/api/papers/<id>/pdf` | `GET` | Exports the paper as a print-ready PDF |
+| `/api/question-bank` | `GET` | Paginated search & filter for 2,500+ PYQ questions |
+| `/api/analytics` | `GET` | Aggregated platform intelligence metrics, subject counts, and difficulty ratios |
+| `/api/subjects` | `GET` | Lists all supported subjects |
+| `/api/analyze-syllabus` | `POST` | Extracts units and topics from raw syllabus text |
 
 ---
 
-## 🎯 Future Improvements
+## 👨‍💻 Creator
 
-* 🔍 Add MCQ generation
-* 🌐 Deploy as web app
-* 📊 Analytics dashboard
-* 🧾 Multiple exam formats
+Developed with ❤️ by **[H A R S H H A A](https://github.com/NotHarshhaa)**
+* **GitHub:** [@NotHarshhaa](https://github.com/NotHarshhaa)
+* **LinkedIn:** [notharshhaa](https://linkedin.com/in/notharshhaa)
+* **Email:** [contact@harshhaa.dev](mailto:contact@harshhaa.dev)
 
 ---
 
 ## 📜 License
 
-This project is open-source and available under the MIT License.
+This project is open-source and available under the [MIT License](LICENSE).

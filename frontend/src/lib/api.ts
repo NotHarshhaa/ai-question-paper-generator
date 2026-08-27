@@ -124,6 +124,68 @@ export interface PaperHistoryItem {
   organization_name: string;
 }
 
+export interface QuestionBankItem {
+  id: number;
+  subject: string;
+  text: string;
+  answer: string;
+  marks: number;
+  difficulty: "easy" | "medium" | "hard";
+  question_type: string;
+  topic: string;
+  source_file: string;
+}
+
+export interface QuestionBankResponse {
+  questions: QuestionBankItem[];
+  total: number;
+  page: number;
+  limit: number;
+  total_pages: number;
+}
+
+export interface AnalyticsSubjectItem {
+  subject: string;
+  count: number;
+  easy: number;
+  medium: number;
+  hard: number;
+}
+
+export interface AnalyticsTopicItem {
+  topic: string;
+  count: number;
+}
+
+export interface AnalyticsData {
+  total_questions: number;
+  difficulty: {
+    easy: number;
+    medium: number;
+    hard: number;
+  };
+  subjects: AnalyticsSubjectItem[];
+  top_topics: AnalyticsTopicItem[];
+  papers_generated: number;
+  avg_paper_marks: number;
+  recent_papers: PaperHistoryItem[];
+}
+
+export interface SolutionItem {
+  question_id: string;
+  text: string;
+  marks: number;
+  difficulty: string;
+  solution: string;
+  key_points: string[];
+}
+
+export interface PaperSolutionsResponse {
+  paper_id: string;
+  subject: string;
+  solutions: SolutionItem[];
+}
+
 export const api = {
   generatePaper: (data: GenerateRequest) =>
     request<GeneratedPaper>("/generate", {
@@ -135,6 +197,12 @@ export const api = {
 
   getPaper: (id: string) => request<GeneratedPaper>(`/papers/${id}`),
 
+  updatePaper: (id: string, data: Partial<GeneratedPaper>) =>
+    request<{ message: string; paper: GeneratedPaper }>(`/papers/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(data),
+    }),
+
   deletePaper: (id: string) =>
     request<{ message: string }>(`/papers/${id}`, { method: "DELETE" }),
 
@@ -144,7 +212,31 @@ export const api = {
     return res.blob();
   },
 
+  getPaperSolutions: (id: string) =>
+    request<PaperSolutionsResponse>(`/papers/${id}/solutions`),
+
   getSubjects: () => request<string[]>("/subjects"),
+
+  getQuestionBank: (params?: {
+    subject?: string;
+    difficulty?: string;
+    type?: string;
+    search?: string;
+    page?: number;
+    limit?: number;
+  }) => {
+    const searchParams = new URLSearchParams();
+    if (params?.subject) searchParams.append("subject", params.subject);
+    if (params?.difficulty) searchParams.append("difficulty", params.difficulty);
+    if (params?.type) searchParams.append("type", params.type);
+    if (params?.search) searchParams.append("search", params.search);
+    if (params?.page) searchParams.append("page", params.page.toString());
+    if (params?.limit) searchParams.append("limit", params.limit.toString());
+    const queryString = searchParams.toString();
+    return request<QuestionBankResponse>(`/question-bank${queryString ? `?${queryString}` : ""}`);
+  },
+
+  getAnalytics: () => request<AnalyticsData>("/analytics"),
 
   analyzeSyllabus: (syllabus: string) =>
     request<{ topics: string[]; units: string[] }>("/analyze-syllabus", {

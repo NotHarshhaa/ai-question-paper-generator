@@ -59,7 +59,104 @@ class TestAPIEndpoints(unittest.TestCase):
         self.assertEqual(data["status"], "success")
         self.assertIn("backup_file", data)
 
+    def test_async_generation_and_polling(self):
+        payload = {
+            "subject": "AWS Cloud Fundamentals",
+            "syllabus": "Unit 1: Cloud Concepts\n- S3 Storage Classes\n- EC2 Pricing",
+            "num_questions": 2,
+            "total_marks": 10
+        }
+        res = self.client.post("/api/generate/async", json=payload)
+        self.assertEqual(res.status_code, 202)
+        data = res.get_json()
+        self.assertIn("task_id", data)
+        task_id = data["task_id"]
+
+        poll_res = self.client.get(f"/api/tasks/{task_id}")
+        self.assertEqual(poll_res.status_code, 200)
+        task_data = poll_res.get_json()
+        self.assertIn(task_data["status"], ["queued", "processing", "completed"])
+
+        # Wait for completion so subsequent database tests don't encounter locked tables
+        import time
+        for _ in range(50):
+            p = self.client.get(f"/api/tasks/{task_id}").get_json()
+            if p["status"] in ("completed", "failed"):
+                break
+            time.sleep(0.1)
+
+    def test_lms_exports(self):
+        import uuid
+        from database.db import save_paper
+        paper_id = f"test-lms-{uuid.uuid4().hex[:8]}"
+        test_paper = {
+            "id": paper_id,
+            "subject": "Docker Containerization",
+            "total_marks": 20,
+            "duration_minutes": 60,
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "What is the primary difference between an image and a container?",
+                    "marks": 5,
+                    "bloom_level": "Understand",
+                    "options": ["Image is static, container is runtime", "No difference", "Container is larger", "None"],
+                    "answer": "Image is static, container is runtime"
+                }
+            ],
+            "sections": [
+                {
+                    "name": "Section A",
+                    "total_marks": 20,
+                    "questions": [
+                        {
+                            "id": "q1",
+                            "text": "What is the primary difference between an image and a container?",
+                            "marks": 5,
+                            "bloom_level": "Understand",
+                            "options": ["Image is static, container is runtime", "No difference", "Container is larger", "None"],
+                            "answer": "Image is static, container is runtime"
+                        }
+                    ]
+                }
+            ],
+            "created_at": "2026-09-13T00:00:00Z"
+        }
+        save_paper(test_paper)
+
+        # 1. Moodle XML
+        moodle_res = self.client.get(f"/api/papers/{test_paper['id']}/export/moodle")
+        self.assertEqual(moodle_res.status_code, 200)
+        self.assertIn(b"<quiz>", moodle_res.data)
+
+        # 2. QTI 2.1
+        qti_res = self.client.get(f"/api/papers/{test_paper['id']}/export/qti")
+        self.assertEqual(qti_res.status_code, 200)
+        self.assertIn(b"<questestinterop", qti_res.data)
+
+        # 3. Google Forms
+        gf_res = self.client.get(f"/api/papers/{test_paper['id']}/export/google-forms")
+        self.assertEqual(gf_res.status_code, 200)
+        gf_data = gf_res.get_json()
+        self.assertIn("items", gf_data)
+
+        # 4. Word DOCX
+        docx_res = self.client.get(f"/api/papers/{test_paper['id']}/export/docx")
+        self.assertEqual(docx_res.status_code, 200)
+        self.assertGreater(len(docx_res.data), 1000)
+
+    def test_hybrid_rag_search(self):
+        from app import rag_engine
+        results = rag_engine.search("kubectl rollout undo", top_k=3)
+        self.assertIsInstance(results, list)
+        if results:
+            first = results[0]
+            self.assertIn("similarity_score", first)
+            self.assertIn("bm25_score", first)
+            self.assertIn("rrf_score", first)
+
 
 if __name__ == "__main__":
     unittest.main()
+
 

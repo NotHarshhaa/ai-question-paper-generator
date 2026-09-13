@@ -22,6 +22,7 @@ export default function GeneratePage() {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [progressValue, setProgressValue] = useState(0);
+  const [stageDescription, setStageDescription] = useState("");
   const [form, setForm] = useState<FormState>(initialFormState);
 
   const updateForm = (updates: Partial<FormState>) => {
@@ -45,11 +46,8 @@ export default function GeneratePage() {
       return;
     }
     setLoading(true);
-    setProgressValue(0);
-
-    const interval = setInterval(() => {
-      setProgressValue((prev) => Math.min(prev + Math.random() * 10, 85));
-    }, 800);
+    setProgressValue(10);
+    setStageDescription("Initializing exam generation pipeline...");
 
     try {
       const selectedPattern = examPatterns.find(
@@ -74,14 +72,44 @@ export default function GeneratePage() {
         exam_structure: selectedPattern?.structure,
       };
 
-      const paper = await api.generatePaper(requestData);
+      let generatedPaperId: string | null = null;
+
+      try {
+        // Step 1: Submit to async task queue to guarantee zero HTTP connection timeouts
+        const asyncJob = await api.generatePaperAsync(requestData);
+        const taskId = asyncJob.task_id;
+
+        // Poll task status every 1.5s
+        while (true) {
+          await new Promise((resolve) => setTimeout(resolve, 1500));
+          const task = await api.getTaskStatus(taskId);
+          if (task.progress) setProgressValue(task.progress);
+          if (task.stage) setStageDescription(task.stage);
+
+          if (task.status === "completed" && task.result) {
+            generatedPaperId = task.result.id;
+            break;
+          }
+          if (task.status === "failed") {
+            throw new Error(task.error || "Paper generation failed on worker");
+          }
+        }
+      } catch (asyncErr: unknown) {
+        console.warn("Async queue fallback to direct generation:", asyncErr);
+        setStageDescription("Synthesizing questions via direct pipeline...");
+        const paper = await api.generatePaper(requestData);
+        generatedPaperId = paper.id;
+      }
+
       setProgressValue(100);
-      clearInterval(interval);
+      setStageDescription("Paper generated successfully! Loading viewer...");
       toast.success("Question paper generated successfully!");
-      router.push(`/paper/${paper.id}`);
+      if (generatedPaperId) {
+        router.push(`/paper/${generatedPaperId}`);
+      }
     } catch (err: unknown) {
-      clearInterval(interval);
       setProgressValue(0);
+      setStageDescription("");
       const message =
         err instanceof Error ? err.message : "Failed to generate paper";
       toast.error(message, { duration: 8000 });
@@ -150,6 +178,7 @@ export default function GeneratePage() {
           form={form}
           loading={loading}
           progressValue={progressValue}
+          stageDescription={stageDescription}
           canSubmit={canSubmit}
           onGenerate={handleGenerate}
           onBack={() => setStep(4)}

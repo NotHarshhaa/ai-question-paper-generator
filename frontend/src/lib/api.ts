@@ -317,5 +317,46 @@ export const api = {
       units: string[];
     }>;
   },
+
+  generatePaperAsync: (data: GenerateRequest) =>
+    request<{ task_id: string; status: string; poll_url: string }>("/generate/async", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+
+  getTaskStatus: (taskId: string) =>
+    request<{
+      task_id: string;
+      status: "queued" | "processing" | "completed" | "failed";
+      progress: number;
+      stage: string;
+      result?: GeneratedPaper;
+      error?: string;
+    }>(`/tasks/${taskId}`),
+
+  exportMoodle: async (id: string) => {
+    const res = await fetch(`${API_BASE}/papers/${id}/export/moodle`);
+    if (!res.ok) throw new Error("Failed to export Moodle XML");
+    return res.blob();
+  },
+
+  exportQti: async (id: string) => {
+    const res = await fetch(`${API_BASE}/papers/${id}/export/qti`);
+    if (!res.ok) throw new Error("Failed to export QTI 2.1");
+    return res.blob();
+  },
+
+  exportGoogleForms: async (id: string) => {
+    const res = await fetch(`${API_BASE}/papers/${id}/export/google-forms`);
+    if (!res.ok) throw new Error("Failed to export Google Forms schema");
+    return res.json();
+  },
+
+  exportDocx: async (id: string) => {
+    const res = await fetch(`${API_BASE}/papers/${id}/export/docx`);
+    if (!res.ok) throw new Error("Failed to export Word document");
+    return res.blob();
+  },
 };
+
 

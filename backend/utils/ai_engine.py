@@ -147,6 +147,7 @@ class AIEngine:
             "- Write clear, professional questions testing practical knowledge, trade-offs, architecture, and troubleshooting.\n"
             "- Avoid trivial filler questions.\n"
             "- Include realistic production considerations (e.g. high availability, security, cost, automation).\n"
+            "- For system architecture, network topology, or CI/CD questions, optionally embed a clean Mermaid diagram (```mermaid ... ```) to test the candidate's analysis.\n"
         )
 
         result = self.llm_gateway.generate_json(system_prompt, user_prompt, temperature=0.7)

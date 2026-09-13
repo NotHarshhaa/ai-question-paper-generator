@@ -9,6 +9,7 @@ interface StepReviewProps {
   form: FormState;
   loading: boolean;
   progressValue: number;
+  stageDescription?: string;
   canSubmit: boolean;
   onGenerate: () => void;
   onBack: () => void;
@@ -18,6 +19,7 @@ export const StepReview: React.FC<StepReviewProps> = ({
   form,
   loading,
   progressValue,
+  stageDescription,
   canSubmit,
   onGenerate,
   onBack,
@@ -101,12 +103,20 @@ export const StepReview: React.FC<StepReviewProps> = ({
 
         {/* Progress Bar */}
         {loading && (
-          <div className="space-y-2">
+          <div className="space-y-2 p-3.5 rounded-xl bg-slate-900/50 border border-slate-800">
             <div className="flex justify-between text-sm">
-              <span>Generating paper...</span>
-              <span>{progressValue}%</span>
+              <span className="font-medium text-foreground flex items-center gap-2">
+                <span className="h-2 w-2 rounded-full bg-indigo-500 animate-ping" />
+                Generating Examination Paper
+              </span>
+              <span className="font-mono text-xs text-indigo-400 font-bold">{progressValue}%</span>
             </div>
-            <Progress value={progressValue} className="w-full" />
+            <Progress value={progressValue} className="w-full h-2" />
+            {stageDescription && (
+              <p className="text-xs text-muted-foreground font-mono transition-all">
+                {stageDescription}
+              </p>
+            )}
           </div>
         )}
 

@@ -64,3 +64,65 @@ export function copyPaperPlainText(
   toast.success("Paper copied to clipboard!");
   setTimeout(() => setCopied(false), 2000);
 }
+
+export async function exportPaperMoodle(paper: GeneratedPaper) {
+  try {
+    const blob = await api.exportMoodle(paper.id);
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${paper.subject.replace(/\s+/g, "_")}_moodle.xml`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success("Moodle XML exported successfully!");
+  } catch {
+    toast.error("Failed to export Moodle XML");
+  }
+}
+
+export async function exportPaperQti(paper: GeneratedPaper) {
+  try {
+    const blob = await api.exportQti(paper.id);
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${paper.subject.replace(/\s+/g, "_")}_qti21.xml`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success("Canvas / Blackboard QTI 2.1 exported successfully!");
+  } catch {
+    toast.error("Failed to export QTI package");
+  }
+}
+
+export async function exportPaperGoogleForms(paper: GeneratedPaper) {
+  try {
+    const data = await api.exportGoogleForms(paper.id);
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${paper.subject.replace(/\s+/g, "_")}_google_forms.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success("Google Forms schema exported!");
+  } catch {
+    toast.error("Failed to export Google Forms schema");
+  }
+}
+
+export async function exportPaperDocx(paper: GeneratedPaper) {
+  try {
+    const blob = await api.exportDocx(paper.id);
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${paper.subject.replace(/\s+/g, "_")}_Question_Paper.docx`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success("Word document (.docx) exported!");
+  } catch {
+    toast.error("Failed to export Word document");
+  }
+}
+

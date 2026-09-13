@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { Copy, Check, Terminal, Network, Code2 } from "lucide-react";
+import { MermaidDiagram } from "./mermaid-diagram";
 
 interface RichContentProps {
   content: string;
@@ -107,6 +108,22 @@ const TextSection: React.FC<{ text: string }> = ({ text }) => {
 const CodeOrDiagramBlock: React.FC<{ language: string; code: string }> = ({ language, code }) => {
   const [copied, setCopied] = useState(false);
 
+  const cleanCode = code.trim();
+  const isMermaid =
+    language === "mermaid" ||
+    cleanCode.startsWith("graph ") ||
+    cleanCode.startsWith("graph TD") ||
+    cleanCode.startsWith("graph LR") ||
+    cleanCode.startsWith("flowchart ") ||
+    cleanCode.startsWith("flowchart TD") ||
+    cleanCode.startsWith("flowchart LR") ||
+    cleanCode.startsWith("sequenceDiagram") ||
+    cleanCode.startsWith("classDiagram");
+
+  if (isMermaid) {
+    return <MermaidDiagram chart={code} />;
+  }
+
   const handleCopy = () => {
     navigator.clipboard.writeText(code);
     setCopied(true);
@@ -114,7 +131,6 @@ const CodeOrDiagramBlock: React.FC<{ language: string; code: string }> = ({ lang
   };
 
   const isDiagram =
-    language === "mermaid" ||
     language === "ascii" ||
     language === "diagram" ||
     code.includes("+--") ||

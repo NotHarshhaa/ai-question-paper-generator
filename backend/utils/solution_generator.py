@@ -435,10 +435,11 @@ def _generate_solution_with_llm(question: Dict[str, Any], llm_gateway) -> Option
     system_prompt = (
         "You are an expert cloud architect and professor creating an official Teacher Solution Key for AWS and DevOps examinations.\n"
         "Generate a concrete, production-grade model solution with exact CLI commands, code blocks (YAML, HCL, Bash), architectural details, and an itemized grading rubric.\n"
+        "When explaining system architecture, topologies, or data flow, embed an interactive Mermaid diagram (```mermaid ... ```) illustrating the design.\n"
         "Do NOT provide meta-instructions. Provide the ACTUAL complete technical answer that would receive 100% marks.\n"
         "Return a JSON object:\n"
         "{\n"
-        "  \"solution\": \"Markdown-formatted complete technical solution with code/commands\",\n"
+        "  \"solution\": \"Markdown-formatted complete technical solution with code/commands and optional mermaid diagram\",\n"
         "  \"key_points\": [\"Specific rubric criterion 1 (X Marks)\", \"Specific rubric criterion 2 (Y Marks)\"]\n"
         "}"
     )

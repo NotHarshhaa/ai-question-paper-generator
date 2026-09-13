@@ -7,6 +7,10 @@ An intelligent full-stack system that automatically generates **DevOps and AWS c
 ## 🚀 Key AI & ML Features
 
 * 🤖 **Multi-Provider LLM Gateway**: Seamless integration with **Google Gemini** (`gemini-2.0-flash`), **OpenAI** (`gpt-4o-mini`), **Groq** (`llama-3.3-70b`), **DeepSeek**, **Anthropic**, and local **Ollama** (`llama3`), with structured JSON schema output validation and resilient offline fallbacks.
+* 📊 **Interactive Mermaid.js Architecture Diagrams**: Visual topology rendering for cloud architecture, CI/CD pipelines, and multi-tier systems. Diagrams render dynamically in browser with fullscreen preview, copyable code, and instant dark mode support.
+* ⚡ **True Hybrid RAG Grounding Engine (Dense + BM25)**: Combines dense semantic Sentence-BERT embeddings (`all-MiniLM-L6-v2`) with lexical Okapi BM25 keyword matching via Reciprocal Rank Fusion (RRF). Features compressed on-disk vector caching (`.cache/rag_embeddings.npz`) for instant (<100ms) cold starts.
+* ⏳ **Async Generation Task Queue & Live Stage Progress**: Background worker pool (`POST /api/generate/async` and `GET /api/tasks/<id>`) that eliminates HTTP proxy timeouts on large exams, providing real-time stage progress updates in the UI.
+* 🎓 **Full LMS & Multi-Format Exporters**: Direct one-click exports to **Moodle Quiz XML**, **Canvas & Blackboard IMS QTI 2.1**, **Google Forms JSON Schema**, and styled **Microsoft Word (`.docx`)** documents alongside formatted PDF, Markdown, and JSON.
 * 📁 **Universal Syllabus Document Ingestion**: Upload real academic or enterprise syllabi in **PDF (`.pdf`)**, **Word (`.docx`)**, or text/markdown (`.txt`, `.md`) with server-side extraction (`pdfplumber` + `python-docx`) and smart fallback parsing.
 * 🧠 **Flexible Syllabus Architecture Parsing**: Automatically detects syllabus structures across Units, Modules, Chapters, Roman numerals, comma-separated lists, and multi-line paragraph descriptions without requiring rigid bullet lists.
 * 💻 **DevOps Syntax & ASCII Architecture Diagram Rendering**: Built-in `RichContent` renderer that color-highlights **YAML, Terraform HCL, Dockerfile, Bash, and JSON** code blocks and cleanly renders ASCII architecture topologies in questions and model solutions.
@@ -14,12 +18,10 @@ An intelligent full-stack system that automatically generates **DevOps and AWS c
 * 📝 **LLM-as-a-Judge Auto-Grader**: Grades student submissions against a 4-pillar rubric (Technical Correctness 40%, Syntax & Command Precision 30%, Completeness 20%, Clarity 10%) with line-by-line feedback, concept coverage metrics, and actionable improvement tips.
 * 🎯 **MCQ & Contextual Distractor Synthesis**: Generates 4-option certification MCQs with realistic distractors targeting specific cloud engineering misconceptions (e.g. S3 storage classes, Kubernetes service types, Terraform state locking) and detailed explanations.
 * 🎓 **Context-Aware Bloom's Taxonomy Classifier**: Categorizes questions into cognitive depth (*Remember, Understand, Apply, Analyze, Evaluate, Create*) using context-aware heuristics and LLM batch evaluation to ensure balanced exams.
-* 🔍 **Vector RAG Grounding Engine**: High-speed vector index across 2,500+ authentic PYQs (using Sentence-BERT `all-MiniLM-L6-v2`) to ground LLM generation in verified exam patterns.
 * 🔑 **Teacher Solution Key Mode**: Instantly generates comprehensive model answers with verified CLI syntax, IaC manifests (YAML/HCL), and point-by-point grading rubrics.
 * 🗂️ **Interactive Question Bank (2,500+ Questions)**: Browse, search, filter, and practice curated questions with complete solutions across 18+ DevOps & Cloud domains.
 * ✍️ **Interactive Paper Editor**: Modify questions, update marks, rebalance sections, or add custom questions inline.
 * 📊 **Platform Analytics & PYQ Intelligence**: Real-time visual metrics on subject question volume, difficulty ratios, and Bloom's taxonomy distributions.
-* 📄 **Multi-Format Export**: Export exams to **PDF** (via ReportLab), **Markdown (`.md`)**, **JSON (`.json`)**, or formatted **Clipboard Copy**.
 
 ---
 
@@ -190,6 +192,8 @@ bash scripts/backup_db.sh
 | Endpoint | Method | Description |
 | :--- | :---: | :--- |
 | `/api/generate` | `POST` | Generates a structured question paper with Bloom cognitive tagging |
+| `/api/generate/async` | `POST` | Submits generation job to background thread pool (returns `task_id` for polling) |
+| `/api/tasks/<task_id>` | `GET` | Polls async generation status (progress %, stage description, and final paper result) |
 | `/api/evaluate-answer` | `POST` | AI Auto-Grades a student answer using LLM-as-a-Judge (or semantic embeddings fallback) |
 | `/api/generate-mcq` | `POST` | Generates 4-option certification MCQs with realistic distractors & explanations |
 | `/api/llm/status` | `GET` | Returns active LLM provider, model, and availability status |
@@ -199,6 +203,10 @@ bash scripts/backup_db.sh
 | `/api/papers/<id>` | `DELETE` | Deletes a paper from history |
 | `/api/papers/<id>/solutions` | `GET` | Returns concrete model solutions, code snippets, and grading rubrics |
 | `/api/papers/<id>/pdf` | `GET` | Exports the paper as a print-ready PDF |
+| `/api/papers/<id>/export/docx` | `GET` | Exports styled Microsoft Word (`.docx`) examination document |
+| `/api/papers/<id>/export/moodle` | `GET` | Exports Moodle Quiz XML (`.xml`) for direct LMS course import |
+| `/api/papers/<id>/export/qti` | `GET` | Exports Canvas / Blackboard IMS QTI 2.1 package (`.xml`) |
+| `/api/papers/<id>/export/google-forms` | `GET` | Generates Google Forms API quiz schema (`.json`) |
 | `/api/question-bank` | `GET` | Paginated search & filter for 2,500+ PYQ questions |
 | `/api/analytics` | `GET` | Aggregated metrics, subject breakdown, and Bloom taxonomy distribution |
 | `/api/subjects` | `GET` | Lists all supported subjects |

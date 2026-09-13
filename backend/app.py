@@ -2,10 +2,18 @@ import os
 import uuid
 import logging
 from threading import BoundedSemaphore
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 
-from flask import Flask, request, jsonify, send_file
+from flask import Flask, request, jsonify, send_file, Response
 from flask_cors import CORS
+
+from utils.lms_exporter import (
+    export_to_moodle_xml,
+    export_to_qti_21,
+    export_to_google_forms,
+    export_to_docx,
+)
 
 from config import (
     FLASK_HOST,
@@ -57,6 +65,9 @@ except Exception:
 
 # Concurrency semaphore prevents parallel heavy ML generations from starving CPU / crashing OOM
 generation_semaphore = BoundedSemaphore(value=MAX_CONCURRENT_GENERATIONS)
+task_executor = ThreadPoolExecutor(max_workers=MAX_CONCURRENT_GENERATIONS)
+GENERATION_TASKS = {}
+
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -94,6 +105,202 @@ except Exception as _exc:
     logger.warning("Model pre-load encountered an error (fallback will be used): %s", _exc)
 
 
+def _execute_paper_generation(data: dict, progress_cb=None) -> dict:
+    subject = data.get("subject", "").strip()
+    syllabus = data.get("syllabus", "").strip()
+    exam_pattern = data.get("exam_pattern", "standard")
+    total_marks = int(data.get("total_marks", 80))
+    duration_minutes = int(data.get("duration_minutes", 180))
+    num_questions = int(data.get("num_questions", 9))
+    difficulty_distribution = data.get("difficulty_distribution", {"easy": 30, "medium": 50, "hard": 20})
+    organization_name = data.get("organization_name", "").strip()
+    semester = data.get("semester", "").strip()
+
+    short_questions_count = int(data.get("short_questions_count", 5))
+    short_questions_marks = int(data.get("short_questions_marks", 2))
+    short_questions_total = int(data.get("short_questions_total", 10))
+    short_questions_choice_generate = int(data.get("short_questions_choice_generate", 7))
+    short_questions_choice_attempt = int(data.get("short_questions_choice_attempt", 5))
+    long_questions_count = int(data.get("long_questions_count", 8))
+    long_questions_marks = int(data.get("long_questions_marks", 15))
+    long_questions_total = int(data.get("long_questions_total", 60))
+
+    if not subject or not syllabus:
+        raise ValueError("Subject and syllabus are required")
+    if len(syllabus) < 10:
+        raise ValueError("Syllabus must be at least 10 characters")
+
+    logger.info("Generating paper for subject: %s, pattern: %s", subject, exam_pattern)
+
+    # Step 1: NLP — Extract topics and units
+    if progress_cb:
+        progress_cb(15, "Analyzing syllabus & extracting unit topics...")
+    topics = nlp.extract_topics(syllabus)
+    units = nlp.extract_units(syllabus)
+    unit_topic_map = nlp.map_topics_to_units(syllabus)
+    important_topics = nlp.get_important_topics(syllabus, top_n=20)
+
+    # Step 2: AI — Generate questions using Hybrid RAG
+    if progress_cb:
+        progress_cb(40, "Retrieving grounded PYQs via Hybrid RAG & synthesizing questions...")
+    all_questions = []
+
+    if exam_pattern == "certification":
+        short_questions_per_topic = max(1, (short_questions_count * 2) // max(len(important_topics), 1))
+        long_questions_per_topic = max(1, (long_questions_count * 2) // max(len(important_topics), 1))
+
+        for topic in important_topics:
+            topic_unit = "Unit 1"
+            for unit_name, unit_topics in unit_topic_map.items():
+                unit_topics_list: list[str] = list(unit_topics)
+                if any(topic.lower() in t.lower() or t.lower() in topic.lower() for t in unit_topics_list):
+                    topic_unit = unit_name
+                    break
+
+            grounding_ctx = rag_engine.get_grounding_context(topic, subject=subject, top_k=2)
+            try:
+                pyq_short = ai_engine.generate_questions_with_rag_pyq(
+                    subject, f"{topic} (short answer)", short_questions_per_topic,
+                    grounding_context=grounding_ctx
+                )
+            except Exception:
+                pyq_short = ai_engine._generate_fallback_questions_dict(topic, short_questions_per_topic, short_mode=True)
+
+            for q_data in pyq_short:
+                all_questions.append({
+                    "id": str(uuid.uuid4()),
+                    "text": q_data["text"],
+                    "marks": short_questions_marks,
+                    "difficulty": q_data["difficulty"],
+                    "unit": topic_unit,
+                    "topic": topic,
+                    "question_type": "short",
+                    "source": q_data.get("source", "Hybrid RAG Engine"),
+                })
+
+            try:
+                pyq_long = ai_engine.generate_questions_with_rag_pyq(
+                    subject, f"{topic} (long answer)", long_questions_per_topic,
+                    grounding_context=grounding_ctx
+                )
+            except Exception:
+                pyq_long = ai_engine._generate_fallback_questions_dict(topic, long_questions_per_topic, short_mode=False)
+
+            for q_data in pyq_long:
+                all_questions.append({
+                    "id": str(uuid.uuid4()),
+                    "text": q_data["text"],
+                    "marks": long_questions_marks,
+                    "difficulty": q_data["difficulty"],
+                    "unit": topic_unit,
+                    "topic": topic,
+                    "question_type": "long",
+                    "source": q_data.get("source", "Hybrid RAG Engine"),
+                })
+    else:
+        questions_per_topic = max(1, (num_questions * 2) // max(len(important_topics), 1))
+        for topic in important_topics:
+            topic_unit = "Unit 1"
+            for unit_name, unit_topics in unit_topic_map.items():
+                unit_topics_list_gen: list[str] = list(unit_topics)
+                if any(topic.lower() in t.lower() or t.lower() in topic.lower() for t in unit_topics_list_gen):
+                    topic_unit = unit_name
+                    break
+
+            grounding_ctx = rag_engine.get_grounding_context(topic, subject=subject, top_k=2)
+            try:
+                pyq_generated = ai_engine.generate_questions_with_rag_pyq(
+                    subject, topic, questions_per_topic, grounding_context=grounding_ctx
+                )
+            except Exception:
+                pyq_generated = ai_engine._generate_fallback_questions_dict(topic, questions_per_topic)
+
+            for q_data in pyq_generated:
+                all_questions.append({
+                    "id": str(uuid.uuid4()),
+                    "text": q_data["text"],
+                    "marks": q_data["marks"],
+                    "difficulty": q_data["difficulty"],
+                    "unit": topic_unit,
+                    "topic": topic,
+                    "question_type": q_data.get("question_type") or "descriptive",
+                    "source": q_data.get("source", "Hybrid RAG Engine"),
+                })
+
+    # Step 3: Selection
+    if progress_cb:
+        progress_cb(70, "Eliminating duplicates & selecting balanced questions...")
+    if exam_pattern == "certification":
+        short_questions = [q for q in all_questions if q.get("question_type") == "short"]
+        long_questions = [q for q in all_questions if q.get("question_type") == "long"]
+        selected_short = short_questions[:short_questions_choice_generate]
+        selected_long = long_questions[:long_questions_count]
+        selected = selected_short + selected_long
+    else:
+        try:
+            selected = selector.select_questions(
+                all_questions, difficulty_distribution, num_questions
+            )
+        except Exception as e:
+            logger.warning("Smart selection fallback: %s", e)
+            import itertools
+            selected = list(itertools.islice(all_questions, num_questions))
+
+    # Step 4: Structure Paper
+    if progress_cb:
+        progress_cb(85, "Structuring paper sections and marks...")
+    try:
+        if exam_pattern == "certification":
+            sections = structurer.structure_certification_paper(
+                selected,
+                short_questions_count, short_questions_marks, short_questions_total,
+                short_questions_choice_generate, short_questions_choice_attempt,
+                long_questions_count, long_questions_marks, long_questions_total
+            )
+        else:
+            sections = structurer.structure_paper(selected, exam_pattern, total_marks)
+    except Exception as e:
+        logger.warning("Paper structuring fallback: %s", e)
+        sections = [{
+            "name": "Section A",
+            "instructions": "Answer all questions",
+            "questions": selected,
+            "total_marks": sum(q["marks"] for q in selected)
+        }]
+
+    # Step 5: Bloom's Taxonomy
+    if progress_cb:
+        progress_cb(95, "Tagging cognitive depth with Bloom's taxonomy...")
+    selected = bloom.tag_questions(selected)
+    for sec in sections:
+        sec_questions = sec.get("questions")
+        if isinstance(sec_questions, list):
+            sec["questions"] = bloom.tag_questions(sec_questions)
+
+    paper_id = str(uuid.uuid4())
+    paper = {
+        "id": paper_id,
+        "subject": subject,
+        "organization_name": organization_name,
+        "semester": semester,
+        "syllabus": syllabus,
+        "exam_pattern": exam_pattern,
+        "total_marks": total_marks,
+        "duration_minutes": duration_minutes,
+        "num_questions": len(selected),
+        "difficulty_distribution": difficulty_distribution,
+        "questions": selected,
+        "sections": sections,
+        "syllabus_topics": important_topics,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    }
+
+    save_paper(paper)
+    if progress_cb:
+        progress_cb(100, "Paper generation complete!")
+    return paper
+
+
 @app.route("/api/generate", methods=["POST"])
 def generate_paper():
     acquired = generation_semaphore.acquire(blocking=True, timeout=60)
@@ -107,239 +314,85 @@ def generate_paper():
         data = request.get_json()
         if not data:
             return jsonify({"error": "No JSON data provided"}), 400
-
-        subject = data.get("subject", "").strip()
-        syllabus = data.get("syllabus", "").strip()
-        exam_pattern = data.get("exam_pattern", "standard")
-        total_marks = int(data.get("total_marks", 80))
-        duration_minutes = int(data.get("duration_minutes", 180))
-        num_questions = int(data.get("num_questions", 9))
-        difficulty_distribution = data.get("difficulty_distribution", {"easy": 30, "medium": 50, "hard": 20})
-        organization_name = data.get("organization_name", "").strip()
-        semester = data.get("semester", "").strip()
-
-        # Extract exam pattern details for certification pattern
-        exam_structure = data.get("exam_structure", {})
-        short_questions_count = int(data.get("short_questions_count", 5))
-        short_questions_marks = int(data.get("short_questions_marks", 2))
-        short_questions_total = int(data.get("short_questions_total", 10))
-        short_questions_choice_generate = int(data.get("short_questions_choice_generate", 7))
-        short_questions_choice_attempt = int(data.get("short_questions_choice_attempt", 5))
-        long_questions_count = int(data.get("long_questions_count", 8))
-        long_questions_marks = int(data.get("long_questions_marks", 15))
-        long_questions_total = int(data.get("long_questions_total", 60))
-        long_questions_units = int(data.get("long_questions_units", 4))
-        long_questions_per_unit = int(data.get("long_questions_per_unit", 2))
-
-        if not subject or not syllabus:
-            return jsonify({"error": "Subject and syllabus are required"}), 400
-        if len(syllabus) < 10:
-            return jsonify({"error": "Syllabus must be at least 10 characters"}), 400
-
-        logger.info("Generating paper for subject: %s, pattern: %s", subject, exam_pattern)
-        logger.info("Exam pattern details: short=%d@%d, long=%d@%d", 
-                    short_questions_count, short_questions_marks, 
-                    long_questions_count, long_questions_marks)
-
-        # Step 1: NLP — Extract topics and units
-        topics = nlp.extract_topics(syllabus)
-        units = nlp.extract_units(syllabus)
-        unit_topic_map = nlp.map_topics_to_units(syllabus)
-        important_topics = nlp.get_important_topics(syllabus, top_n=20)
-
-        logger.info("Extracted %d topics, %d units", len(topics), len(units))
-
-        # Step 2: AI — Generate questions using PYQ patterns with fallbacks
-        all_questions = []
-        
-        # For certification pattern, generate specific numbers of short and long questions
-        if exam_pattern == "certification":
-            # Generate short questions (2 marks each)
-            short_questions_per_topic = max(1, (short_questions_count * 2) // max(len(important_topics), 1))
-            long_questions_per_topic = max(1, (long_questions_count * 2) // max(len(important_topics), 1))
-            
-            for topic in important_topics:
-                # Find which unit this topic belongs to
-                topic_unit = "Unit 1"
-                for unit_name, unit_topics in unit_topic_map.items():
-                    unit_topics_list: list[str] = list(unit_topics)
-                    if any(topic.lower() in t.lower() or t.lower() in topic.lower() for t in unit_topics_list):
-                        topic_unit = unit_name
-                        break
-
-                # Generate short questions
-                try:
-                    grounding = rag_engine.get_grounding_context(topic, subject=subject, top_k=2)
-                    pyq_generated = ai_engine.generate_questions_with_pyq_patterns(
-                        subject, f"{topic} (short answer)", short_questions_per_topic, grounding_context=grounding
-                    )
-                    logger.info("Generation successful for short questions on topic: %s", topic)
-                except Exception as e:
-                    logger.warning("PYQ generation failed for %s: %s", topic, e)
-                    pyq_generated = ai_engine._generate_fallback_questions_dict(topic, short_questions_per_topic)
-
-                for q_data in pyq_generated[:short_questions_per_topic]:
-                    all_questions.append({
-                        "id": str(uuid.uuid4()),
-                        "text": q_data["text"],
-                        "marks": short_questions_marks,
-                        "difficulty": q_data["difficulty"],
-                        "unit": topic_unit,
-                        "topic": topic,
-                        "question_type": "short",
-                        "source": q_data["source"],
-                    })
-
-                # Generate long questions
-                try:
-                    grounding = rag_engine.get_grounding_context(topic, subject=subject, top_k=2)
-                    pyq_generated = ai_engine.generate_questions_with_pyq_patterns(
-                        subject, f"{topic} (long answer)", long_questions_per_topic, grounding_context=grounding
-                    )
-                    logger.info("Generation successful for long questions on topic: %s", topic)
-                except Exception as e:
-                    logger.warning("PYQ generation failed for %s: %s", topic, e)
-                    pyq_generated = ai_engine._generate_fallback_questions_dict(topic, long_questions_per_topic)
-
-                for q_data in pyq_generated[:long_questions_per_topic]:
-                    all_questions.append({
-                        "id": str(uuid.uuid4()),
-                        "text": q_data["text"],
-                        "marks": long_questions_marks,
-                        "difficulty": q_data["difficulty"],
-                        "unit": topic_unit,
-                        "topic": topic,
-                        "question_type": "long",
-                        "source": q_data["source"],
-                    })
-        else:
-            # Original logic for other patterns
-            questions_per_topic = max(2, (num_questions * 3) // max(len(important_topics), 1))
-
-            for topic in important_topics:
-                # Find which unit this topic belongs to
-                topic_unit = "Unit 1"
-                for unit_name, unit_topics in unit_topic_map.items():
-                    unit_topics_list: list[str] = list(unit_topics)
-                    if any(topic.lower() in t.lower() or t.lower() in topic.lower() for t in unit_topics_list):
-                        topic_unit = unit_name
-                        break
-
-                # Try question generation with grounding context
-                pyq_generated = []
-                try:
-                    grounding = rag_engine.get_grounding_context(topic, subject=subject, top_k=2)
-                    pyq_generated = ai_engine.generate_questions_with_pyq_patterns(
-                        subject, topic, questions_per_topic, grounding_context=grounding
-                    )
-                    logger.info("Question generation successful for topic: %s", topic)
-                except Exception as e:
-                    logger.warning("PYQ generation failed for %s: %s", topic, e)
-                    # Fallback to simple template questions
-                    pyq_generated = ai_engine._generate_fallback_questions_dict(topic, questions_per_topic)
-
-                for q_data in pyq_generated:
-                    all_questions.append(
-                        {
-                            "id": str(uuid.uuid4()),
-                            "text": q_data["text"],
-                            "marks": q_data["marks"],
-                            "difficulty": q_data["difficulty"],
-                            "unit": topic_unit,
-                            "topic": topic,
-                            "question_type": q_data.get("question_type") or "descriptive",
-                            "source": q_data["source"],
-                        }
-                    )
-
-        logger.info("Generated %d raw questions", len(all_questions))
-
-        # Step 3: Smart Selection with fallback
-        if exam_pattern == "certification":
-            # For certification pattern, select specific numbers of short and long questions
-            short_questions = [q for q in all_questions if q.get("question_type") == "short"]
-            long_questions = [q for q in all_questions if q.get("question_type") == "long"]
-            
-            # Select the required number of questions
-            selected_short = short_questions[:short_questions_choice_generate]  # Generate more than needed
-            selected_long = long_questions[:long_questions_count]
-            selected = selected_short + selected_long
-            
-            logger.info("Certification pattern: selected %d short, %d long questions", 
-                       len(selected_short), len(selected_long))
-        else:
-            # Original logic for other patterns
-            try:
-                selected = selector.select_questions(
-                    all_questions, difficulty_distribution, num_questions
-                )
-                logger.info("Smart selection successful")
-            except Exception as e:
-                logger.warning("Smart selection failed: %s", e)
-                # Simple fallback: take first N questions (use islice to satisfy type checker)
-                import itertools
-                selected = list(itertools.islice(all_questions, num_questions))
-
-        # Step 4: Structure paper with fallback
-        try:
-            # Pass exam pattern details to structurer for certification pattern
-            if exam_pattern == "certification":
-                sections = structurer.structure_certification_paper(
-                    selected, 
-                    short_questions_count, short_questions_marks, short_questions_total,
-                    short_questions_choice_generate, short_questions_choice_attempt,
-                    long_questions_count, long_questions_marks, long_questions_total
-                )
-            else:
-                sections = structurer.structure_paper(selected, exam_pattern, total_marks)
-            logger.info("Paper structuring successful")
-        except Exception as e:
-            logger.warning("Paper structuring failed: %s", e)
-            # Simple fallback: one section with all questions
-            sections = [{
-                "name": "Section A",
-                "instructions": "Answer all questions",
-                "questions": selected,
-                "total_marks": sum(q["marks"] for q in selected)
-            }]
-
-        # Step 5: Bloom's Taxonomy Cognitive Classification
-        selected = bloom.tag_questions(selected)
-        for sec in sections:
-            sec_questions = sec.get("questions")
-            if isinstance(sec_questions, list):
-                sec["questions"] = bloom.tag_questions(sec_questions)
-
-        # Build final paper object
-        paper_id = str(uuid.uuid4())
-        paper = {
-            "id": paper_id,
-            "subject": subject,
-            "organization_name": organization_name,
-            "semester": semester,
-            "syllabus": syllabus,
-            "exam_pattern": exam_pattern,
-            "total_marks": total_marks,
-            "duration_minutes": duration_minutes,
-            "num_questions": len(selected),
-            "difficulty_distribution": difficulty_distribution,
-            "questions": selected,
-            "sections": sections,
-            "syllabus_topics": important_topics,
-            "created_at": datetime.now(timezone.utc).isoformat(),
-        }
-
-        # Save to database
-        save_paper(paper)
-
-        logger.info("Paper generated successfully: %s", paper_id)
+        paper = _execute_paper_generation(data)
         return jsonify(paper)
-
+    except ValueError as val_err:
+        return jsonify({"error": str(val_err)}), 400
     except Exception as e:
         logger.exception("Error generating paper")
         return jsonify({"error": str(e)}), 500
     finally:
         generation_semaphore.release()
+
+
+@app.route("/api/generate/async", methods=["POST"])
+def generate_paper_async():
+    """Submit a paper generation job asynchronously without HTTP timeout risk."""
+    data = request.get_json()
+    if not data:
+        return jsonify({"error": "No JSON data provided"}), 400
+
+    subject = data.get("subject", "").strip()
+    syllabus = data.get("syllabus", "").strip()
+    if not subject or not syllabus:
+        return jsonify({"error": "Subject and syllabus are required"}), 400
+
+    task_id = str(uuid.uuid4())
+    now_iso = datetime.now(timezone.utc).isoformat()
+    GENERATION_TASKS[task_id] = {
+        "task_id": task_id,
+        "status": "queued",
+        "progress": 5,
+        "stage": "Job queued in background worker pool...",
+        "result": None,
+        "error": None,
+        "created_at": now_iso,
+        "updated_at": now_iso,
+    }
+
+    def _async_worker():
+        acquired = generation_semaphore.acquire(blocking=True, timeout=120)
+        if not acquired:
+            GENERATION_TASKS[task_id]["status"] = "failed"
+            GENERATION_TASKS[task_id]["error"] = "Server worker capacity exhausted."
+            return
+
+        try:
+            def _update_progress(percent: int, stage_desc: str):
+                GENERATION_TASKS[task_id]["progress"] = percent
+                GENERATION_TASKS[task_id]["stage"] = stage_desc
+                GENERATION_TASKS[task_id]["status"] = "processing"
+                GENERATION_TASKS[task_id]["updated_at"] = datetime.now(timezone.utc).isoformat()
+
+            paper_result = _execute_paper_generation(data, progress_cb=_update_progress)
+            GENERATION_TASKS[task_id]["status"] = "completed"
+            GENERATION_TASKS[task_id]["progress"] = 100
+            GENERATION_TASKS[task_id]["stage"] = "Examination paper created successfully!"
+            GENERATION_TASKS[task_id]["result"] = paper_result
+            GENERATION_TASKS[task_id]["updated_at"] = datetime.now(timezone.utc).isoformat()
+        except Exception as async_err:
+            logger.exception("Async paper generation failed")
+            GENERATION_TASKS[task_id]["status"] = "failed"
+            GENERATION_TASKS[task_id]["error"] = str(async_err)
+            GENERATION_TASKS[task_id]["updated_at"] = datetime.now(timezone.utc).isoformat()
+        finally:
+            generation_semaphore.release()
+
+    task_executor.submit(_async_worker)
+    return jsonify({
+        "task_id": task_id,
+        "status": "queued",
+        "poll_url": f"/api/tasks/{task_id}"
+    }), 202
+
+
+@app.route("/api/tasks/<task_id>", methods=["GET"])
+def get_task_status(task_id: str):
+    """Retrieve async generation task status and result."""
+    task = GENERATION_TASKS.get(task_id)
+    if not task:
+        return jsonify({"error": "Task not found"}), 404
+    return jsonify(task)
 
 
 
@@ -515,6 +568,74 @@ def export_pdf(paper_id):
         )
     except Exception as e:
         logger.exception("Error exporting PDF")
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/papers/<paper_id>/export/moodle", methods=["GET"])
+def export_moodle(paper_id):
+    try:
+        paper = get_paper_by_id(paper_id)
+        if paper is None:
+            return jsonify({"error": "Paper not found"}), 404
+        xml_content = export_to_moodle_xml(paper)
+        clean_name = paper.get("subject", "exam").replace(" ", "_")
+        return Response(
+            xml_content,
+            mimetype="application/xml",
+            headers={"Content-Disposition": f'attachment; filename="{clean_name}_moodle.xml"'}
+        )
+    except Exception as e:
+        logger.exception("Error exporting Moodle XML")
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/papers/<paper_id>/export/qti", methods=["GET"])
+def export_qti(paper_id):
+    try:
+        paper = get_paper_by_id(paper_id)
+        if paper is None:
+            return jsonify({"error": "Paper not found"}), 404
+        xml_content = export_to_qti_21(paper)
+        clean_name = paper.get("subject", "exam").replace(" ", "_")
+        return Response(
+            xml_content,
+            mimetype="application/xml",
+            headers={"Content-Disposition": f'attachment; filename="{clean_name}_qti21.xml"'}
+        )
+    except Exception as e:
+        logger.exception("Error exporting QTI 2.1")
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/papers/<paper_id>/export/google-forms", methods=["GET"])
+def export_google_forms_endpoint(paper_id):
+    try:
+        paper = get_paper_by_id(paper_id)
+        if paper is None:
+            return jsonify({"error": "Paper not found"}), 404
+        forms_data = export_to_google_forms(paper)
+        return jsonify(forms_data)
+    except Exception as e:
+        logger.exception("Error exporting Google Forms schema")
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/papers/<paper_id>/export/docx", methods=["GET"])
+def export_docx_endpoint(paper_id):
+    try:
+        paper = get_paper_by_id(paper_id)
+        if paper is None:
+            return jsonify({"error": "Paper not found"}), 404
+        docx_stream = export_to_docx(paper)
+        clean_name = paper.get("subject", "exam").replace(" ", "_")
+        return send_file(
+            docx_stream,
+            as_attachment=True,
+            download_name=f"{clean_name}_Question_Paper.docx",
+            mimetype="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        )
+    except Exception as e:
+        logger.exception("Error exporting Word DOCX")
         return jsonify({"error": str(e)}), 500
 
 

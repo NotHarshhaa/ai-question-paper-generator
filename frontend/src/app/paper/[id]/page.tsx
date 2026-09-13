@@ -28,6 +28,10 @@ import {
   exportPaperPdf,
   exportPaperMarkdown,
   copyPaperPlainText,
+  exportPaperDocx,
+  exportPaperMoodle,
+  exportPaperQti,
+  exportPaperGoogleForms,
 } from "./utils/export-helpers";
 
 export default function PaperViewPage() {
@@ -252,6 +256,10 @@ export default function PaperViewPage() {
         onCopyText={() => copyPaperPlainText(paper, setCopied)}
         onExportMarkdown={() => exportPaperMarkdown(paper)}
         onExportPdf={() => exportPaperPdf(paper, setExporting)}
+        onExportDocx={() => exportPaperDocx(paper)}
+        onExportMoodle={() => exportPaperMoodle(paper)}
+        onExportQti={() => exportPaperQti(paper)}
+        onExportGoogleForms={() => exportPaperGoogleForms(paper)}
       />
 
       {/* KPI Info Cards */}

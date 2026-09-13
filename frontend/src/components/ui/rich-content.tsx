@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Copy, Check, Terminal, Network, Code2 } from "lucide-react";
+import { Copy, Check, Terminal, Network } from "lucide-react";
 import { MermaidDiagram } from "./mermaid-diagram";
 
 interface RichContentProps {

@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 import { Heart, Code, User, Mail } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -24,10 +25,13 @@ export const CreatorSection: React.FC = () => {
           <CardContent className="p-6 md:p-8">
             <div className="grid sm:grid-cols-5 gap-6 items-center">
               <div className="sm:col-span-2 flex flex-col items-center justify-center text-center">
-                <img
+                <Image
                   src="https://github.com/NotHarshhaa.png"
                   alt="H A R S H H A A"
+                  width={144}
+                  height={144}
                   className="h-28 w-28 md:h-36 md:w-36 rounded-full border-4 border-primary/20 shadow-md object-cover"
+                  unoptimized
                 />
                 <h3 className="text-lg font-bold mt-3">H A R S H H A A</h3>
                 <p className="text-xs text-muted-foreground">DevOps &amp; Platform Engineer</p>

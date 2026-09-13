@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { toast } from "sonner";
 import {
   api,
@@ -32,7 +32,7 @@ export default function QuestionBankPage() {
   const [isEvaluating, setIsEvaluating] = useState(false);
   const [evalResult, setEvalResult] = useState<AnswerEvaluationResponse | null>(null);
 
-  const fetchQuestions = async (targetPage = page) => {
+  const fetchQuestions = useCallback(async (targetPage = page) => {
     setLoading(true);
     try {
       const res = await api.getQuestionBank({
@@ -51,11 +51,11 @@ export default function QuestionBankPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [page, subject, difficulty, questionType, search]);
 
   useEffect(() => {
     fetchQuestions(1);
-  }, [subject, difficulty, questionType]);
+  }, [fetchQuestions]);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();

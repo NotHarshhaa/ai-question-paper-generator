@@ -7,15 +7,11 @@ import {
   Pause,
   Send,
   Award,
-  CheckCircle2,
-  AlertCircle,
   RotateCcw,
   ChevronLeft,
   ChevronRight,
   Sparkles,
   Loader2,
-  FileCheck,
-  Download,
   Copy,
   Check,
 } from "lucide-react";
@@ -72,8 +68,9 @@ export const PaperStudentArena: React.FC<PaperStudentArenaProps> = ({ paper, sol
   const [scorecard, setScorecard] = useState<ExamScorecard | null>(null);
   const [copiedScorecard, setCopiedScorecard] = useState(false);
 
-  // Timer Ref
+  // Timer Ref & Submit Ref
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const handleSubmitRef = useRef<() => void>(() => {});
 
   useEffect(() => {
     if (!isTimerRunning || isSubmitted) {
@@ -85,7 +82,7 @@ export const PaperStudentArena: React.FC<PaperStudentArenaProps> = ({ paper, sol
       setTimeLeft((prev) => {
         if (prev <= 1) {
           clearInterval(timerRef.current!);
-          handleSubmitExam();
+          handleSubmitRef.current();
           toast.warning("Time has expired! Submitting your examination answers.");
           return 0;
         }
@@ -219,6 +216,8 @@ export const PaperStudentArena: React.FC<PaperStudentArenaProps> = ({ paper, sol
       setIsGrading(false);
     }
   };
+
+  handleSubmitRef.current = handleSubmitExam;
 
   const handleRetakeExam = () => {
     setStudentAnswers({});

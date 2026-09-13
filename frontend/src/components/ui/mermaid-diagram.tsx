@@ -51,10 +51,11 @@ export const MermaidDiagram: React.FC<MermaidDiagramProps> = ({ chart, className
           setSvgContent(svg);
           setError(null);
         }
-      } catch (err: any) {
+      } catch (err: unknown) {
         if (isMounted) {
           console.warn("Mermaid rendering warning:", err);
-          setError(err?.message || "Failed to render diagram");
+          const msg = err instanceof Error ? err.message : "Failed to render diagram";
+          setError(msg);
         }
       }
     }

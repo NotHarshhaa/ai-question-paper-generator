@@ -25,7 +25,7 @@ interface PaperExamTabProps {
     sectionIndex: number,
     questionIndex: number,
     field: keyof Question,
-    value: any
+    value: Question[keyof Question]
   ) => void;
   onDeleteQuestion: (sectionIndex: number, questionIndex: number) => void;
   onAddQuestion: (sectionIndex: number) => void;

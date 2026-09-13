@@ -42,7 +42,7 @@ export interface FormState {
   paper_type: string;
   question_type: string;
   // Custom Pattern (if selected)
-  custom_sections: any[];
+  custom_sections: unknown[];
   // Derived from syllabus (auto-generated)
   units: ProcessedSyllabus[];
   topics: string[];

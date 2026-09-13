@@ -132,7 +132,7 @@ export const StepSettings: React.FC<StepSettingsProps> = ({
           <TabsContent value="ai" className="space-y-4">
             {/* Bloom's Taxonomy */}
             <div className="space-y-3">
-              <Label>Bloom's Taxonomy Level</Label>
+              <Label>Bloom&apos;s Taxonomy Level</Label>
               <Select
                 value={form.bloom_level}
                 onValueChange={(value) => updateForm({ bloom_level: value })}

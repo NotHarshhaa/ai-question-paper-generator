@@ -142,7 +142,7 @@ export default function PaperViewPage() {
     sectionIndex: number,
     questionIndex: number,
     field: keyof Question,
-    value: any
+    value: Question[keyof Question]
   ) => {
     if (!paper) return;
     const newSections = [...paper.sections];

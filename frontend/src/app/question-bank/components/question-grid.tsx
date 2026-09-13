@@ -46,7 +46,7 @@ export const QuestionGrid: React.FC<QuestionGridProps> = ({
           <BookOpen className="h-12 w-12 mx-auto text-muted-foreground/50" />
           <h3 className="text-lg font-semibold">No questions found</h3>
           <p className="text-sm text-muted-foreground max-w-sm mx-auto">
-            We couldn't find any questions matching your current search criteria. Try adjusting your search query or filters.
+            We couldn&apos;t find any questions matching your current search criteria. Try adjusting your search query or filters.
           </p>
           <Button variant="outline" size="sm" onClick={onResetFilters}>
             Clear All Filters

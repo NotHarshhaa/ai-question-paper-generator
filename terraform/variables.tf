@@ -70,3 +70,16 @@ variable "disable_t5_model" {
   type        = bool
   default     = true
 }
+
+variable "enable_persistent_data_volume" {
+  description = "Attach an independent persistent EBS volume for papers.db database storage that survives EC2 recreation"
+  type        = bool
+  default     = false
+}
+
+variable "data_volume_size_gb" {
+  description = "Size of persistent data volume in GB"
+  type        = number
+  default     = 10
+}
+

@@ -1,0 +1,131 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  # ── Backend CI: Linting & Unit Testing ──────────────────────────────────────
+  backend-ci:
+    name: Backend CI (Python 3.11)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8 pytest
+          pip install -r backend/requirements.txt
+
+      - name: Lint with Flake8
+        run: |
+          # Stop build if syntax errors or undefined names exist
+          flake8 backend --count --select=E9,F63,F7,F82 --show-source --statistics
+          # Warning level checks
+          flake8 backend --count --exit-zero --max-complexity=15 --max-line-length=127 --statistics
+
+      - name: Run Backend Unit Tests
+        env:
+          DISABLE_T5_MODEL: "true"
+          FLASK_DEBUG: "false"
+        run: |
+          cd backend
+          python -m unittest discover -s tests -p "test_*.py"
+
+  # ── Frontend CI: Linting & Build Verification ──────────────────────────────
+  frontend-ci:
+    name: Frontend CI (Node.js 20)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install Dependencies
+        run: |
+          cd frontend
+          npm ci
+
+      - name: Run ESLint
+        run: |
+          cd frontend
+          npm run lint
+
+      - name: Build Next.js Application
+        env:
+          NEXT_TELEMETRY_DISABLED: 1
+        run: |
+          cd frontend
+          npm run build
+
+  # ── Terraform CI: Formatting & Validation ──────────────────────────────────
+  terraform-ci:
+    name: Terraform Validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.7.0"
+
+      - name: Terraform Format Check
+        run: |
+          cd terraform
+          terraform fmt -check
+
+      - name: Terraform Init & Validate
+        run: |
+          cd terraform
+          terraform init -backend=false
+          terraform validate
+
+  # ── Docker CI: Build Container Images ──────────────────────────────────────
+  docker-ci:
+    name: Docker Build Verification
+    runs-on: ubuntu-latest
+    needs: [backend-ci, frontend-ci]
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Backend Container
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          file: ./backend/Dockerfile
+          push: false
+          tags: ai-question-paper-backend:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Build Frontend Container
+        uses: docker/build-push-action@v5
+        with:
+          context: ./frontend
+          file: ./frontend/Dockerfile
+          push: false
+          tags: ai-question-paper-frontend:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

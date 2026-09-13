@@ -80,13 +80,27 @@ An intelligent full-stack system that automatically generates **DevOps and AWS c
 
 ## ⚙️ Installation & Setup
 
-### 1. Clone the Repository
+### Option A: ⚡ Instant Launch with Docker Compose (Recommended)
+Launch the complete full-stack environment with a single command:
+```bash
+docker compose up --build
+```
+* **Frontend:** [http://localhost:3000](http://localhost:3000)
+* **Backend API:** [http://localhost:5000](http://localhost:5000)
+* **Storage:** Persistent SQLite volume (`papers_data`) ensures questions and exams survive container restarts.
+* **Healthcheck:** Automatic dependency orchestration ensures the backend is fully initialized before the frontend connects.
+
+---
+
+### Option B: Local Manual Setup
+
+#### 1. Clone the Repository
 ```bash
 git clone https://github.com/NotHarshhaa/ai-question-paper-generator.git
 cd ai-question-paper-generator
 ```
 
-### 2. Backend Setup
+#### 2. Backend Setup
 ```bash
 cd backend
 python -m venv venv
@@ -100,7 +114,7 @@ python app.py
 ```
 > The backend server starts at `http://127.0.0.1:5000`, auto-seeds the database with 2,500+ DevOps PYQs, and builds the Vector RAG index.
 
-### 3. (Optional) Configure Your Preferred LLM Provider
+#### 3. (Optional) Configure Your Preferred LLM Provider
 Create or edit `backend/.env`:
 ```bash
 # Option 1: Google Gemini (Recommended)
@@ -121,13 +135,53 @@ OLLAMA_BASE_URL=http://localhost:11434
 ```
 *Note: If no API key is provided, the platform automatically operates in High-Grade Offline Fallback mode with authentic domain templates.*
 
-### 4. Frontend Setup
+#### 4. Frontend Setup
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
 > Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+---
+
+## 🛡️ Production DevOps & Cloud Infrastructure
+
+### 1. Remote Terraform Backend with S3 & DynamoDB Locking
+To prevent state leakage and lock state across team members:
+```bash
+# 1. Bootstrap S3 bucket and DynamoDB locking table
+bash scripts/bootstrap_tf_backend.sh
+
+# 2. Configure backend.tf
+cp terraform/backend.tf.example terraform/backend.tf
+# (Set your generated bucket and table name in backend.tf)
+
+# 3. Initialize & migrate state
+cd terraform && terraform init
+```
+
+### 2. Automated CI/CD Workflows (GitHub Actions)
+Continuous Integration is configured in `.github/workflows/ci.yml`:
+* **Backend Pipeline:** Python 3.11 linting (Flake8), automated test execution.
+* **Frontend Pipeline:** Node.js 20 ESLint checks, TypeScript strict validation, Next.js build verification.
+* **Terraform Pipeline:** `terraform fmt -check`, `terraform init`, `terraform validate`.
+* **Container Pipeline:** Automated Docker Buildx multi-stage image verification.
+
+### 3. Concurrency Protection & PyTorch CPU Throttling
+* **Gunicorn Concurrency:** Configured with `gthread` workers and preloaded models in `gunicorn.conf.py` to share Sentence-BERT memory across threads.
+* **CPU Starvation Shield:** PyTorch CPU thread count capped via `TORCH_NUM_THREADS` and generation concurrency controlled via `MAX_CONCURRENT_GENERATIONS`.
+
+### 4. Database Durability & S3 Snapshots
+* Automated SQLite live backup via SQLite Online Backup API:
+```bash
+# Manual or cron snapshot
+python backend/utils/db_backup.py backup
+# Or run the cron script
+bash scripts/backup_db.sh
+```
+* Optionally syncs snapshots to AWS S3 by setting `PAPERS_BACKUP_S3_BUCKET=your-bucket-name`.
+
 
 ---
 
@@ -150,6 +204,7 @@ npm run dev
 | `/api/subjects` | `GET` | Lists all supported subjects |
 | `/api/analyze-syllabus` | `POST` | Extracts units and topics from raw syllabus text |
 | `/api/upload-syllabus` | `POST` | Ingests PDF (`.pdf`), Word (`.docx`), or text files and extracts structured syllabus units & topics |
+| `/api/db/backup` | `POST` | Triggers a live, transaction-consistent SQLite snapshot (with optional S3 sync) |
 | `/api/health` | `GET` | Health check endpoint reporting server & LLM Gateway status |
 
 ---

@@ -5,13 +5,21 @@ load_dotenv()
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
-DATABASE_PATH = os.path.join(BASE_DIR, "database", "papers.db")
+# Database & Storage (Supports local, mounted volume, or container mounts)
+DATABASE_PATH = os.getenv("DATABASE_PATH", os.path.join(BASE_DIR, "database", "papers.db"))
+PAPERS_BACKUP_DIR = os.getenv("PAPERS_BACKUP_DIR", os.path.join(BASE_DIR, "database", "backups"))
+PAPERS_BACKUP_S3_BUCKET = os.getenv("PAPERS_BACKUP_S3_BUCKET", "")
+
 MODELS_DIR = os.path.join(BASE_DIR, "models")
 PDF_OUTPUT_DIR = os.path.join(BASE_DIR, "output")
 
 # Ensure directories exist
-for d in [os.path.dirname(DATABASE_PATH), MODELS_DIR, PDF_OUTPUT_DIR]:
+for d in [os.path.dirname(DATABASE_PATH), PAPERS_BACKUP_DIR, MODELS_DIR, PDF_OUTPUT_DIR]:
     os.makedirs(d, exist_ok=True)
+
+# Concurrency & Resource Throttling (Prevents CPU starvation on ML inference)
+TORCH_NUM_THREADS = int(os.getenv("TORCH_NUM_THREADS", "2"))
+MAX_CONCURRENT_GENERATIONS = int(os.getenv("MAX_CONCURRENT_GENERATIONS", "2"))
 
 # Model names (Hugging Face)
 T5_MODEL_NAME = os.getenv("T5_MODEL_NAME", "valhalla/t5-small-qg-hl")
@@ -28,4 +36,5 @@ OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
 FLASK_HOST = os.getenv("FLASK_HOST", "0.0.0.0")
 FLASK_PORT = int(os.getenv("FLASK_PORT", "5000"))
 FLASK_DEBUG = os.getenv("FLASK_DEBUG", "true").lower() == "true"
+
 

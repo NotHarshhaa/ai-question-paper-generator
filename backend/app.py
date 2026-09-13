@@ -1,12 +1,22 @@
 import os
 import uuid
 import logging
+from threading import BoundedSemaphore
 from datetime import datetime, timezone
 
 from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 
-from config import FLASK_HOST, FLASK_PORT, FLASK_DEBUG, T5_MODEL_NAME, BERT_MODEL_NAME
+from config import (
+    FLASK_HOST,
+    FLASK_PORT,
+    FLASK_DEBUG,
+    T5_MODEL_NAME,
+    BERT_MODEL_NAME,
+    TORCH_NUM_THREADS,
+    MAX_CONCURRENT_GENERATIONS,
+)
+from utils.db_backup import backup_database
 from database.db import (
     init_db,
     save_paper,
@@ -36,6 +46,17 @@ logging.basicConfig(
     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
 )
 logger = logging.getLogger(__name__)
+
+# Throttling & Concurrency controls to protect worker CPU
+try:
+    import torch
+    torch.set_num_threads(TORCH_NUM_THREADS)
+    logger.info("Configured PyTorch CPU thread pool: %d threads", TORCH_NUM_THREADS)
+except Exception:
+    pass
+
+# Concurrency semaphore prevents parallel heavy ML generations from starving CPU / crashing OOM
+generation_semaphore = BoundedSemaphore(value=MAX_CONCURRENT_GENERATIONS)
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -75,6 +96,13 @@ except Exception as _exc:
 
 @app.route("/api/generate", methods=["POST"])
 def generate_paper():
+    acquired = generation_semaphore.acquire(blocking=True, timeout=60)
+    if not acquired:
+        logger.warning("Generation request rejected: server at capacity")
+        return jsonify({
+            "error": "The generation engine is currently operating at peak capacity. Please retry shortly."
+        }), 429
+
     try:
         data = request.get_json()
         if not data:
@@ -310,6 +338,9 @@ def generate_paper():
     except Exception as e:
         logger.exception("Error generating paper")
         return jsonify({"error": str(e)}), 500
+    finally:
+        generation_semaphore.release()
+
 
 
 @app.route("/api/papers", methods=["GET"])
@@ -625,6 +656,25 @@ def health():
 def llm_status():
     """Get active LLM status and provider configuration."""
     return jsonify(llm_gateway.get_status())
+
+
+@app.route("/api/db/backup", methods=["POST"])
+def trigger_db_backup():
+    """Trigger a live, consistent SQLite snapshot."""
+    try:
+        backup_path = backup_database()
+        if backup_path and os.path.exists(backup_path):
+            return jsonify({
+                "status": "success",
+                "message": "Database backup completed successfully",
+                "backup_file": os.path.basename(backup_path),
+                "backup_size_bytes": os.path.getsize(backup_path)
+            }), 200
+        return jsonify({"error": "Failed to create database snapshot"}), 500
+    except Exception as e:
+        logger.exception("Error executing database backup")
+        return jsonify({"error": str(e)}), 500
+
 
 
 def _classify_question_type(question: str) -> str:

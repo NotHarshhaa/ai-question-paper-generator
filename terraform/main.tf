@@ -122,3 +122,24 @@ resource "aws_eip" "app" {
   # EIP must be created after the instance
   depends_on = [aws_instance.app]
 }
+
+# ── Optional Persistent Data Volume (Preserves papers.db across EC2 terminations)
+resource "aws_ebs_volume" "data" {
+  count             = var.enable_persistent_data_volume ? 1 : 0
+  availability_zone = aws_instance.app.availability_zone
+  size              = var.data_volume_size_gb
+  type              = "gp3"
+  encrypted         = true
+
+  tags = {
+    Name = "${var.app_name}-data-volume"
+  }
+}
+
+resource "aws_volume_attachment" "data_att" {
+  count       = var.enable_persistent_data_volume ? 1 : 0
+  device_name = "/dev/xvdf"
+  volume_id   = aws_ebs_volume.data[0].id
+  instance_id = aws_instance.app.id
+}
+

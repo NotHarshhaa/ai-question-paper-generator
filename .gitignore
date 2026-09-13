@@ -64,9 +64,14 @@ backend/models/
 backend/.cache/
 
 # Terraform
-terraform/.terraform/
-terraform/.terraform.lock.hcl
-terraform/terraform.tfstate
-terraform/terraform.tfstate.backup
-terraform/terraform.tfvars
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.tfvars.json
 *.tfplan
+.terraform.lock.hcl
+
+# Docker
+.docker/
+

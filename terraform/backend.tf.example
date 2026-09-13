@@ -1,0 +1,19 @@
+# =============================================================================
+# backend.tf.example — Remote State with AWS S3 & DynamoDB Locking
+# =============================================================================
+# To enable remote state storage:
+# 1. Run the bootstrap script: bash scripts/bootstrap_tf_backend.sh
+# 2. Copy this file to `backend.tf`: cp terraform/backend.tf.example terraform/backend.tf
+# 3. Replace the bucket and dynamodb_table names below with your created resources
+# 4. Run `terraform init -migrate-state`
+# =============================================================================
+
+terraform {
+  backend "s3" {
+    bucket         = "ai-question-paper-tf-state-<your-unique-id>"
+    key            = "production/terraform.tfstate"
+    region         = "ap-south-1"
+    dynamodb_table = "ai-question-paper-tf-locks"
+    encrypt        = true
+  }
+}

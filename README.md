@@ -7,7 +7,10 @@ An intelligent full-stack system that automatically generates **DevOps and AWS c
 ## 🚀 Key AI & ML Features
 
 * 🤖 **Multi-Provider LLM Gateway**: Seamless integration with **Google Gemini** (`gemini-2.0-flash`), **OpenAI** (`gpt-4o-mini`), **Groq** (`llama-3.3-70b`), **DeepSeek**, **Anthropic**, and local **Ollama** (`llama3`), with structured JSON schema output validation and resilient offline fallbacks.
-* ☁️ **Syllabus-Based Topic Extraction**: Analyzes syllabus units and extracts high-weightage topics using NLTK and TF-IDF keyword ranking.
+* 📁 **Universal Syllabus Document Ingestion**: Upload real academic or enterprise syllabi in **PDF (`.pdf`)**, **Word (`.docx`)**, or text/markdown (`.txt`, `.md`) with server-side extraction (`pdfplumber` + `python-docx`) and smart fallback parsing.
+* 🧠 **Flexible Syllabus Architecture Parsing**: Automatically detects syllabus structures across Units, Modules, Chapters, Roman numerals, comma-separated lists, and multi-line paragraph descriptions without requiring rigid bullet lists.
+* 💻 **DevOps Syntax & ASCII Architecture Diagram Rendering**: Built-in `RichContent` renderer that color-highlights **YAML, Terraform HCL, Dockerfile, Bash, and JSON** code blocks and cleanly renders ASCII architecture topologies in questions and model solutions.
+* ⏱️ **Interactive Student Examination Arena**: Full live test environment for students featuring a configurable countdown timer, question navigator, answered/flagged indicators, and an end-to-end auto-grading evaluation scorecard.
 * 📝 **LLM-as-a-Judge Auto-Grader**: Grades student submissions against a 4-pillar rubric (Technical Correctness 40%, Syntax & Command Precision 30%, Completeness 20%, Clarity 10%) with line-by-line feedback, concept coverage metrics, and actionable improvement tips.
 * 🎯 **MCQ & Contextual Distractor Synthesis**: Generates 4-option certification MCQs with realistic distractors targeting specific cloud engineering misconceptions (e.g. S3 storage classes, Kubernetes service types, Terraform state locking) and detailed explanations.
 * 🎓 **Context-Aware Bloom's Taxonomy Classifier**: Categorizes questions into cognitive depth (*Remember, Understand, Apply, Analyze, Evaluate, Create*) using context-aware heuristics and LLM batch evaluation to ensure balanced exams.
@@ -146,6 +149,7 @@ npm run dev
 | `/api/analytics` | `GET` | Aggregated metrics, subject breakdown, and Bloom taxonomy distribution |
 | `/api/subjects` | `GET` | Lists all supported subjects |
 | `/api/analyze-syllabus` | `POST` | Extracts units and topics from raw syllabus text |
+| `/api/upload-syllabus` | `POST` | Ingests PDF (`.pdf`), Word (`.docx`), or text files and extracts structured syllabus units & topics |
 | `/api/health` | `GET` | Health check endpoint reporting server & LLM Gateway status |
 
 ---

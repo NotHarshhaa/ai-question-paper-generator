@@ -13,6 +13,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { GeneratedPaper, Question } from "@/lib/api";
+import { RichContent } from "@/components/ui/rich-content";
+
 import { difficultyColors, bloomColors } from "../constants";
 
 interface PaperExamTabProps {
@@ -186,9 +188,10 @@ export const PaperExamTab: React.FC<PaperExamTabProps> = ({
                             Q{qi + 1}.
                           </span>
                           <div className="space-y-2.5 flex-1">
-                            <p className="text-sm md:text-base font-medium leading-relaxed">
-                              {q.text}
-                            </p>
+                            <div className="text-sm md:text-base font-medium leading-relaxed">
+                              <RichContent content={q.text} />
+                            </div>
+
                             <div className="flex flex-wrap items-center gap-1.5">
                               <span
                                 className={`inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold border ${

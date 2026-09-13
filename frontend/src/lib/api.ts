@@ -298,4 +298,24 @@ export const api = {
       method: "POST",
       body: JSON.stringify({ syllabus }),
     }),
+
+  uploadSyllabusFile: async (file: File) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    const res = await fetch(`${API_BASE}/upload-syllabus`, {
+      method: "POST",
+      body: formData,
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ error: "Failed to upload file" }));
+      throw new Error(err.error || `Upload failed with status ${res.status}`);
+    }
+    return res.json() as Promise<{
+      filename: string;
+      syllabus_text: string;
+      topics: string[];
+      units: string[];
+    }>;
+  },
 };
+

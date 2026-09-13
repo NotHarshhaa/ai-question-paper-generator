@@ -24,7 +24,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-PDF_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "subject pdfs")
+PDF_DIR = os.getenv("SUBJECT_PDFS_DIR", os.path.join(os.path.dirname(os.path.dirname(__file__)), "subject pdfs"))
 OUTPUT_JSON = os.path.join(os.path.dirname(__file__), "data", "pyq_data.json")
 
 
@@ -35,8 +35,10 @@ def main():
     logger.info("PDF Directory: %s", PDF_DIR)
 
     if not os.path.isdir(PDF_DIR):
-        logger.error("PDF directory not found: %s", PDF_DIR)
-        sys.exit(1)
+        logger.warning("PDF directory '%s' not found.", PDF_DIR)
+        logger.info("To extract interview questions, set SUBJECT_PDFS_DIR or place PDFs in 'subject pdfs'.")
+        sys.exit(0)
+
 
     all_data = parse_all_interview_pdfs(PDF_DIR)
 

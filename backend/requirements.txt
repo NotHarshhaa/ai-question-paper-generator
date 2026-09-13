@@ -15,9 +15,12 @@ huggingface-hub==0.23.4
 sentence-transformers==3.0.1
 tokenizers>=0.19,<0.22
 
-# PDF generation
+# PDF & Document generation / extraction
 reportlab==4.2.5
 pdfplumber==0.11.4
+python-docx>=1.0.0
 
-# Utilities
+# LLM Gateway & Utilities
 python-dotenv==1.0.1
+litellm>=1.40.0
+

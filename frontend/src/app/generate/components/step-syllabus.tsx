@@ -7,6 +7,7 @@ import {
   BarChart3,
   ChevronLeft,
   ChevronRight,
+  Loader2,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -14,6 +15,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
+import { api } from "@/lib/api";
 import { syllabusTemplates } from "../constants";
 import { FormState, SyllabusTemplateItem } from "../types";
 import { parseSyllabus } from "../utils/syllabus-parser";
@@ -33,6 +35,7 @@ export const StepSyllabus: React.FC<StepSyllabusProps> = ({
 }) => {
   const [showTemplates, setShowTemplates] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
 
   const handleApplySyllabus = (content: string) => {
     const parsed = parseSyllabus(content);
@@ -51,17 +54,47 @@ export const StepSyllabus: React.FC<StepSyllabusProps> = ({
     toast.success(`Template "${template.name}" applied successfully!`);
   };
 
-  const handleSyllabusImport = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSyllabusImport = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const content = e.target?.result as string;
-        handleApplySyllabus(content);
-        toast.success("Syllabus imported successfully!");
-      };
-      reader.readAsText(file);
+    if (!file) return;
+
+    // Reset input value so re-selecting same file triggers event
+    event.target.value = "";
+
+    const ext = file.name.split(".").pop()?.toLowerCase();
+
+    // For PDF, Word DOCX/DOC files: extract via backend parser
+    if (ext === "pdf" || ext === "docx" || ext === "doc") {
+      setIsUploading(true);
+      const toastId = toast.loading(`Extracting syllabus from ${file.name}...`);
+      try {
+        const res = await api.uploadSyllabusFile(file);
+        handleApplySyllabus(res.syllabus_text);
+        toast.success(`Extracted syllabus from "${file.name}"!`, { id: toastId });
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : "Failed to extract syllabus document";
+        toast.error(msg, { id: toastId });
+      } finally {
+        setIsUploading(false);
+      }
+      return;
     }
+
+    // For text / markdown files
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const content = (e.target?.result as string) || "";
+      if (content.trim()) {
+        handleApplySyllabus(content);
+        toast.success(`Imported text from "${file.name}"!`);
+      } else {
+        toast.error("File is empty.");
+      }
+    };
+    reader.onerror = () => {
+      toast.error("Failed to read text file.");
+    };
+    reader.readAsText(file);
   };
 
   const handleClear = () => {
@@ -104,22 +137,33 @@ export const StepSyllabus: React.FC<StepSyllabusProps> = ({
             <div className="flex-1">
               <input
                 type="file"
-                accept=".txt,.md,.doc,.docx"
+                accept=".pdf,.docx,.doc,.txt,.md"
                 onChange={handleSyllabusImport}
+                disabled={isUploading}
                 className="hidden"
                 id="syllabus-import"
               />
-              <Button variant="outline" asChild className="gap-2 w-full">
+              <Button variant="outline" asChild disabled={isUploading} className="gap-2 w-full">
                 <label
                   htmlFor="syllabus-import"
                   className="cursor-pointer flex items-center justify-center"
                 >
-                  <Upload className="h-4 w-4" />
-                  Import File
+                  {isUploading ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin text-primary mr-2" />
+                      Extracting Document...
+                    </>
+                  ) : (
+                    <>
+                      <Upload className="h-4 w-4 mr-2" />
+                      Import PDF / Word / Text
+                    </>
+                  )}
                 </label>
               </Button>
             </div>
           </div>
+
 
           {/* Template Selection */}
           {showTemplates && (

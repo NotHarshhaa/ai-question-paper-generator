@@ -1,3 +1,4 @@
+import os
 import uuid
 import logging
 from datetime import datetime, timezone
@@ -526,6 +527,78 @@ def analyze_syllabus():
     except Exception as e:
         logger.exception("Error analyzing syllabus")
         return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/upload-syllabus", methods=["POST"])
+def upload_syllabus():
+    """Extract syllabus text from uploaded PDF, DOCX, or text files."""
+    try:
+        if "file" not in request.files:
+            return jsonify({"error": "No file uploaded"}), 400
+
+        uploaded_file = request.files["file"]
+        if not uploaded_file.filename:
+            return jsonify({"error": "Empty filename"}), 400
+
+        filename = uploaded_file.filename
+        ext = os.path.splitext(filename)[1].lower()
+        file_bytes = uploaded_file.read()
+
+        if len(file_bytes) == 0:
+            return jsonify({"error": "Uploaded file is empty"}), 400
+
+        extracted_text = ""
+
+        if ext == ".pdf":
+            import io
+            import pdfplumber
+            with pdfplumber.open(io.BytesIO(file_bytes)) as pdf:
+                page_texts = []
+                for page in pdf.pages:
+                    txt = page.extract_text()
+                    if txt:
+                        page_texts.append(txt)
+                extracted_text = "\n\n".join(page_texts)
+
+        elif ext in [".docx", ".doc"]:
+            import io
+            try:
+                import docx
+                doc = docx.Document(io.BytesIO(file_bytes))
+                lines = [p.text for p in doc.paragraphs if p.text.strip()]
+                for table in doc.tables:
+                    for row in table.rows:
+                        row_text = " | ".join([cell.text.strip() for cell in row.cells if cell.text.strip()])
+                        if row_text:
+                            lines.append(row_text)
+                extracted_text = "\n".join(lines)
+            except Exception as docx_err:
+                logger.warning("DOCX extraction error (%s). Trying raw text decode.", docx_err)
+                extracted_text = file_bytes.decode("utf-8", errors="ignore")
+
+        elif ext in [".txt", ".md", ".json"]:
+            extracted_text = file_bytes.decode("utf-8", errors="ignore")
+        else:
+            extracted_text = file_bytes.decode("utf-8", errors="ignore")
+
+        extracted_text = extracted_text.strip()
+        if not extracted_text:
+            return jsonify({"error": f"Could not extract readable text from '{filename}'"}), 400
+
+        topics = nlp.extract_topics(extracted_text)
+        units = nlp.extract_units(extracted_text)
+
+        return jsonify({
+            "filename": filename,
+            "syllabus_text": extracted_text,
+            "topics": topics,
+            "units": units
+        })
+
+    except Exception as e:
+        logger.exception("Error processing uploaded syllabus file")
+        return jsonify({"error": str(e)}), 500
+
 
 
 @app.route("/api/pyq-stats/<subject>", methods=["GET"])

@@ -4,4 +4,6 @@ export { PaperExamTab } from "./paper-exam-tab";
 export { PaperSolutionsTab } from "./paper-solutions-tab";
 export { PaperMcqTab } from "./paper-mcq-tab";
 export { PaperTopicsTab } from "./paper-topics-tab";
+export { PaperStudentArena } from "./paper-student-arena";
 export { AiEvalModal } from "./ai-eval-modal";
+

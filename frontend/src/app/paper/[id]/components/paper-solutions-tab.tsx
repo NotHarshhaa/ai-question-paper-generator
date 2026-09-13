@@ -8,7 +8,9 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { RichContent } from "@/components/ui/rich-content";
 import { GeneratedPaper, SolutionItem } from "@/lib/api";
+
 
 interface PaperSolutionsTabProps {
   paper: GeneratedPaper;
@@ -80,9 +82,10 @@ export const PaperSolutionsTab: React.FC<PaperSolutionsTabProps> = ({
                   <div className="font-semibold text-amber-600 dark:text-amber-400 flex items-center gap-1.5">
                     <Sparkles className="h-3.5 w-3.5" /> Model Answer:
                   </div>
-                  <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
-                    {sol.solution}
-                  </p>
+                  <div className="pt-1">
+                    <RichContent content={sol.solution} />
+                  </div>
+
                   {sol.key_points && sol.key_points.length > 0 && (
                     <div className="pt-2 border-t mt-2">
                       <div className="font-semibold text-[11px] text-muted-foreground mb-1">

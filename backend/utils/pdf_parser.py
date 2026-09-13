@@ -2,7 +2,10 @@ import re
 import os
 import logging
 import pdfplumber
-import easyocr
+try:
+    import easyocr
+except ImportError:
+    easyocr = None
 import numpy as np
 from PIL import Image
 import io
@@ -15,10 +18,18 @@ _ocr_reader = None
 
 def get_ocr_reader():
     global _ocr_reader
+    if easyocr is None:
+        logger.warning("EasyOCR is not installed. Scanned page OCR is disabled; falling back to pdfplumber text extraction.")
+        return None
     if _ocr_reader is None:
-        logger.info("Initializing EasyOCR reader (first time may download models)...")
-        _ocr_reader = easyocr.Reader(["en"], gpu=False)
+        try:
+            logger.info("Initializing EasyOCR reader (first time may download models)...")
+            _ocr_reader = easyocr.Reader(["en"], gpu=False)
+        except Exception as e:
+            logger.warning("Failed to initialize EasyOCR: %s", e)
+            _ocr_reader = None
     return _ocr_reader
+
 
 # Map PDF filenames to subject names used in the platform
 SUBJECT_MAP = {
@@ -99,6 +110,10 @@ def extract_text_with_ocr(pdf_path: str, page_indices: list[int] | None = None):
       back into a partially-extracted document.
     """
     reader = get_ocr_reader()
+    if reader is None:
+        logger.warning("OCR skipped for %s because EasyOCR reader is unavailable.", pdf_path)
+        return {} if page_indices is not None else ""
+
 
     def ocr_page(page) -> str:
         # Convert page to image at lower resolution for speed

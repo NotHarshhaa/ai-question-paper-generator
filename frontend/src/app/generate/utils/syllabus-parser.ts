@@ -7,59 +7,40 @@ export interface ParsedSyllabusResult {
 }
 
 export function parseSyllabus(syllabusText: string): ParsedSyllabusResult {
-  // Step 1: Unit Detection - Support multiple formats including typos
+  if (!syllabusText || syllabusText.trim().length === 0) {
+    return { units: [], topics: [], keywords: [] };
+  }
+
+  // Step 1: Flexible Unit / Module / Chapter Detection
   const unitPatterns = [
-    /Unit\s*[-\s]*([IVXL]+|[ivxl]+|[IVXLivxl]+)/gi, // Unit-I, Unit II, unit-iii, etc.
-    /Unit\s*[-\s]*(\d+)/gi, // Unit-1, Unit 2, etc.
-    /\bUnit[-\s]*([IVXL]+|[ivxl]+|\d+)\b/gi, // More flexible unit detection
+    /\b(?:Unit|Module|Chapter|Section|Part)\s*[-\s:]*([IVXLivxl]+|\d+)\b[^\n]*/gi,
+    /\b(?:Unit|Module|Chapter|Section|Part)\s+(\d+)\b[^\n]*/gi,
   ];
 
   const units: ProcessedSyllabus[] = [];
   const unitMatches: Array<{ match: string; index: number; number: number }> = [];
 
-  // First pass: Find all unit matches with their positions
   unitPatterns.forEach((pattern) => {
     let match;
-    // Reset regex lastIndex to ensure we catch all matches from the beginning of the string
     pattern.lastIndex = 0;
     while ((match = pattern.exec(syllabusText)) !== null) {
       const fullMatch = match[0];
       const matchIndex = match.index;
+      let unitIdentifier = match[1].toLowerCase().trim();
 
-      let unitIdentifier = match[1].toLowerCase(); // Convert to lowercase for easier handling
-
-      // Fix common typos: ll -> ii, etc.
+      // Normalize common typo substitutions
       if (unitIdentifier === "ll") unitIdentifier = "ii";
       if (unitIdentifier === "l") unitIdentifier = "i";
       if (unitIdentifier === "v") unitIdentifier = "v";
 
       let unitNumber: number;
+      const romanMap: Record<string, number> = {
+        i: 1, ii: 2, iii: 3, iv: 4, v: 5,
+        vi: 6, vii: 7, viii: 8, ix: 9, x: 10,
+      };
 
-      // Convert Roman numerals to numbers
-      if (/^[ivxl]+$/.test(unitIdentifier)) {
-        const romanMap: { [key: string]: number } = {
-          i: 1,
-          ii: 2,
-          iii: 3,
-          iv: 4,
-          v: 5,
-          vi: 6,
-          vii: 7,
-          viii: 8,
-          ix: 9,
-          x: 10,
-          I: 1,
-          II: 2,
-          III: 3,
-          IV: 4,
-          V: 5,
-          VI: 6,
-          VII: 7,
-          VIII: 8,
-          IX: 9,
-          X: 10,
-        };
-        unitNumber = romanMap[unitIdentifier] || 1;
+      if (unitIdentifier in romanMap) {
+        unitNumber = romanMap[unitIdentifier];
       } else {
         unitNumber = parseInt(unitIdentifier, 10) || 1;
       }
@@ -72,77 +53,175 @@ export function parseSyllabus(syllabusText: string): ParsedSyllabusResult {
     }
   });
 
-  // Sort matches by position and remove duplicates
+  // Sort matches by position and deduplicate by unit number
   unitMatches.sort((a, b) => a.index - b.index);
   const uniqueMatches = unitMatches.filter(
     (match, index, self) => index === self.findIndex((m) => m.number === match.number)
   );
 
-  // Create units from unique matches
-  uniqueMatches.forEach((unitMatch) => {
-    units.push({
-      number: unitMatch.number,
-      title: unitMatch.match,
-      topics: [],
+  // If units found, create them
+  if (uniqueMatches.length > 0) {
+    uniqueMatches.forEach((unitMatch) => {
+      units.push({
+        number: unitMatch.number,
+        title: unitMatch.match,
+        topics: [],
+      });
     });
-  });
 
-  // If no units detected, create a default unit
-  if (units.length === 0 && syllabusText.trim().length > 10) {
+    // Extract topics per unit slice
+    uniqueMatches.forEach((unitMatch, unitIndex) => {
+      const nextUnit = uniqueMatches[unitIndex + 1];
+      const unitStartIndex = unitMatch.index + unitMatch.match.length;
+      const unitEndIndex = nextUnit ? nextUnit.index : syllabusText.length;
+
+      if (unitStartIndex !== -1 && unitEndIndex > unitStartIndex) {
+        const unitContent = syllabusText.substring(unitStartIndex, unitEndIndex);
+        const extracted = extractTopicsFromContent(unitContent);
+        const unitObj = units.find((u) => u.number === unitMatch.number);
+        if (unitObj) {
+          unitObj.topics = extracted;
+        }
+      }
+    });
+  } else {
+    // No explicit Unit headers: create a single default Unit and extract all topics
+    const extracted = extractTopicsFromContent(syllabusText);
     units.push({
       number: 1,
-      title: "Unit 1",
-      topics: [],
+      title: "Unit 1: Core Syllabus",
+      topics: extracted,
     });
   }
 
-  // Step 2: Topic Extraction using proper unit boundaries
-  uniqueMatches.forEach((unitMatch, unitIndex) => {
-    const nextUnit = uniqueMatches[unitIndex + 1];
-    const unitStartIndex = unitMatch.index + unitMatch.match.length;
-    const unitEndIndex = nextUnit ? nextUnit.index : syllabusText.length;
+  // Step 2: Technical keyword extraction
+  const keywords: string[] = [];
+  const technicalTerms = syllabusText.match(/\b[A-Z][A-Za-z0-9_\-]{2,}(?:\s+[A-Z][A-Za-z0-9_\-]+)*\b/g) || [];
+  const stopwords = new Set([
+    "The", "And", "Or", "But", "For", "With", "This", "That", "From", "They", "Have",
+    "Been", "Unit", "Module", "Chapter", "Section", "Part", "Syllabus", "Course", "Hours"
+  ]);
 
-    if (unitStartIndex !== -1 && unitEndIndex > unitStartIndex) {
-      const unitContent = syllabusText.substring(unitStartIndex, unitEndIndex);
+  technicalTerms.forEach((term: string) => {
+    const trimmed = term.trim();
+    if (!stopwords.has(trimmed) && trimmed.length > 3 && !keywords.includes(trimmed)) {
+      keywords.push(trimmed);
+    }
+  });
 
-      // Extract topics from this unit's content
-      // Look for lines starting with bullet points or hyphens
-      const lines = unitContent.split("\n");
-      const topics: string[] = [];
+  const allTopics = units.flatMap((u) => u.topics);
 
-      lines.forEach((line) => {
-        const trimmedLine = line.trim();
-        // Match bullet points or hyphens at the start of a line
-        if (trimmedLine.match(/^[-•–—*]\s*.+/) || trimmedLine.match(/^•\s*.+/)) {
-          const topic = trimmedLine.replace(/^[-•–—*]\s*/, "").trim();
-          if (topic.length > 0) {
-            topics.push(topic);
-          }
-        }
-      });
+  return {
+    units,
+    topics: allTopics,
+    keywords: keywords.slice(0, 25),
+  };
+}
 
-      // Find the corresponding unit in the units array and update its topics
-      const unitToUpdate = units.find((u) => u.number === unitMatch.number);
-      if (unitToUpdate) {
-        unitToUpdate.topics = topics;
+/**
+ * Flexible topic extractor that handles:
+ * 1. Bullets (-, •, *, –, —)
+ * 2. Numbered lists (1., 1), (a), i.)
+ * 3. Comma-separated lists (e.g. AWS VPC, EC2, S3, IAM)
+ * 4. Semicolon-separated lists
+ * 5. Sentence and paragraph phrasing
+ */
+export function extractTopicsFromContent(content: string): string[] {
+  const cleanContent = content.trim();
+  if (!cleanContent) return [];
+
+  const topics: string[] = [];
+
+  // Pattern 1: Explicit bullet points or numbered lists
+  const lines = cleanContent.split("\n");
+  lines.forEach((line) => {
+    const trimmed = line.trim();
+    if (!trimmed) return;
+
+    // Matches bullet points: -, •, *, –, —, or numbers: 1., 1), a., (i)
+    const bulletMatch = trimmed.match(/^(?:[-•–—*]|\d+[\.\)]|\([a-zA-Z0-9]+\))\s*(.+)/);
+    if (bulletMatch && bulletMatch[1]) {
+      const topicText = bulletMatch[1].trim();
+      // If the bullet item itself contains comma-separated sub-topics, split them
+      if (topicText.includes(",") && topicText.split(",").length >= 3) {
+        topicText.split(",").forEach((sub) => {
+          const s = cleanTopic(sub);
+          if (s) topics.push(s);
+        });
+      } else {
+        const cleaned = cleanTopic(topicText);
+        if (cleaned) topics.push(cleaned);
       }
     }
   });
 
-  // Step 3: Extract keywords
-  const keywords: string[] = [];
-  const technicalTerms = syllabusText.match(/\b[A-Z][a-z]+(?:[A-Z][a-z]+)*\b/g) || [];
-  const commonWords = ["The", "And", "Or", "But", "For", "With", "This", "That", "From", "They", "Have", "Been"];
+  if (topics.length >= 2) {
+    return deduplicateTopics(topics);
+  }
 
-  technicalTerms.forEach((term: string) => {
-    if (!commonWords.includes(term) && term.length > 3) {
-      keywords.push(term);
+  // Pattern 2: Comma or Semicolon separated lists
+  // e.g. "VPC, Subnets, Route Tables, Internet Gateways, NAT Gateways, Security Groups"
+  const delimiter = cleanContent.includes(";") ? ";" : ",";
+  if (cleanContent.includes(delimiter)) {
+    const segments = cleanContent.split(delimiter);
+    if (segments.length >= 3) {
+      segments.forEach((seg) => {
+        const cleaned = cleanTopic(seg);
+        if (cleaned) topics.push(cleaned);
+      });
+      if (topics.length >= 3) {
+        return deduplicateTopics(topics);
+      }
+    }
+  }
+
+  // Pattern 3: Natural language paragraphs (split by period / colon)
+  const sentences = cleanContent.split(/[\.\:\n]+/);
+  sentences.forEach((s) => {
+    const cleaned = cleanTopic(s);
+    if (cleaned && cleaned.length >= 5 && cleaned.length <= 80) {
+      topics.push(cleaned);
     }
   });
 
-  return {
-    units,
-    topics: units.flatMap((unit) => unit.topics),
-    keywords: keywords.slice(0, 20), // Limit to top 20 keywords
-  };
+  return deduplicateTopics(topics);
+}
+
+function cleanTopic(text: string): string | null {
+  let cleaned = text.trim();
+  // Strip leading numbering or bullets
+  cleaned = cleaned.replace(/^(?:[-•–—*]|\d+[\.\)]|\([a-zA-Z0-9]+\))\s*/, "");
+  // Strip trailing punctuation
+  cleaned = cleaned.replace(/[\.\,\;\:]+$/, "").trim();
+
+  // Exclude common noise or headers
+  const noisePhrases = [
+    "introduction", "overview", "hours", "marks", "credits", "lecture",
+    "prerequisites", "learning outcomes", "reference books", "textbooks",
+    "unit", "module", "chapter"
+  ];
+
+  if (
+    cleaned.length < 3 ||
+    cleaned.length > 100 ||
+    noisePhrases.includes(cleaned.toLowerCase()) ||
+    /^\d+$/.test(cleaned)
+  ) {
+    return null;
+  }
+
+  return cleaned;
+}
+
+function deduplicateTopics(topics: string[]): string[] {
+  const seen = new Set<string>();
+  const result: string[] = [];
+  topics.forEach((t) => {
+    const key = t.toLowerCase();
+    if (!seen.has(key)) {
+      seen.add(key);
+      result.push(t);
+    }
+  });
+  return result;
 }

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { Loader2, FileText, KeyRound, BrainCircuit, BookOpen } from "lucide-react";
+import { Loader2, FileText, KeyRound, BrainCircuit, BookOpen, GraduationCap } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   api,
@@ -20,8 +20,10 @@ import {
   PaperSolutionsTab,
   PaperMcqTab,
   PaperTopicsTab,
+  PaperStudentArena,
   AiEvalModal,
 } from "./components";
+
 import {
   exportPaperPdf,
   exportPaperMarkdown,
@@ -260,13 +262,16 @@ export default function PaperViewPage() {
         defaultValue="formatted"
         className="w-full"
         onValueChange={(val) => {
-          if (val === "solutions") loadSolutions();
+          if (val === "solutions" || val === "arena") loadSolutions();
           if (val === "mcq") loadMcqs();
         }}
       >
-        <TabsList className="grid grid-cols-4 md:w-[560px]">
+        <TabsList className="grid grid-cols-5 md:w-[700px]">
           <TabsTrigger value="formatted" className="gap-1.5 text-xs">
             <FileText className="h-3.5 w-3.5" /> Exam Paper
+          </TabsTrigger>
+          <TabsTrigger value="arena" className="gap-1.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+            <GraduationCap className="h-3.5 w-3.5" /> Take Exam
           </TabsTrigger>
           <TabsTrigger value="solutions" className="gap-1.5 text-xs">
             <KeyRound className="h-3.5 w-3.5 text-amber-500" /> Solution Key
@@ -296,7 +301,12 @@ export default function PaperViewPage() {
           />
         </TabsContent>
 
-        {/* Tab 2: Teacher Solution Key Mode */}
+        {/* Tab 2: Interactive Student Examination Arena */}
+        <TabsContent value="arena" className="pt-2 space-y-4">
+          <PaperStudentArena paper={paper} solutions={solutions} />
+        </TabsContent>
+
+        {/* Tab 3: Teacher Solution Key Mode */}
         <TabsContent value="solutions" className="pt-2 space-y-4">
           <PaperSolutionsTab
             paper={paper}
@@ -304,6 +314,7 @@ export default function PaperViewPage() {
             loadingSolutions={loadingSolutions}
           />
         </TabsContent>
+
 
         {/* Tab 3: Practice MCQs Mode */}
         <TabsContent value="mcq" className="pt-2 space-y-4">

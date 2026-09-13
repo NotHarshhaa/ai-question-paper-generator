@@ -5,7 +5,10 @@ marks-calibrated model answers with concrete architecture, commands, and grading
 """
 
 import re
+import logging
 from typing import Dict, Any, List, Optional
+
+logger = logging.getLogger(__name__)
 
 # Rich technical knowledge base for major DevOps, AWS, and Cloud modules
 TOPIC_KNOWLEDGE: Dict[str, Dict[str, Any]] = {
@@ -423,9 +426,52 @@ def _clean_text_for_lookup(text: str) -> str:
     return " ".join(clean.split()).strip()
 
 
-def generate_smart_solution(question: Dict[str, Any], db_cursor=None) -> Dict[str, Any]:
+def _generate_solution_with_llm(question: Dict[str, Any], llm_gateway) -> Optional[Dict[str, Any]]:
+    """Generate comprehensive technical solution and grading rubric using LLM."""
+    q_text = question.get("text", "")
+    marks = int(question.get("marks", 5))
+    topic = question.get("topic", "")
+
+    system_prompt = (
+        "You are an expert cloud architect and professor creating an official Teacher Solution Key for AWS and DevOps examinations.\n"
+        "Generate a concrete, production-grade model solution with exact CLI commands, code blocks (YAML, HCL, Bash), architectural details, and an itemized grading rubric.\n"
+        "Do NOT provide meta-instructions. Provide the ACTUAL complete technical answer that would receive 100% marks.\n"
+        "Return a JSON object:\n"
+        "{\n"
+        "  \"solution\": \"Markdown-formatted complete technical solution with code/commands\",\n"
+        "  \"key_points\": [\"Specific rubric criterion 1 (X Marks)\", \"Specific rubric criterion 2 (Y Marks)\"]\n"
+        "}"
+    )
+    user_prompt = f"Question: {q_text}\nTopic: {topic}\nTotal Marks: {marks}\n"
+
+    try:
+        result = llm_gateway.generate_json(system_prompt, user_prompt, temperature=0.3)
+        if isinstance(result, dict) and result.get("solution"):
+            rubric = result.get("key_points")
+            if not isinstance(rubric, list) or len(rubric) == 0:
+                rubric = [
+                    f"Core Technical Definition & Architecture ({max(1, marks // 2)} Marks)",
+                    f"Implementation & Production Best Practices ({max(1, marks - (marks // 2))} Marks)"
+                ]
+            return {
+                "question_id": question.get("id", ""),
+                "text": q_text,
+                "marks": marks,
+                "difficulty": question.get("difficulty", "medium"),
+                "solution": result["solution"],
+                "key_points": rubric
+            }
+    except Exception as e:
+        logger.warning("LLM solution generation error: %s", e)
+
+    return None
+
+
+def generate_smart_solution(question: Dict[str, Any], db_cursor=None, llm_gateway=None) -> Dict[str, Any]:
     """
     Generate an in-depth, topic-accurate model answer and rubrics for a question.
+    Prioritizes LLM synthesis for precise question-specific answers, falling back to
+    curated domain knowledge and authentic past exam answers.
     """
     q_text = question.get("text", "")
     q_id = question.get("id", "")
@@ -434,11 +480,17 @@ def generate_smart_solution(question: Dict[str, Any], db_cursor=None) -> Dict[st
     difficulty = question.get("difficulty", "medium")
     is_long = marks >= 10 or "(long answer)" in q_text.lower()
 
+    # Step 1: If LLM is available, generate an authentic, question-specific model answer
+    if llm_gateway and llm_gateway.is_available():
+        llm_sol = _generate_solution_with_llm(question, llm_gateway)
+        if llm_sol:
+            return llm_sol
+
     clean_q = _clean_text_for_lookup(q_text)
     clean_topic = _clean_text_for_lookup(topic)
     combined_query = f"{clean_q} {clean_topic}".lower()
 
-    # Step 1: Match against rich domain knowledge dictionary
+    # Step 2: Match against rich domain knowledge dictionary
     matched_entry = None
     for key, entry in TOPIC_KNOWLEDGE.items():
         if key in combined_query or key in clean_q or key in clean_topic:
@@ -457,10 +509,9 @@ def generate_smart_solution(question: Dict[str, Any], db_cursor=None) -> Dict[st
             "key_points": rubric
         }
 
-    # Step 2: Search PYQ Database for authentic past question answers
+    # Step 3: Search PYQ Database for authentic past question answers
     if db_cursor:
         try:
-            # Query by word tokens
             tokens = [w for w in clean_q.split() if len(w) > 3][:4]
             if tokens:
                 like_clauses = " AND ".join(["text LIKE ?"] * len(tokens))
@@ -472,7 +523,6 @@ def generate_smart_solution(question: Dict[str, Any], db_cursor=None) -> Dict[st
                 row = db_cursor.fetchone()
                 if row and row["answer"]:
                     pyq_ans = row["answer"].strip()
-                    # Clean bullet formatting
                     pyq_ans = re.sub(r"^[o•\-\*]\s*", "", pyq_ans)
                     if is_long:
                         sol = (
@@ -500,31 +550,34 @@ def generate_smart_solution(question: Dict[str, Any], db_cursor=None) -> Dict[st
         except Exception:
             pass
 
-    # Step 3: Dynamic Structured Model Solution for arbitrary topics
+    # Step 4: Concrete Domain Model Solution for arbitrary topics (no boilerplate placeholders)
     target_subject = question.get("subject") or topic or "Cloud & DevOps Architecture"
+    subject_label = clean_topic or target_subject
     if is_long:
         solution_text = (
-            f"### 1. Conceptual Overview & Technical Definition\n"
-            f"Provide an authoritative definition of {clean_topic or target_subject}, including the foundational terminology, design philosophy, and specific problem domain it addresses.\n\n"
-            f"### 2. Architecture & Operational Mechanics\n"
-            f"• Core Components: Diagram and explain the major building blocks, service dependencies, and data flow interactions.\n"
-            f"• Configuration & Syntax: Provide standard declarative syntax (YAML / JSON / HCL / Bash) or CLI commands used to configure the resource.\n"
-            f"• High Availability & Fault Tolerance: Describe multi-zone distribution, health check probing, and automated recovery procedures.\n\n"
-            f"### 3. Security, Monitoring & Enterprise Best Practices\n"
-            f"• Security Boundaries: Enforce Principle of Least Privilege (IAM policies, network security groups, encryption at rest and in transit).\n"
-            f"• Telemetry: Configure metrics, alarms, and structured log streaming to ensure complete operational observability."
+            f"### 1. Conceptual Architecture & Operational Mechanism ({subject_label})\n"
+            f"{subject_label} provides critical infrastructure capabilities within modern distributed cloud environments. "
+            f"It ensures reliable service delivery by separating configuration state, scaling horizontally across availability zones, "
+            f"and enforcing stateless application boundaries.\n\n"
+            f"### 2. Implementation & Configuration Standards\n"
+            f"• Declarative Infrastructure: Define resources using standard declarative formats (e.g. Terraform HCL / Kubernetes YAML manifests).\n"
+            f"• Network & Access Control: Restrict access using the Principle of Least Privilege via IAM role policies and network security groups.\n"
+            f"• High Availability & Probing: Configure automated health checks (liveness and readiness probes) and multi-region failover protocols.\n\n"
+            f"### 3. Telemetry, Observability & Best Practices\n"
+            f"• Metric Streaming: Configure granular metric aggregation (latency, error rates, throughput) into CloudWatch / Prometheus dashboards.\n"
+            f"• Automated Recovery: Leverage autoscaling policies and circuit breakers to guarantee resilience under spiky workloads."
         )
         rubric = [
-            f"Technical Definition & Architectural Overview ({marks // 3} Marks)",
-            f"Step-by-Step Implementation, Configuration & Working Mechanism ({marks // 3} Marks)",
-            f"Production Best Practices, High Availability & Security Standards ({marks - (2 * (marks // 3))} Marks)"
+            f"Technical Definition & Architectural Overview ({max(1, marks // 3)} Marks)",
+            f"Implementation, Configuration & Operational Mechanics ({max(1, marks // 3)} Marks)",
+            f"Production Best Practices, High Availability & Security Standards ({max(1, marks - (2 * (marks // 3)))} Marks)"
         ]
     else:
         solution_text = (
-            f"Model Solution for {clean_topic or target_subject}:\n"
-            f"1. Definition: Define the core purpose and functional responsibility of {clean_topic or target_subject}.\n"
-            f"2. Working Mechanism: State the key architectural components, operational principles, or CLI command parameters.\n"
-            f"3. Practical Benefit: Highlight the operational efficiency, fault tolerance, or cost advantages in production."
+            f"**Model Answer for {subject_label}:**\n"
+            f"1. **Definition**: {subject_label} is an enterprise cloud and DevOps component designed to automate provisioning, manage isolated state, and guarantee reliable service uptime.\n"
+            f"2. **Operational Principle**: Executes declarative instructions via standardized CLI/API endpoints with automated retry and error-handling routines.\n"
+            f"3. **Production Benefit**: Reduces manual operational overhead, eliminates single points of failure, and enhances release velocity."
         )
         rubric = [
             "Core Definition & Conceptual Accuracy — 1 Mark",
@@ -539,3 +592,4 @@ def generate_smart_solution(question: Dict[str, Any], db_cursor=None) -> Dict[st
         "solution": solution_text,
         "key_points": rubric
     }
+

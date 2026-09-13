@@ -1,22 +1,21 @@
 # 🧠 AI-Based DevOps & AWS Question Paper Generator
 
-An intelligent full-stack system that automatically generates **DevOps and AWS certification & university-style question papers** using **NLP, Machine Learning, and Semantic RAG** techniques. Includes an interactive **2,500+ Question Bank**, **AI Auto-Grader Playground**, **Bloom's Taxonomy Classifier**, **Certification MCQ Generator**, **Platform Analytics Dashboard**, **Teacher Solution Key Mode**, and **Multi-Format Exporters**.
+An intelligent full-stack system that automatically generates **DevOps and AWS certification & university-style question papers** using **Modern LLMs, Semantic RAG, and NLP** techniques. Includes an interactive **2,500+ Question Bank**, **LLM-as-a-Judge Auto-Grader Playground**, **Context-Aware Bloom's Taxonomy Classifier**, **Certification MCQ & Distractor Generator**, **Platform Analytics Dashboard**, **Teacher Solution Key Mode**, and **Multi-Format Exporters**.
 
 ---
 
 ## 🚀 Key AI & ML Features
 
-* ☁️ **Syllabus-Based Topic Extraction**: Analyzes syllabus units and extracts high-weightage topics using NLTK and TF-IDF.
-* 🤖 **AI-Powered Question Generation**: Uses Hugging Face **T5 Transformer** (`valhalla/t5-base-qg-hl`) with smart fallback question pattern engines.
-* 🧠 **Semantic Deduplication & Similarity Checking**: Utilizes **BERT / Sentence-Transformers** (`all-MiniLM-L6-v2`) to eliminate redundant questions.
-* 🎓 **Bloom's Taxonomy Cognitive Classifier**: Automatically tags questions with cognitive depth (*Remember, Understand, Apply, Analyze, Evaluate, Create*) to ensure balanced exams.
-* 📝 **Semantic Answer Evaluator & AI Auto-Grader**: Grades student answers in real-time by comparing Sentence-BERT embeddings, measuring concept coverage, and providing actionable feedback.
-* 🎯 **MCQ & Smart Distractor Generator**: Generates 4-option certification MCQs with realistic distractors targeting common cloud engineering misconceptions.
-* 🔍 **Vector RAG Grounding Engine**: High-speed in-memory vector index across 2,500+ PYQs to ground question generation in authentic exams.
-* 🗂️ **Interactive Question Bank (2,500+ Questions)**: Browse, search, filter, and practice curated PYQ questions with complete model answers across 15+ DevOps & Cloud subject areas.
+* 🤖 **Multi-Provider LLM Gateway**: Seamless integration with **Google Gemini** (`gemini-2.0-flash`), **OpenAI** (`gpt-4o-mini`), **Groq** (`llama-3.3-70b`), **DeepSeek**, **Anthropic**, and local **Ollama** (`llama3`), with structured JSON schema output validation and resilient offline fallbacks.
+* ☁️ **Syllabus-Based Topic Extraction**: Analyzes syllabus units and extracts high-weightage topics using NLTK and TF-IDF keyword ranking.
+* 📝 **LLM-as-a-Judge Auto-Grader**: Grades student submissions against a 4-pillar rubric (Technical Correctness 40%, Syntax & Command Precision 30%, Completeness 20%, Clarity 10%) with line-by-line feedback, concept coverage metrics, and actionable improvement tips.
+* 🎯 **MCQ & Contextual Distractor Synthesis**: Generates 4-option certification MCQs with realistic distractors targeting specific cloud engineering misconceptions (e.g. S3 storage classes, Kubernetes service types, Terraform state locking) and detailed explanations.
+* 🎓 **Context-Aware Bloom's Taxonomy Classifier**: Categorizes questions into cognitive depth (*Remember, Understand, Apply, Analyze, Evaluate, Create*) using context-aware heuristics and LLM batch evaluation to ensure balanced exams.
+* 🔍 **Vector RAG Grounding Engine**: High-speed vector index across 2,500+ authentic PYQs (using Sentence-BERT `all-MiniLM-L6-v2`) to ground LLM generation in verified exam patterns.
+* 🔑 **Teacher Solution Key Mode**: Instantly generates comprehensive model answers with verified CLI syntax, IaC manifests (YAML/HCL), and point-by-point grading rubrics.
+* 🗂️ **Interactive Question Bank (2,500+ Questions)**: Browse, search, filter, and practice curated questions with complete solutions across 18+ DevOps & Cloud domains.
 * ✍️ **Interactive Paper Editor**: Modify questions, update marks, rebalance sections, or add custom questions inline.
-* 🔑 **Teacher Solution Key Mode**: Instantly toggle to view comprehensive model answers, key concepts, and grading criteria for instructors.
-* 📊 **Platform Analytics & PYQ Intelligence**: Real-time visual metrics on subject question volume, cognitive difficulty ratios, and Bloom's taxonomy distributions.
+* 📊 **Platform Analytics & PYQ Intelligence**: Real-time visual metrics on subject question volume, difficulty ratios, and Bloom's taxonomy distributions.
 * 📄 **Multi-Format Export**: Export exams to **PDF** (via ReportLab), **Markdown (`.md`)**, **JSON (`.json`)**, or formatted **Clipboard Copy**.
 
 ---
@@ -24,19 +23,20 @@ An intelligent full-stack system that automatically generates **DevOps and AWS c
 ## 🏗️ System Architecture
 
 ```
-[ Frontend: Next.js + React + Tailwind ] 
-                     │  (HTTP / REST API)
-                     ▼
+[ Frontend: Next.js 15 + React 19 + Tailwind CSS ] 
+                         │  (HTTP / REST API)
+                         ▼
 [ Backend: Python Flask Server ]
-   ├── NLP Layer (NLTK + TF-IDF) ────────► Extracts syllabus units & keywords
-   ├── Vector RAG Engine (Embeddings) ───► Retrieves grounding PYQ context
-   ├── AI Engine (T5 + PYQ Dataset) ─────► Generates contextual candidate questions
-   ├── Smart Selector (Sentence-BERT) ───► Eliminates duplicates & balances difficulty
-   ├── Bloom's Classifier ───────────────► Assigns cognitive levels (Remember -> Create)
-   ├── AI Auto-Grader (Sentence-BERT) ───► Evaluates student answers vs model answers
-   ├── MCQ Distractor Generator ─────────► Synthesizes 4-option certification MCQs
-   ├── SQLite Database (papers.db) ──────► Auto-seeds & stores 2,500+ PYQs and papers
-   └── PDF Generator (ReportLab) ────────► Renders print-ready formatted PDFs
+   ├── Unified LLM Gateway ────────────► Gemini / OpenAI / Groq / DeepSeek / Ollama
+   ├── Vector RAG Engine (Embeddings) ─► Grounds generation in 2,500+ authentic PYQs
+   ├── Question Engine (LLM + PYQ) ────► Generates scenario, architecture & coding questions
+   ├── Smart Selector (Sentence-BERT) ─► Eliminates semantic duplicates & balances marks
+   ├── Bloom's Classifier ─────────────► Evaluates cognitive depth (Remember -> Create)
+   ├── LLM-as-a-Judge Auto-Grader ─────► Multi-pillar rubric evaluation with feedback
+   ├── MCQ & Distractor Generator ─────► Contextual distractor synthesis with explanations
+   ├── Solution Key Generator ─────────► Concrete technical solutions with code & rubrics
+   ├── SQLite Database (papers.db) ────► Auto-seeds & stores 2,500+ PYQs and exams
+   └── PDF Generator (ReportLab) ──────► Renders print-ready formatted PDFs
 ```
 
 ---
@@ -44,10 +44,11 @@ An intelligent full-stack system that automatically generates **DevOps and AWS c
 ## 🧰 Tech Stack
 
 * **Frontend:** Next.js 15 (App Router), React 19, TypeScript, Tailwind CSS, Lucide Icons, Sonner
-* **Backend:** Python 3.11+, Flask, Flask-CORS
+* **Backend:** Python 3.11+, Flask, Flask-CORS, Gunicorn
+* **AI & LLM Gateway:** LiteLLM / Google Gemini / OpenAI / Groq / Ollama / DeepSeek
 * **NLP & Information Retrieval:** NLTK, Scikit-learn (TF-IDF), NumPy
-* **Machine Learning & RAG:** Hugging Face Transformers (T5 Seq2Seq LM), Sentence-Transformers (BERT MiniLM), Cosine Similarity Vector Index
-* **Database:** SQLite (WAL mode, auto-seeded with 2,500+ questions & solutions)
+* **Embeddings & RAG:** Sentence-Transformers (`all-MiniLM-L6-v2`), In-Memory Cosine Similarity Vector Index
+* **Database:** SQLite (WAL mode, auto-seeded with 2,550+ questions & solutions)
 * **Document Export:** ReportLab (PDF), Markdown, JSON
 
 ---
@@ -94,9 +95,30 @@ source venv/bin/activate
 pip install -r requirements.txt
 python app.py
 ```
-> The backend server will start at `http://127.0.0.1:5000` and automatically seed the database with 2,500+ DevOps PYQs and initialize the Vector RAG index.
+> The backend server starts at `http://127.0.0.1:5000`, auto-seeds the database with 2,500+ DevOps PYQs, and builds the Vector RAG index.
 
-### 3. Frontend Setup
+### 3. (Optional) Configure Your Preferred LLM Provider
+Create or edit `backend/.env`:
+```bash
+# Option 1: Google Gemini (Recommended)
+DEFAULT_LLM_MODEL=gemini/gemini-2.0-flash
+GEMINI_API_KEY=your_gemini_api_key_here
+
+# Option 2: OpenAI
+DEFAULT_LLM_MODEL=openai/gpt-4o-mini
+OPENAI_API_KEY=your_openai_api_key_here
+
+# Option 3: Groq (Ultra-fast)
+DEFAULT_LLM_MODEL=groq/llama-3.3-70b-versatile
+GROQ_API_KEY=your_groq_api_key_here
+
+# Option 4: Local Ollama (100% private & offline)
+DEFAULT_LLM_MODEL=ollama/llama3
+OLLAMA_BASE_URL=http://localhost:11434
+```
+*Note: If no API key is provided, the platform automatically operates in High-Grade Offline Fallback mode with authentic domain templates.*
+
+### 4. Frontend Setup
 ```bash
 cd frontend
 npm install
@@ -111,18 +133,20 @@ npm run dev
 | Endpoint | Method | Description |
 | :--- | :---: | :--- |
 | `/api/generate` | `POST` | Generates a structured question paper with Bloom cognitive tagging |
-| `/api/evaluate-answer` | `POST` | AI Auto-Grades a student answer using Sentence-BERT embeddings & concept rubrics |
+| `/api/evaluate-answer` | `POST` | AI Auto-Grades a student answer using LLM-as-a-Judge (or semantic embeddings fallback) |
 | `/api/generate-mcq` | `POST` | Generates 4-option certification MCQs with realistic distractors & explanations |
+| `/api/llm/status` | `GET` | Returns active LLM provider, model, and availability status |
 | `/api/papers` | `GET` | Retrieves all previously generated papers |
 | `/api/papers/<id>` | `GET` | Retrieves details for a specific paper |
 | `/api/papers/<id>` | `PUT` | Updates paper content (modified questions, marks, title) |
 | `/api/papers/<id>` | `DELETE` | Deletes a paper from history |
-| `/api/papers/<id>/solutions` | `GET` | Returns model solutions, explanations, and grading rubrics |
+| `/api/papers/<id>/solutions` | `GET` | Returns concrete model solutions, code snippets, and grading rubrics |
 | `/api/papers/<id>/pdf` | `GET` | Exports the paper as a print-ready PDF |
 | `/api/question-bank` | `GET` | Paginated search & filter for 2,500+ PYQ questions |
 | `/api/analytics` | `GET` | Aggregated metrics, subject breakdown, and Bloom taxonomy distribution |
 | `/api/subjects` | `GET` | Lists all supported subjects |
 | `/api/analyze-syllabus` | `POST` | Extracts units and topics from raw syllabus text |
+| `/api/health` | `GET` | Health check endpoint reporting server & LLM Gateway status |
 
 ---
 

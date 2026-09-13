@@ -27,6 +27,7 @@ from utils.bloom_classifier import BloomClassifier
 from utils.rag_engine import VectorRAGEngine
 from utils.answer_evaluator import AnswerEvaluator
 from utils.mcq_generator import MCQGenerator
+from utils.llm_gateway import LLMGateway
 
 # Configure logging
 logging.basicConfig(
@@ -41,15 +42,16 @@ app = Flask(__name__)
 CORS(app, resources={r"/api/*": {"origins": "*"}})  # type: ignore
 
 # Initialize components
+llm_gateway = LLMGateway()
 nlp = NLPProcessor()
-ai_engine = AIEngine(T5_MODEL_NAME, BERT_MODEL_NAME)
+ai_engine = AIEngine(T5_MODEL_NAME, BERT_MODEL_NAME, llm_gateway=llm_gateway)
 selector = SmartSelector(ai_engine)
 structurer = PaperStructurer()
 pdf_gen = PDFGenerator()
-bloom = BloomClassifier()
+bloom = BloomClassifier(llm_gateway=llm_gateway)
 rag_engine = VectorRAGEngine(ai_engine)
-evaluator = AnswerEvaluator(ai_engine)
-mcq_generator = MCQGenerator()
+evaluator = AnswerEvaluator(ai_engine=ai_engine, llm_gateway=llm_gateway)
+mcq_generator = MCQGenerator(llm_gateway=llm_gateway)
 
 # Initialize database
 init_db()
@@ -138,10 +140,11 @@ def generate_paper():
 
                 # Generate short questions
                 try:
+                    grounding = rag_engine.get_grounding_context(topic, subject=subject, top_k=2)
                     pyq_generated = ai_engine.generate_questions_with_pyq_patterns(
-                        subject, f"{topic} (short answer)", short_questions_per_topic
+                        subject, f"{topic} (short answer)", short_questions_per_topic, grounding_context=grounding
                     )
-                    logger.info("PYQ generation successful for short questions on topic: %s", topic)
+                    logger.info("Generation successful for short questions on topic: %s", topic)
                 except Exception as e:
                     logger.warning("PYQ generation failed for %s: %s", topic, e)
                     pyq_generated = ai_engine._generate_fallback_questions_dict(topic, short_questions_per_topic)
@@ -160,10 +163,11 @@ def generate_paper():
 
                 # Generate long questions
                 try:
+                    grounding = rag_engine.get_grounding_context(topic, subject=subject, top_k=2)
                     pyq_generated = ai_engine.generate_questions_with_pyq_patterns(
-                        subject, f"{topic} (long answer)", long_questions_per_topic
+                        subject, f"{topic} (long answer)", long_questions_per_topic, grounding_context=grounding
                     )
-                    logger.info("PYQ generation successful for long questions on topic: %s", topic)
+                    logger.info("Generation successful for long questions on topic: %s", topic)
                 except Exception as e:
                     logger.warning("PYQ generation failed for %s: %s", topic, e)
                     pyq_generated = ai_engine._generate_fallback_questions_dict(topic, long_questions_per_topic)
@@ -192,13 +196,14 @@ def generate_paper():
                         topic_unit = unit_name
                         break
 
-                # Try PYQ pattern generation with timeout protection
+                # Try question generation with grounding context
                 pyq_generated = []
                 try:
+                    grounding = rag_engine.get_grounding_context(topic, subject=subject, top_k=2)
                     pyq_generated = ai_engine.generate_questions_with_pyq_patterns(
-                        subject, topic, questions_per_topic
+                        subject, topic, questions_per_topic, grounding_context=grounding
                     )
-                    logger.info("PYQ generation successful for topic: %s", topic)
+                    logger.info("Question generation successful for topic: %s", topic)
                 except Exception as e:
                     logger.warning("PYQ generation failed for %s: %s", topic, e)
                     # Fallback to simple template questions
@@ -356,7 +361,7 @@ def get_paper_solutions(paper_id):
         from database.db import get_connection
         conn = get_connection()
         cursor = conn.cursor()
-        solutions = [generate_smart_solution(q, db_cursor=cursor) for q in questions]
+        solutions = [generate_smart_solution(q, db_cursor=cursor, llm_gateway=llm_gateway) for q in questions]
         conn.close()
         return jsonify({
             "paper_id": paper_id,
@@ -536,7 +541,17 @@ def pyq_stats(subject):
 
 @app.route("/api/health", methods=["GET"])
 def health():
-    return jsonify({"status": "ok", "message": "AI Question Paper Generator API is running"})
+    return jsonify({
+        "status": "ok",
+        "message": "AI Question Paper Generator API is running",
+        "llm": llm_gateway.get_status()
+    })
+
+
+@app.route("/api/llm/status", methods=["GET"])
+def llm_status():
+    """Get active LLM status and provider configuration."""
+    return jsonify(llm_gateway.get_status())
 
 
 def _classify_question_type(question: str) -> str:
